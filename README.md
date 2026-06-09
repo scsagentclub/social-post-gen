@@ -58,6 +58,12 @@ social-post-gen/
 5. 确保图片保持原始比例
 6. 输出完整的独立 `.html` 文件
 
+## 在线预览
+
+- **案例索引**：https://scsagent.club/social-post/
+- **聚餐回顾（Warm Gathering）**：https://scsagent.club/social-post/gathering.html
+- **技术展示（Deep Space）**：https://scsagent.club/social-post/tech-showcase.html
+
 ## 示例
 
 ### 技术展示
