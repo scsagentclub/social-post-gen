@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>技术分享沙龙 活动回顾</title>
+    <style>
+        /* ========== CSS 变量 ========== */
+        :root {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --accent-blue: #2563eb;
+            --accent-blue-light: #3b82f6;
+            --accent-purple: #7c3aed;
+            --accent-cyan: #0891b2;
+            --accent-pink: #ec4899;
+            --border-color: #e2e8f0;
+        }
+
+        /* ========== 基础重置 ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ========== 页面背景 ========== */
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", -apple-system, sans-serif;
+            background: linear-gradient(180deg, 
+                #f8fafc 0%, 
+                #f1f5f9 15%, 
+                #eef2ff 35%, 
+                #f5f3ff 55%, 
+                #fdf4ff 75%, 
+                #f8fafc 100%
+            );
+            color: var(--text-primary);
+            line-height: 1.8;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* ========== 背景装饰层 ========== */
+        .bg-decoration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+            background: 
+                radial-gradient(ellipse 80% 50% at 20% 40%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse 60% 80% at 80% 20%, rgba(59, 130, 246, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse 50% 60% at 60% 80%, rgba(147, 51, 234, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse 70% 40% at 10% 90%, rgba(236, 72, 153, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse 40% 70% at 90% 60%, rgba(14, 165, 233, 0.1) 0%, transparent 50%);
+        }
+
+        /* ========== 主容器 ========== */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ========== 头部区域 ========== */
+        .article-header {
+            width: 100%;
+            text-align: center;
+            padding: 80px 0 60px;
+            position: relative;
+        }
+
+        .article-header::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue), var(--accent-purple));
+            border-radius: 2px;
+        }
+
+        .article-tag {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 28px;
+            background: rgba(37, 99, 235, 0.08);
+            border: 1px solid var(--accent-blue);
+            border-radius: 50px;
+            font-size: 13px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--accent-blue);
+            font-weight: 600;
+            margin-bottom: 40px;
+        }
+
+        .article-title {
+            display: block;
+            width: 100%;
+            font-size: clamp(36px, 6vw, 56px);
+            font-weight: 900;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            line-height: 1.2;
+            letter-spacing: -1px;
+            text-align: center;
+        }
+
+        .article-title .gradient-text {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .article-subtitle {
+            display: block;
+            width: 100%;
+            font-size: clamp(18px, 2.5vw, 24px);
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            letter-spacing: 4px;
+            text-align: center;
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .info-block {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 20px 28px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .info-icon {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .info-content {
+            text-align: left;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-top: 4px;
+        }
+
+        /* ========== 正文区域 ========== */
+        .article-content {
+            margin-top: 60px;
+            padding-bottom: 80px;
+        }
+
+        .article-content p {
+            font-size: 16px;
+            color: #334155;
+            margin-bottom: 24px;
+            text-align: justify;
+        }
+
+        .article-content p.lead {
+            font-size: 20px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .highlight {
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+
+        /* ========== 章节标题 ========== */
+        .section-header {
+            margin: 60px 0 30px;
+            position: relative;
+        }
+
+        .section-number {
+            font-size: 80px;
+            font-weight: 900;
+            color: rgba(37, 99, 235, 0.1);
+            line-height: 1;
+            margin-bottom: -20px;
+            font-family: "Arial", sans-serif;
+        }
+
+        .section-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text-primary);
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .section-title::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--accent-cyan), var(--accent-blue), var(--accent-purple));
+            border-radius: 2px;
+        }
+
+        /* ========== 照片宫格区域 ========== */
+        .photo-grid-section {
+            margin: 40px 0;
+        }
+
+        .photo-grid-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            padding-left: 12px;
+            border-left: 3px solid var(--accent-blue);
+        }
+
+        /* 4格宫格 */
+        .photo-grid-4 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        /* 3格宫格 */
+        .photo-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .photo-item {
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            border: 2px dashed #94a3b8;
+            border-radius: 12px;
+            aspect-ratio: 4/3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .photo-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+            opacity: 0.5;
+        }
+
+        .photo-label {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .photo-hint {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        /* 单张大图 */
+        .photo-single {
+            margin: 40px 0;
+        }
+
+        .photo-single-placeholder {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border: 2px dashed #94a3b8;
+            border-radius: 16px;
+            aspect-ratio: 16/9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .photo-single-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 14px;
+        }
+
+        .photo-single-placeholder .photo-icon {
+            font-size: 48px;
+        }
+
+        /* ========== 引用框 ========== */
+        .quote-box {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.06), rgba(124, 58, 237, 0.04));
+            border-left: 3px solid var(--accent-blue);
+            border-radius: 0 16px 16px 0;
+            padding: 28px 32px;
+            margin: 40px 0;
+            position: relative;
+        }
+
+        .quote-box::before {
+            content: '"';
+            position: absolute;
+            top: 10px;
+            left: 16px;
+            font-size: 60px;
+            color: var(--accent-blue);
+            opacity: 0.2;
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+
+        .quote-text {
+            font-size: 18px;
+            color: var(--text-primary);
+            font-style: italic;
+            position: relative;
+            z-index: 1;
+        }
+
+        .quote-author {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 16px;
+            text-align: right;
+        }
+
+        /* ========== 页脚 ========== */
+        .article-footer {
+            margin-top: 80px;
+            padding: 40px 0;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .footer-slogan {
+            font-size: 18px;
+            font-weight: 600;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+
+        .footer-credit {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* ========== 响应式 ========== */
+        @media (max-width: 768px) {
+            .article-title {
+                font-size: 32px;
+            }
+            
+            .section-number {
+                font-size: 60px;
+            }
+            
+            .section-title {
+                font-size: 22px;
+            }
+
+            .photo-grid-4,
+            .photo-grid-3 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .info-block {
+                padding: 16px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-decoration"></div>
+    
+    <div class="container">
+        <!-- ========== 头部区域 ========== -->
+        <header class="article-header">
+            <div class="article-tag">⚡ Event Review</div>
+            <h1 class="article-title">
+                <span class="gradient-text">6个故事，6项专利</span><br>
+                一场让技术"活"起来的分享会
+            </h1>
+            <p class="article-subtitle">技术分享沙龙 首场回顾</p>
+            <div class="article-meta">
+                <div class="info-block">
+                    <div class="info-icon">📍</div>
+                    <div class="info-content">
+                        <div class="info-label">活动地点</div>
+                        <div class="info-value">某培训场地</div>
+                    </div>
+                </div>
+                <div class="info-block">
+                    <div class="info-icon">📅</div>
+                    <div class="info-content">
+                        <div class="info-label">活动时间</div>
+                        <div class="info-value">某年某月某日</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- ========== 正文区域 ========== -->
+        <article class="article-content">
+            <p class="lead">"踩过的坑，才是最值钱的经验。"</p>
+            
+            <p>4月23日下午，某培训场地迎来了首场 <span class="highlight">技术分享沙龙</span>。没有PPT轰炸，没有空洞理论，6位分享者用最真实的故事，讲了他们是怎么把"不可能"变成"原来可以这样"的。</p>
+
+            <!-- ========== 01 技术分享 ========== -->
+            <div class="section-header">
+                <div class="section-number">01</div>
+                <h2 class="section-title">技术分享：讲真实故事</h2>
+            </div>
+
+            <p>两间教室，三轮分享，讨论声几乎没停过。</p>
+
+            <p>某工程师讲AI知识库搭建，现场演示怎么用"说人话"的方式让AI帮你干活；某工程师用某自动化工具把复杂的生产数据变成了"看一眼就懂"的可视化报表；某工程师和某工程师展示的低代码自动化方案，让不少人直呼"原来还能这么干"。</p>
+
+            <!-- ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ -->
+            <!-- ★★★ 讲座照片区域 - 2×2宫格（共4张） ★★★ -->
+            <!-- ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ -->
+            <div class="photo-grid-section">
+                <div class="photo-grid-title">技术分享现场</div>
+                <div class="photo-grid-4">
+                    <!-- 【讲座照片 1】建议内容：分享人演讲 -->
+                    <div class="photo-item">
+                        <!-- ★★★ 替换为：<img src="你的图片链接" alt="分享人演讲"> ★★★ -->
+                        <div class="photo-icon">📷</div>
+                        <div class="photo-label">【讲座照片 1】</div>
+                        <div class="photo-hint">分享人演讲</div>
+                    </div>
+                    <!-- 【讲座照片 2】建议内容：技术演示 -->
+                    <div class="photo-item">
+                        <!-- ★★★ 替换为：<img src="你的图片链接" alt="技术演示"> ★★★ -->
+                        <div class="photo-icon">📷</div>
+                        <div class="photo-label">【讲座照片 2】</div>
+                        <div class="photo-hint">技术演示</div>
+                    </div>
+                    <!-- 【讲座照片 3】建议内容：圆桌答疑 -->
+                    <div class="photo-item">
+                        <!-- ★★★ 替换为：<img src="你的图片链接" alt="圆桌答疑"> ★★★ -->
+                        <div class="photo-icon">📷</div>
+                        <div class="photo-label">【讲座照片 3】</div>
+                        <div class="photo-hint">圆桌答疑</div>
+                    </div>
+                    <!-- 【讲座照片 4】建议内容：现场互动 -->
+                    <div class="photo-item">
+                        <!-- ★★★ 替换为：<img src="你的图片链接" alt="现场互动"> ★★★ -->
+                        <div class="photo-icon">📷</div>
+                        <div class="photo-label">【讲座照片 4】</div>
+                        <div class="photo-hint">现场互动</div>
+                    </div>
+                </div>
+            </div>
+            <!-- ★★★ 讲座照片区域结束 ★★★ -->
+
+            <p>最有意思的是圆桌环节——没有预设问题，全是现场抛出的真实困惑。"这个方案能解决我的XX问题吗？""数据安全怎么保障？"一问一答间，分享变成了真正的交流。</p>
+
+            <div class="quote-box">
+                <p class="quote-text">本来以为又是一场听完就忘的培训，没想到听完就想回去试试。</p>
+                <p class="quote-author">—— 现场参与者</p>
+            </div>
+
+            <!-- ========== 02 专利展示 ========== -->
+            <div class="section-header">
+                <div class="section-number">02</div>
+                <h2 class="section-title">专利展示：能摸到的创新</h2>
+            </div>
+
+            <p>走廊里，6个专利展位一字排开。不是海报贴墙上那种，而是<span class="highlight">实物 + 发明人面对面</span>。</p>
+
+            <p>从内窥镜检测工具到高度量测Jig，从Pump Clean工具到Fluke检测仪器，每件展品背后都是一个"发现问题→解决问题"的故事。发明人站在自己的展位前，一边演示一边讲解，大家随时可以提问、上手体验。</p>
+
+            <!-- ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ -->
+            <!-- ★★★ 专利照片区域 - 3列宫格（共3张） ★★★ -->
+            <!-- ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ -->
+            <div class="photo-grid-section">
+                <div class="photo-grid-title">专利展览互动</div>
+                <div class="photo-grid-3">
+                    <!-- 【专利照片 1】建议内容：发明人讲解 -->
+                    <div class="photo-item">
+                        <!-- ★★★ 替换为：<img src="你的图片链接" alt="发明人讲解"> ★★★ -->
+                        <div class="photo-icon">💡</div>
+                        <div class="photo-label">【专利照片 1】</div>
+                        <div class="photo-hint">发明人讲解</div>
+                    </div>
+                    <!-- 【专利照片 2】建议内容：实物展示 -->
+                    <div class="photo-item">
+                        <!-- ★★★ 替换为：<img src="你的图片链接" alt="实物展示"> ★★★ -->
+                        <div class="photo-icon">💡</div>
+                        <div class="photo-label">【专利照片 2】</div>
+                        <div class="photo-hint">实物展示</div>
+                    </div>
+                    <!-- 【专利照片 3】建议内容：参观者体验 -->
+                    <div class="photo-item">
+                        <!-- ★★★ 替换为：<img src="你的图片链接" alt="参观者体验"> ★★★ -->
+                        <div class="photo-icon">💡</div>
+                        <div class="photo-label">【专利照片 3】</div>
+                        <div class="photo-hint">参观者体验</div>
+                    </div>
+                </div>
+            </div>
+            <!-- ★★★ 专利照片区域结束 ★★★ -->
+
+            <!-- ========== 03 集章打卡 ========== -->
+            <div class="section-header">
+                <div class="section-number">03</div>
+                <h2 class="section-title">集章打卡：让参与更有趣</h2>
+            </div>
+
+            <p>这次活动还搞了个"小花样"——集章打卡。签到领章，听分享盖章，逛展览再盖一个。集满3章换小礼品，集满5章参与终极大抽奖。</p>
+
+            <p>本来只是想让活动更有互动感，结果集章台前排起了队。<span class="highlight">"还有一章就满了！"</span>成了当天听到最多的话之一。</p>
+
+            <!-- ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ -->
+            <!-- ★★★ 互动照片区域 - 单张横图 ★★★ -->
+            <!-- ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ -->
+            <div class="photo-single">
+                <!-- ★★★ 替换为：<img src="你的图片链接" alt="互动照片" style="border-radius:16px;"> ★★★ -->
+                <div class="photo-single-placeholder">
+                    <div class="photo-icon">🎁</div>
+                    <div class="photo-label">【互动照片】</div>
+                    <div class="photo-hint">建议：集章打卡或抽奖环节</div>
+                </div>
+            </div>
+            <!-- ★★★ 互动照片区域结束 ★★★ -->
+
+            <!-- ========== 04 写在最后 ========== -->
+            <div class="section-header">
+                <div class="section-number">04</div>
+                <h2 class="section-title">下一场，期待你的故事</h2>
+            </div>
+
+            <p>技术分享沙龙 的初衷很简单：<span class="highlight">让有经验的人分享，让有困惑的人获得启发</span>。</p>
+
+            <p>第一场已经结束，但分享不会停止。如果你也有一个"踩过的坑"想分享，或者一个"解决不了的问题"想找人一起想办法，欢迎联系我们。</p>
+
+            <!-- ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ -->
+            <!-- ★★★ 集体合影区域 - 单张横图 ★★★ -->
+            <!-- ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ -->
+            <div class="photo-single">
+                <!-- ★★★ 替换为：<img src="你的图片链接" alt="集体合影" style="border-radius:16px;"> ★★★ -->
+                <div class="photo-single-placeholder">
+                    <div class="photo-icon">👥</div>
+                    <div class="photo-label">【集体合影】</div>
+                    <div class="photo-hint">技术分享沙龙 首场圆满落幕</div>
+                </div>
+            </div>
+            <!-- ★★★ 集体合影区域结束 ★★★ -->
+        </article>
+
+        <!-- ========== 页脚 ========== -->
+        <footer class="article-footer">
+            <p class="footer-slogan">洞察技术 · 启发创新 · 连接同行</p>
+            <p class="footer-credit">技术分享沙龙 · 某职能部门</p>
+        </footer>
+    </div>
+</body>
+</html>

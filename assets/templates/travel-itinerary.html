@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>某景区白马藏寨五一假期旅游规划 V4终极版</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #1a5f4a 0%, #2d8a6e 50%, #4ade80 100%);
+            padding: 40px 20px;
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        /* 页面头部 */
+        .header {
+            background: linear-gradient(135deg, #1a5f4a 0%, #2d8a6e 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
+            background-size: 30px 30px;
+            animation: moveBackground 20s linear infinite;
+        }
+
+        @keyframes moveBackground {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(30px, 30px); }
+        }
+
+        .header .badge {
+            display: inline-block;
+            background: #ffc107;
+            color: #1a5f4a;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.3em;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 各栏目通用样式 */
+        .section {
+            padding: 50px 40px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            color: #1a5f4a;
+            font-size: 2em;
+            margin-bottom: 35px;
+            padding-bottom: 15px;
+            border-bottom: 4px solid #1a5f4a;
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+        }
+
+        .section-title::before {
+            content: "🏔️";
+            margin-right: 12px;
+            font-size: 1.4em;
+        }
+
+        /* 需求信息 - 一行显示 */
+        .info-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .info-item {
+            flex: 1;
+            min-width: 180px;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            padding: 25px 20px;
+            border-radius: 12px;
+            border-left: 5px solid #1a5f4a;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .info-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .info-item .label {
+            color: #6b7280;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-item .value {
+            color: #1a5f4a;
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+
+        /* 天气信息 */
+        .weather-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+        }
+
+        .weather-card {
+            background: linear-gradient(135deg, #2d8a6e 0%, #4ade80 100%);
+            color: white;
+            padding: 30px 20px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .weather-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .weather-card .date {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .weather-card .city {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            opacity: 0.95;
+        }
+
+        .weather-card .temp {
+            font-size: 2.5em;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .weather-card .desc {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        /* 交通票务 */
+        .ticket-card {
+            background: #f0fdf4;
+            padding: 30px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            border-left: 5px solid #1a5f4a;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .ticket-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .ticket-card h4 {
+            color: #1a5f4a;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+
+        .ticket-card p {
+            color: #4b5563;
+            font-size: 1.05em;
+            margin-bottom: 8px;
+        }
+
+        .ticket-card .highlight {
+            background: #dcfce7;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        /* 行程安排 */
+        .day-section {
+            margin-bottom: 50px;
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .day-header {
+            background: linear-gradient(135deg, #1a5f4a 0%, #2d8a6e 100%);
+            color: white;
+            padding: 20px 30px;
+            font-size: 1.5em;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(26, 95, 74, 0.3);
+        }
+
+        .day-header .date {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .activity-list {
+            padding: 25px 30px;
+            background: #fafafa;
+        }
+
+        .time-slot {
+            display: flex;
+            margin-bottom: 20px;
+            align-items: flex-start;
+        }
+
+        .time-marker {
+            min-width: 80px;
+            background: linear-gradient(135deg, #1a5f4a 0%, #2d8a6e 100%);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.95em;
+            margin-right: 20px;
+        }
+
+        .activity-content {
+            flex: 1;
+            background: white;
+            padding: 20px 25px;
+            border-radius: 12px;
+            border-left: 4px solid #2d8a6e;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .activity-content h4 {
+            color: #1a5f4a;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .activity-content h4 .icon {
+            margin-right: 8px;
+            font-size: 1.1em;
+        }
+
+        .activity-content .desc {
+            color: #4b5563;
+            line-height: 1.9;
+            font-size: 1.02em;
+        }
+
+        .activity-content .tips {
+            background: #fef9c3;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-size: 0.95em;
+            color: #854d0e;
+        }
+
+        .activity-content .tips strong {
+            color: #b45309;
+        }
+
+        .activity-content.lunch .time-marker {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+        }
+
+        .activity-content.lunch {
+            border-left-color: #f59e0b;
+        }
+
+        .activity-content.dinner .time-marker {
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+        }
+
+        .activity-content.dinner {
+            border-left-color: #dc2626;
+        }
+
+        .activity-content.accommodation .time-marker {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        }
+
+        .activity-content.accommodation {
+            border-left-color: #059669;
+            background: #f0fdf4;
+        }
+
+        .activity-content.transport .time-marker {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        }
+
+        .activity-content.transport {
+            border-left-color: #6366f1;
+            background: #f5f3ff;
+        }
+
+        /* 费用明细 - 增强样式 */
+        .cost-section {
+            margin-bottom: 30px;
+        }
+        
+        .cost-section h3 {
+            color: #1a5f4a;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #2d8a6e;
+            display: flex;
+            align-items: center;
+        }
+        
+        .cost-section.confirmed h3::before {
+            content: "✅";
+            margin-right: 10px;
+        }
+        
+        .cost-section.estimated h3::before {
+            content: "📋";
+            margin-right: 10px;
+        }
+        
+        .cost-detail-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .cost-detail-table th,
+        .cost-detail-table td {
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .cost-detail-table th {
+            background: linear-gradient(135deg, #1a5f4a 0%, #2d8a6e 100%);
+            color: white;
+            font-weight: 600;
+            font-size: 1.05em;
+        }
+        
+        .cost-detail-table tr:nth-child(even) {
+            background: #f9fafb;
+        }
+        
+        .cost-detail-table tr:hover {
+            background: #f0fdf4;
+        }
+        
+        .cost-detail-table .amount {
+            text-align: right;
+            font-weight: 600;
+            color: #1a5f4a;
+            font-size: 1.1em;
+        }
+        
+        .cost-detail-table .subtotal {
+            background: #dcfce7;
+            font-weight: 700;
+            font-size: 1.15em;
+        }
+        
+        .cost-detail-table .subtotal td {
+            color: #166534;
+        }
+        
+        .grand-total {
+            background: linear-gradient(135deg, #1a5f4a 0%, #2d8a6e 100%);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            box-shadow: 0 8px 20px rgba(26, 95, 74, 0.3);
+        }
+        
+        .grand-total .label {
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+        
+        .grand-total .amount {
+            font-size: 2em;
+            font-weight: 800;
+        }
+        
+        .cost-note {
+            background: #fef9c3;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 0.95em;
+            color: #854d0e;
+            border-left: 4px solid #eab308;
+        }
+        
+        /* 注意事项 */
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .note-card {
+            background: linear-gradient(135deg, #fef9c3 0%, #fef08a 100%);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid #eab308;
+        }
+
+        .note-card h4 {
+            color: #854d0e;
+            margin-bottom: 12px;
+            font-size: 1.15em;
+        }
+
+        .note-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .note-card li {
+            color: #713f12;
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .note-card li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #65a30d;
+            font-weight: bold;
+        }
+
+        /* 路线图 */
+        .route-card {
+            background: #f5f3ff;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 4px solid #6366f1;
+        }
+
+        .route-card h4 {
+            color: #4338ca;
+            margin-bottom: 12px;
+        }
+
+        .route-card .route-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .route-card .route-item {
+            background: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .route-card .route-item .label {
+            font-size: 0.85em;
+            color: #6b7280;
+        }
+
+        .route-card .route-item .value {
+            font-weight: 600;
+            color: #1a5f4a;
+        }
+
+        /* 来源标注 */
+        .source {
+            font-size: 0.85em;
+            color: #9ca3af;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        /* 页脚 */
+        .footer {
+            background: linear-gradient(135deg, #1a5f4a 0%, #2d8a6e 100%);
+            text-align: center;
+            padding: 30px;
+            color: white;
+        }
+
+        .footer p {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .footer .disclaimer {
+            font-size: 0.9em;
+            opacity: 0.85;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 10px;
+            }
+
+            .header {
+                padding: 40px 20px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .section {
+                padding: 30px 20px;
+            }
+
+            .section-title {
+                font-size: 1.5em;
+            }
+
+            .info-container {
+                flex-direction: column;
+            }
+
+            .info-item {
+                min-width: 100%;
+            }
+
+            .weather-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .time-slot {
+                flex-direction: column;
+            }
+
+            .time-marker {
+                margin-right: 0;
+                margin-bottom: 10px;
+                align-self: flex-start;
+            }
+
+            .activity-content {
+                width: 100%;
+            }
+        }
+
+        /* 打印优化 */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 页面头部 -->
+        <div class="header">
+            <div class="badge">🌟 V4 终极精细版</div>
+            <h1>🏔️ 某景区白马藏寨五一假期旅游规划</h1>
+            <p>某月某日至某月某日 | 某城市出发 | 自驾穿越川北秘境</p>
+        </div>
+
+        <!-- 需求信息 -->
+        <div class="section">
+            <h2 class="section-title">基础信息</h2>
+            <div class="info-container">
+                <div class="info-item">
+                    <div class="label">出发城市</div>
+                    <div class="value">某城市</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">目的城市</div>
+                    <div class="value">某地·某景区·某景区</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">出发时间</div>
+                    <div class="value">某月某日至某月某日</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">返程时间</div>
+                    <div class="value">5月4日</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">出行人数</div>
+                    <div class="value">2人（主人某岁 + 母亲某岁）</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 天气信息 -->
+        <div class="section">
+            <h2 class="section-title">天气预报（某地·某景区·某景区）</h2>
+            <div class="weather-grid">
+                <div class="weather-card">
+                    <div class="date">某月某日至某月某日 周四</div>
+                    <div class="city">某地</div>
+                    <div class="temp">18-28°C</div>
+                    <div class="desc">☀️ 多云转晴</div>
+                </div>
+                <div class="weather-card">
+                    <div class="date">5月2日 周五</div>
+                    <div class="city">某景区</div>
+                    <div class="temp">8-18°C</div>
+                    <div class="desc">🌤️ 多云</div>
+                </div>
+                <div class="weather-card">
+                    <div class="date">5月3日 周六</div>
+                    <div class="city">某景区·白马</div>
+                    <div class="temp">10-20°C</div>
+                    <div class="desc">🌤️ 晴间多云</div>
+                </div>
+                <div class="weather-card">
+                    <div class="date">5月4日 周日</div>
+                    <div class="city">某地</div>
+                    <div class="temp">16-26°C</div>
+                    <div class="desc">☀️ 晴</div>
+                </div>
+            </div>
+            <p class="source">* 天气预报来源：墨迹天气 | 五一假期期间川北天气总体适宜出行，早晚温差较大，高海拔地区需注意保暖</p>
+        </div>
+
+        <!-- 交通票务 -->
+        <div class="section">
+            <h2 class="section-title">交通安排</h2>
+            
+            <div class="ticket-card">
+                <h4>🚄 去程：高铁路线（已购票）</h4>
+                <p>• <strong>车次：</strong>某车次 或相近班次</p>
+                <p>• <strong>时间：</strong>某月某日至某月某日 17:00+ 某城市北 → 20:30+ 某地站</p>
+                <p>• <strong>耗时：</strong>约3.5小时</p>
+                <p>• <strong>票价：</strong>约¥XXX/人</p>
+                <div class="highlight">
+                    📍 到达某地站后，步行/打车前往派酒店（某地方特高铁站店），约2.5公里，5分钟车程
+                </div>
+            </div>
+
+            <div class="ticket-card">
+                <h4>🚗 租车安排（5月2日-3日）</h4>
+                <p>• <strong>取车点：</strong>某地站附近租车公司（大方租车某地站店 推荐）</p>
+                <p>• <strong>地址：</strong>某地东北方向170米</p>
+                <p>• <strong>电话：</strong>13800138000</p>
+                <p>• <strong>建议车型：</strong>SUV或紧凑型轿车（山路为主）</p>
+                <p>• <strong>租车时长：</strong>2天（5月2日8:30取 - 5月3日20:00还）</p>
+                <div class="highlight">
+                    💡 取车时请携带身份证、驾驶证，仔细检查车辆外观，拍照留存；<strong>还车时间：5月3日20:00前</strong>
+                </div>
+            </div>
+
+            <div class="ticket-card">
+                <h4>🚄 返程：高铁路线（已购票）</h4>
+                <p>• <strong>车次：</strong>某车次 或相近班次</p>
+                <p>• <strong>时间：</strong>5月4日 09:22 某地站 → 约12:52 某城市北</p>
+                <p>• <strong>耗时：</strong>约3.5小时</p>
+                <p>• <strong>票价：</strong>约¥XXX/人</p>
+                <div class="highlight">
+                    ⏰ 5月4日早上从派酒店直接打车前往某地站（约2.5公里，5分钟），建议8:30前抵达进站口，留出充足安检时间
+                </div>
+            </div>
+        </div>
+
+        <!-- 住宿信息 -->
+        <div class="section">
+            <h2 class="section-title">住宿安排</h2>
+            
+            <div class="ticket-card">
+                <h4>🏨 某月某日至某月某日/3日：派酒店（某地方特高铁站店）</h4>
+                <p>• <strong>地址：</strong>某地市涪江路中段546号（老店肥肠对面）</p>
+                <p>• <strong>距某地站：</strong>2.5公里，约5分钟车程</p>
+                <p>• <strong>电话：</strong>000-00000000 / 3880677</p>
+                <p>• <strong>设施：</strong>免费停车、免费WiFi、24小时前台</p>
+                <p>• <strong>周边：</strong>近沃尔玛超市、太白公园、老店肥肠等美食</p>
+            </div>
+
+            <div class="ticket-card">
+                <h4>🏡 5月2日：某景区（白马藏寨）</h4>
+                <p>• <strong>地址：</strong>某景区某景区家常川菜馆斜对面</p>
+                <p>• <strong>距某景区景区：</strong>约8.7公里，车程约15分钟</p>
+                <p>• <strong>距某景点：</strong>约2.3公里</p>
+                <p>• <strong>距某景点：</strong>约2.5公里</p>
+                <p>• <strong>设施：</strong>免费停车、地暖、KTV、充电桩</p>
+                <p>• <strong>特色：</strong>正宗白马藏族美食、篝火晚会体验</p>
+                <p>• <strong>电话：</strong>13800138000</p>
+                <div class="highlight">
+                    🌄 民宿位置绝佳，可观赏日照金山景观
+                </div>
+            </div>
+        </div>
+
+        <!-- 行程安排 - Day 1 -->
+        <div class="section">
+            <h2 class="section-title">详细行程安排</h2>
+            
+            <div class="day-section">
+                <div class="day-header">
+                    <div>📅 Day 1：某月某日至某月某日（周四）- 出发日</div>
+                    <div class="date">某地站接站 → 派酒店入住 → 探索某地美食</div>
+                </div>
+                <div class="activity-list">
+                    <div class="time-slot">
+                        <div class="time-marker">17:00-20:30</div>
+                        <div class="activity-content transport">
+                            <h4><span class="icon">🚄</span> 高铁某城市北 → 某地站</h4>
+                            <div class="desc">
+                                <p>• 从某城市北站乘坐高铁出发前往某地</p>
+                                <p>• 预计行车时间约3.5小时</p>
+                                <p>• 抵达某地站后，出站</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">20:30-21:00</div>
+                        <div class="activity-content transport">
+                            <h4><span class="icon">🚕</span> 前往派酒店</h4>
+                            <div class="desc">
+                                <p>• 方式一：步行约30分钟（较晚且携带行李不推荐）</p>
+                                <p>• 方式二：打车约5分钟，车费约10元</p>
+                                <p>• 方式三：联系酒店接送（如有服务）</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">21:00-21:30</div>
+                        <div class="activity-content accommodation">
+                            <h4><span class="icon">🏨</span> 派酒店办理入住</h4>
+                            <div class="desc">
+                                <p>• 办理入住手续</p>
+                                <p>• 整理行李</p>
+                                <p>• 稍作休息</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">21:30-23:00</div>
+                        <div class="activity-content dinner">
+                            <h4><span class="icon">🍜</span> 夜宵探索：某地美食</h4>
+                            <div class="desc">
+                                <p>酒店对面就是「老店肥肠」，可品尝正宗某地肥肠</p>
+                                <p>推荐菜品：</p>
+                                <p>• 红烧肥肠 + 醋汤 + 米饭</p>
+                                <p>• 肥肠豆花</p>
+                            </div>
+                            <div class="tips">
+                                <strong>💡 温馨提示：</strong>某地肥肠是城市名片，「老店肥肠」是本地人常去的老字号，营业至凌晨
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-section">
+                <div class="day-header">
+                    <div>📅 Day 2：5月2日（周五）- 某景区秘境探访</div>
+                    <div class="date">某地自驾 → 某景区景区 → 某景区</div>
+                </div>
+                <div class="activity-list">
+                    <div class="time-slot">
+                        <div class="time-marker">06:30-07:00</div>
+                        <div class="activity-content">
+                            <h4><span class="icon">⏰</span> 起床洗漱</h4>
+                            <div class="desc">
+                                <p>• 起床洗漱</p>
+                                <p>• 整理行李装车</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">07:00-07:30</div>
+                        <div class="activity-content dinner">
+                            <h4><span class="icon">🍳</span> 早餐</h4>
+                            <div class="desc">
+                                <p>• 酒店周边简餐</p>
+                                <p>• 推荐：某地米粉（德华开元米粉等）</p>
+                                <p>• 人均约15元</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">07:30-08:00</div>
+                        <div class="activity-content transport">
+                            <h4><span class="icon">🚗</span> 前往租车点取车</h4>
+                            <div class="desc">
+                                <p>• 步行或打车前往大方租车某地站店</p>
+                                <p>• 地址：某地</p>
+                                <p>• 办理取车手续</p>
+                            </div>
+                            <div class="tips">
+                                <strong>📋 取车检查清单：</strong>身份证+驾驶证、验车单（外观/内饰/油量）、拍照留存
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">08:00-10:30</div>
+                        <div class="activity-content transport">
+                            <h4><span class="icon">🛣️</span> 自驾前往某景区</h4>
+                            <div class="desc">
+                                <p><strong>路线：</strong>某地 → 某高速 → 某景区收费站 → 某景区景区</p>
+                                <p><strong>距离：</strong>约120公里</p>
+                                <p><strong>耗时：</strong>约2-2.5小时</p>
+                                <p><strong>路况：</strong>某高速路况良好，全程柏油路面</p>
+                                <p>沿途可欣赏岷山峡谷风光</p>
+                            </div>
+                            <div class="tips">
+                                <strong>⛽ 提醒：</strong>出发前加满油！景区附近无加油站，建议在某景区县城或白马乡提前加油
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">10:30-10:45</div>
+                        <div class="activity-content transport">
+                            <h4><span class="icon">🅿️</span> 抵达某景区景区停车场</h4>
+                            <div class="desc">
+                                <p>• 导航至「某景区国家级自然保护区」</p>
+                                <p>• 停车费：10元/车</p>
+                                <p>• 前往访客中心</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">10:45-11:00</div>
+                        <div class="activity-content">
+                            <h4><span class="icon">🎫</span> 办理入园手续</h4>
+                            <div class="desc">
+                                <p>• 提前在「某自然景区」公众号预约</p>
+                                <p>• 成人票：108元/人（含门票+观光车）</p>
+                                <p>• 老人票（60岁以上）：70元/人</p>
+                                <p>• 验票后等候摆渡车</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">11:00-12:00</div>
+                        <div class="activity-content">
+                            <h4><span class="icon">🚌</span> 乘坐摆渡车前往甘海子</h4>
+                            <div class="desc">
+                                <p><strong>车程：</strong>约40分钟</p>
+                                <p><strong>甘海子景点：</strong></p>
+                                <p>• 李子柒同款取景地</p>
+                                <p>• 1.4公里平缓木栈道</p>
+                                <p>• 雪山+湿地+枯木同框</p>
+                                <p>• 适合老人轻松游览</p>
+                            </div>
+                            <div class="tips">
+                                <strong>⚠️ 海拔提示：</strong>访客中心海拔2360米，甘海子约2700米，注意不要剧烈运动
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">12:00-13:00</div>
+                        <div class="activity-content lunch">
+                            <h4><span class="icon">🍲</span> 午餐</h4>
+                            <div class="desc">
+                                <p><strong>方式一：</strong>景区内牧羊场营区餐厅</p>
+                                <p>• 推荐：高山黄牛肉汤锅套餐</p>
+                                <p>• 价格约68元/人</p>
+                                <p><strong>方式二：</strong>自带干粮</p>
+                                <p>• 沿途补给站可接热水</p>
+                            </div>
+                            <div class="tips">
+                                <strong>💡 建议：</strong>5月2日已预订民宿晚餐，午餐可在景区简餐或自带干粮解决
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">13:00-14:30</div>
+                        <div class="activity-content">
+                            <h4><span class="icon">🌲</span> 游览白沙沟原始森林</h4>
+                            <div class="desc">
+                                <p><strong>游览方式：</strong>摆渡车前往白沙沟</p>
+                                <p><strong>主要景点：</strong></p>
+                                <p>• 1.9公里徒步木栈道</p>
+                                <p>• 厚苔藓地面如天然地毯</p>
+                                <p>• 百年冷杉遮天蔽日</p>
+                                <p>• 可能偶遇金丝猴、小熊猫</p>
+                                <p>• 海拔约3050米</p>
+                            </div>
+                            <div class="tips">
+                                <strong>⚠️ 体力提示：</strong>带母亲同行建议缓慢行进，注意休息，不必强求走完全程
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">14:30-15:30</div>
+                        <div class="activity-content">
+                            <h4><span class="icon">💎</span> 翡翠湖打卡</h4>
+                            <div class="desc">
+                                <p>• tiffany蓝湖水</p>
+                                <p>• 熊猫文化墙拍照</p>
+                                <p>• 休息片刻</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">15:30-16:30</div>
+                        <div class="activity-content transport">
+                            <h4><span class="icon">🚌</span> 乘坐摆渡车返回访客中心</h4>
+                            <div class="desc">
+                                <p>• 摆渡车返回景区入口</p>
+                                <p>• 取车</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">16:30-17:00</div>
+                        <div class="activity-content transport">
+                            <h4><span class="icon">🚗</span> 自驾前往某景区</h4>
+                            <div class="desc">
+                                <p>• 从某景区景区出发</p>
+                                <p>• 距离约8.7公里</p>
+                                <p>• 车程约15分钟</p>
+                                <p>• 导航至「某景区」</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">17:00-18:00</div>
+                        <div class="activity-content accommodation">
+                            <h4><span class="icon">🏡</span> 某景区入住</h4>
+                            <div class="desc">
+                                <p>• 办理入住手续</p>
+                                <p>• 整理行李</p>
+                                <p>• 参观民宿环境</p>
+                                <p>• 可观赏雪山日落景观</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">18:00-19:30</div>
+                        <div class="activity-content">
+                            <h4><span class="icon">🌅</span> 自由活动</h4>
+                            <div class="desc">
+                                <p>• 在民宿周边散步</p>
+                                <p>• 拍摄雪山日落</p>
+                                <p>• 欣赏白马藏寨风光</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">19:30-21:00</div>
+                        <div class="activity-content dinner">
+                            <h4><span class="icon">🥘</span> 民宿晚餐</h4>
+                            <div class="desc">
+                                <p>• 品尝正宗白马藏族美食</p>
+                                <p>• 推荐：牦牛肉火锅、腊排骨汤锅</p>
+                                <p>• 洋芋糍粑、野生菌汤</p>
+                                <p>• 蜂蜜咂酒</p>
+                                <p>• 晚餐+早餐约80元/人</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">21:00-22:00</div>
+                        <div class="activity-content">
+                            <h4><span class="icon">🔥</span> 篝火晚会（如有安排）</h4>
+                            <div class="desc">
+                                <p>• 夏季旺季可能有篝火晚会</p>
+                                <p>• 体验白马藏族「圆圆舞」</p>
+                                <p>• 与当地人共舞</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">22:00</div>
+                        <div class="activity-content accommodation">
+                            <h4><span class="icon">🛏️</span> 休息</h4>
+                            <div class="desc">
+                                <p>• 返回房间休息</p>
+                                <p>• 房间有地暖，温暖舒适</p>
+                                <p>• 养精蓄锐，准备第二天的行程</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-section">
+                <div class="day-header">
+                    <div>📅 Day 3：5月3日（周六）- 白马风情深度游 + 还车</div>
+                    <div class="date">民宿 → 某景点 → 某景点 → 某景点 → 某地还车 → 派酒店</div>
+                </div>
+                <div class="activity-list">
+                    <div class="time-slot">
+                        <div class="time-marker">07:30-08:00</div>
+                        <div class="activity-content">
+                            <h4><span class="icon">⏰</span> 起床</h4>
+                            <div class="desc">
+                                <p>• 起床洗漱</p>
+                                <p>• 整理行李装车</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">08:00-08:30</div>
+                        <div class="activity-content dinner">
+                            <h4><span class="icon">🍳</span> 民宿早餐</h4>
+                            <div class="desc">
+                                <p>• 民宿简早餐（已含）</p>
+                                <p>• 白粥+小菜+馒头</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">08:30-09:00</div>
+                        <div class="activity-content transport">
+                            <h4><span class="icon">🚗</span> 前往某景点</h4>
+                            <div class="desc">
+                                <p>• 距离约2.5公里</p>
+                                <p>• 车程约5分钟</p>
+                                <p>• 导航至「某景点观景台」</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">09:00-10:30</div>
+                        <div class="activity-content">
+                            <h4><span class="icon">🏞️</span> 某景点游览</h4>
+                            <div class="desc">
+                                <p><strong>门票：</strong>免费</p>
+                                <p><strong>游览时长：</strong>约1.5小时</p>
+                                <p><strong>主要看点：</strong></p>
+                                <p>• 高山湖泊，水质清澈</p>
+                                <p>• 雪山倒影</p>
+                                <p>• 湖畔栈道漫步</p>
+                                <p>• 拍摄绝美风景照</p>
+                                <p>• 如有房车咖啡可享用</p>
+                            </div>
+                            <div class="tips">
+                                <strong>📸 拍照建议：</strong>观景台是最佳拍摄位置，清晨光线最美
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">10:30-12:00</div>
+                        <div class="activity-content">
+                            <h4><span class="icon">🏘️</span> 某景点</h4>
+                            <div class="desc">
+                                <p><strong>门票：</strong>免费</p>
+                                <p><strong>距某景点：</strong>约1公里，步行10分钟</p>
+                                <p><strong>游览时长：</strong>约1.5小时</p>
+                                <p><strong>主要看点：</strong></p>
+                                <p>• 「白马第一古寨」，千年历史</p>
+                                <p>• 全木结构传统建筑</p>
+                                <p>• 白马藏族民俗体验</p>
+                                <p>• 曹盖面具、花腰带编织</p>
+                                <p>• 可骑马（50元/圈）</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">12:00-13:00</div>
+                        <div class="activity-content lunch">
+                            <h4><span class="icon">🍜</span> 午餐（提前用）</h4>
+                            <div class="desc">
+                                <p>• 古寨内农家乐简餐</p>
+                                <p>• 推荐：腊肉野菜汤锅</p>
+                                <p>• 人均约40-50元</p>
+                                <p>• 建议提前用餐，为下午留出时间</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">13:00-14:00</div>
+                        <div class="activity-content transport">
+                            <h4><span class="icon">🚗</span> 前往某景区某景点</h4>
+                            <div class="desc">
+                                <p>• 从白马藏寨出发</p>
+                                <p>• 距离约50公里</p>
+                                <p>• 车程约1小时</p>
+                                <p>• 导航至「某景区某景点」</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">14:00-15:30</div>
+                        <div class="activity-content">
+                            <h4><span class="icon">🏛️</span> 某景区某景点</h4>
+                            <div class="desc">
+                                <p><strong>开放时间：</strong>08:30-17:00</p>
+                                <p><strong>门票：</strong>成人票40元/人</p>
+                                <p><strong>游览时长：</strong>约1.5小时</p>
+                                <p><strong>主要看点：</strong></p>
+                                <p>• 「深山故宫」，明代建筑群</p>
+                                <p>• 全楠木结构，卯榫建造</p>
+                                <p>• 千手千眼观音像</p>
+                                <p>• 转轮经藏（可转动，需50元）</p>
+                                <p>• 明代壁画</p>
+                            </div>
+                            <div class="tips">
+                                <strong>📝 门票说明：</strong>母亲某岁不符合60岁免票条件，需购买成人票40元；建议请讲解员（20元/次）了解历史文化
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">15:30-18:00</div>
+                        <div class="activity-content transport">
+                            <h4><span class="icon">🚗</span> 前往某地还车</h4>
+                            <div class="desc">
+                                <p>• 从某景区县城出发</p>
+                                <p>• 某高速返回某地</p>
+                                <p>• 距离约76公里</p>
+                                <p>• 车程约2-2.5小时</p>
+                                <p>• 全程高速</p>
+                            </div>
+                            <div class="tips">
+                                <strong>⏰ 时间提示：</strong>需在20:00前还车，建议18:00前抵达某地
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">18:00-18:30</div>
+                        <div class="activity-content transport">
+                            <h4><span class="icon">🔑</span> 还车验车</h4>
+                            <div class="desc">
+                                <p>• 抵达大方租车某地站店</p>
+                                <p>• 工作人员验车</p>
+                                <p>• 确认车辆状况</p>
+                                <p>• 签署还车单</p>
+                            </div>
+                            <div class="tips">
+                                <strong>⛽ 还车提醒：</strong>保持油量与取车时一致（满油取车、满油还车）
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">18:30-19:00</div>
+                        <div class="activity-content transport">
+                            <h4><span class="icon">🚕</span> 前往派酒店</h4>
+                            <div class="desc">
+                                <p>• 步行或打车前往派酒店</p>
+                                <p>• 距离约500-800米</p>
+                                <p>• 步行约10分钟</p>
+                                <p>• 打车约5分钟</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">19:00-19:30</div>
+                        <div class="activity-content accommodation">
+                            <h4><span class="icon">🏨</span> 派酒店入住</h4>
+                            <div class="desc">
+                                <p>• 抵达派酒店</p>
+                                <p>• 办理入住</p>
+                                <p>• 整理行李</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">19:30-21:00</div>
+                        <div class="activity-content dinner">
+                            <h4><span class="icon">🍜</span> 晚餐：某地美食</h4>
+                            <div class="desc">
+                                <p>• 酒店对面「老店肥肠」品尝正宗某地肥肠</p>
+                                <p>• 推荐：红烧肥肠 + 醋汤 + 米饭</p>
+                                <p>• 酒店周边美食丰富，可灵活选择</p>
+                            </div>
+                            <div class="tips">
+                                <strong>💡 温馨提示：</strong>今天行程较紧，晚餐以简餐为主，酒店对面就有美食，方便快捷
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">21:00</div>
+                        <div class="activity-content accommodation">
+                            <h4><span class="icon">🛏️</span> 休息</h4>
+                            <div class="desc">
+                                <p>• 返回酒店休息</p>
+                                <p>• 准备明早返程</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-section">
+                <div class="day-header">
+                    <div>📅 Day 4：5月4日（周日）- 返程日</div>
+                    <div class="date">派酒店 → 打车前往高铁站 → 返回某城市</div>
+                </div>
+                <div class="activity-list">
+                    <div class="time-slot">
+                        <div class="time-marker">07:00-07:30</div>
+                        <div class="activity-content">
+                            <h4><span class="icon">⏰</span> 起床退房</h4>
+                            <div class="desc">
+                                <p>• 起床洗漱</p>
+                                <p>• 整理行李</p>
+                                <p>• 办理退房手续</p>
+                                <p>• 退房后将行李寄存在前台</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">07:30-08:00</div>
+                        <div class="activity-content">
+                            <h4><span class="icon">🍜</span> 早餐</h4>
+                            <div class="desc">
+                                <p>• 酒店周边简餐</p>
+                                <p>• 推荐：某地米粉</p>
+                                <p>• 或者打包带走</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">08:00-08:30</div>
+                        <div class="activity-content transport">
+                            <h4><span class="icon">🚕</span> 前往某地站</h4>
+                            <div class="desc">
+                                <p>• 从派酒店打车前往某地站</p>
+                                <p>• 距离约2.5公里</p>
+                                <p>• 车程约5分钟</p>
+                                <p>• 车费约10-15元</p>
+                            </div>
+                            <div class="tips">
+                                <strong>💡 温馨提示：</strong>酒店免费停车，可以直接打车出行，方便快捷
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">08:30-09:00</div>
+                        <div class="activity-content">
+                            <h4><span class="icon">🚄</span> 进站候车</h4>
+                            <div class="desc">
+                                <p>• 安检进站</p>
+                                <p>• 刷身份证检票</p>
+                                <p>• 前往站台候车</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">09:00-09:22</div>
+                        <div class="activity-content">
+                            <h4><span class="icon">⏰</span> 等候检票</h4>
+                            <div class="desc">
+                                <p>• 某车次次列车 09:22开</p>
+                                <p>• 预留充足时间</p>
+                                <p>• 可在候车厅简单休息</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time-marker">09:22-12:52</div>
+                        <div class="activity-content transport">
+                            <h4><span class="icon">🚄</span> 高铁返程</h4>
+                            <div class="desc">
+                                <p>• 某车次 某地 → 某城市北</p>
+                                <p>• 约3.5小时</p>
+                                <p>• 抵达某城市，结束行程</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 自驾路线汇总 -->
+        <div class="section">
+            <h2 class="section-title">自驾路线总览</h2>
+            
+            <div class="route-card">
+                <h4>🗺️ 某地 → 某景区 → 白马藏寨 → 某景区 → 某地</h4>
+                <div class="route-info">
+                    <div class="route-item">
+                        <div class="label">某地 → 某景区</div>
+                        <div class="value">约120km / 2-2.5h</div>
+                    </div>
+                    <div class="route-item">
+                        <div class="label">高速</div>
+                        <div class="value">某高速</div>
+                    </div>
+                    <div class="route-item">
+                        <div class="label">某景区 → 民宿</div>
+                        <div class="value">约9km / 15min</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="route-card">
+                <h4>🗺️ 5月3日环线</h4>
+                <div class="route-info">
+                    <div class="route-item">
+                        <div class="label">民宿 → 某景点</div>
+                        <div class="value">2.5km / 5min</div>
+                    </div>
+                    <div class="route-item">
+                        <div class="label">某景点 → 扒昔加</div>
+                        <div class="value">1km / 步行10min</div>
+                    </div>
+                    <div class="route-item">
+                        <div class="label">白马 → 某景点</div>
+                        <div class="value">50km / 1h</div>
+                    </div>
+                    <div class="route-item">
+                        <div class="label">某景点 → 某地</div>
+                        <div class="value">76km / 1.5h</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ticket-card">
+                <h4>⛽ 油费与过路费估算</h4>
+                <p>• <strong>总里程：</strong>约350公里</p>
+                <p>• <strong>油费：</strong>约250元（油耗按0.7元/km估算）</p>
+                <p>• <strong>过路费：</strong>约150元（某高速目前免费通行，以实际为准）</p>
+                <p>• <strong>合计：</strong>约350-400元</p>
+                <div class="tips">
+                    <strong>⚠️ 注意：</strong>某高速目前处于试运行免费阶段，正式收费后需额外支付约100-150元过路费
+                </div>
+            </div>
+
+            <div class="ticket-card">
+                <h4>⚠️ 山路驾驶注意事项</h4>
+                <p>• 山区弯道多，保持车距，勿超速</p>
+                <p>• 遇弯道提前减速，使用喇叭提醒对向来车</p>
+                <p>• 避免夜间山区驾驶</p>
+                <p>• 部分路段可能有落石，注意观察</p>
+                <p>• 建议每2小时休息一次，避免疲劳驾驶</p>
+                <p>• 山区信号不稳定，提前下载离线地图</p>
+            </div>
+        </div>
+
+        <!-- 费用明细 -->
+        <div class="section">
+            <h2 class="section-title">费用明细</h2>
+            
+            <!-- 已确认支出 -->
+            <div class="cost-section confirmed">
+                <h3>已确认支出</h3>
+                <table class="cost-detail-table">
+                    <thead>
+                        <tr>
+                            <th>项目</th>
+                            <th>明细说明</th>
+                            <th style="text-align:right;">金额</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>🚄 高铁往返</td>
+                            <td>2人 × 245元/人/次 × 2次（去程+返程）</td>
+                            <td class="amount">¥XXX</td>
+                        </tr>
+                        <tr>
+                            <td>🏨 某地酒店</td>
+                            <td>派酒店（2晚：239元 + 200元）</td>
+                            <td class="amount">¥XXX</td>
+                        </tr>
+                        <tr>
+                            <td>🚗 租车费用</td>
+                            <td>5月2日 8:30 - 5月3日 20:00（2天）</td>
+                            <td class="amount">¥XXX</td>
+                        </tr>
+                        <tr>
+                            <td>🎫 某景区门票</td>
+                            <td>2人（成人票108元 + 老人票70元）</td>
+                            <td class="amount">¥XXX</td>
+                        </tr>
+                        <tr>
+                            <td>🏡 民宿住宿</td>
+                            <td>某景区（1晚）</td>
+                            <td class="amount">¥XXX</td>
+                        </tr>
+                        <tr class="subtotal">
+                            <td colspan="2">已确认小计</td>
+                            <td class="amount">¥XXX,514</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- 其他预计 -->
+            <div class="cost-section estimated">
+                <h3>其他预计费用</h3>
+                <table class="cost-detail-table">
+                    <thead>
+                        <tr>
+                            <th>项目</th>
+                            <th>明细说明</th>
+                            <th style="text-align:right;">金额</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>⛽ 油费</td>
+                            <td>约300km（油耗按0.7-0.8元/km估算）</td>
+                            <td class="amount">¥XXX</td>
+                        </tr>
+                        <tr>
+                            <td>🛣️ 过路费</td>
+                            <td>某高速免费通行</td>
+                            <td class="amount">¥XXX</td>
+                        </tr>
+                        <tr>
+                            <td>🏛️ 某景点门票</td>
+                            <td>2人全价票（母亲某岁不符合60岁免票条件）</td>
+                            <td class="amount">¥XXX</td>
+                        </tr>
+                        <tr>
+                            <td>🚕 5月4日打车费</td>
+                            <td>酒店到某地站（约2.5公里）</td>
+                            <td class="amount">¥XXX</td>
+                        </tr>
+                        <tr>
+                            <td>🍜 餐饮费用</td>
+                            <td>3天2人（含特色美食）</td>
+                            <td class="amount">¥XXX</td>
+                        </tr>
+                        <tr class="subtotal">
+                            <td colspan="2">其他预计小计</td>
+                            <td class="amount">¥XXX</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- 总计 -->
+            <div class="grand-total">
+                <span class="label">💰 预算总计</span>
+                <span class="amount">¥XXX,359</span>
+            </div>
+            
+            <div class="cost-note">
+                <strong>💡 说明：</strong>已确认支出为实际预订/购买费用；其他预计费用为参考估算，实际可能有所浮动。餐饮费用视个人消费习惯而定，建议预留适量现金备用。
+            </div>
+        </div>
+
+        <!-- 注意事项 -->
+        <div class="section">
+            <h2 class="section-title">重要注意事项</h2>
+            <div class="notes-grid">
+                <div class="note-card">
+                    <h4>🎫 门票预约提醒</h4>
+                    <ul>
+                        <li>某景区景区必须提前在「某自然景区」公众号预约</li>
+                        <li>每日限流，建议提前1-2天预约</li>
+                        <li>携带身份证原件入园</li>
+                        <li>母亲某岁可购买老人优惠票（70元）</li>
+                        <li>某景点门票40元/人，60岁（含）以上老人免票</li>
+                    </ul>
+                </div>
+                <div class="note-card">
+                    <h4>👔 衣物建议（某景区5月初天气：9-24°C，有小雨）</h4>
+                    <ul>
+                        <li><strong>外套：</strong>防水冲锋衣或轻便雨衣（必备！山区易下雨）</li>
+                        <li><strong>内搭：</strong>长袖T恤/薄款卫衣2-3件（方便增减）</li>
+                        <li><strong>裤子：</strong>休闲长裤或牛仔裤（避免短裤短裙）</li>
+                        <li><strong>鞋袜：</strong>防滑运动鞋/徒步鞋 + 纯棉袜子</li>
+                        <li><strong>防晒：</strong>遮阳帽、太阳镜、防晒霜SPF50+</li>
+                        <li><strong>其他：</strong>薄围巾/披肩（拍照+保暖两用）</li>
+                    </ul>
+                    <p style="margin-top:10px;color:#713f12;"><strong>特别提示：</strong>海拔2000-3000米，紫外线强，早晚温差大（相差10-15°C），建议分层穿衣，方便随时增减</p>
+                </div>
+                <div class="note-card">
+                    <h4>🎒 必带物品清单</h4>
+                    <ul>
+                        <li><strong>证件类：</strong>身份证、驾驶证、社保卡（母亲）</li>
+                        <li><strong>药品类：</strong>晕车药、感冒药、止泻药、创可贴、红景天（预防高原反应）</li>
+                        <li><strong>食品水：</strong>保温杯（接热水）、零食干粮（景区餐饮少）、巧克力（补充能量）</li>
+                        <li><strong>电子类：</strong>充电宝（20000mAh）、数据线、充电转接头</li>
+                        <li><strong>洗漱类：</strong>牙刷、牙膏、洗面奶、防晒霜、湿纸巾</li>
+                        <li><strong>其他：</strong>纸巾、雨伞/雨衣、现金（山里信号差）、双肩包</li>
+                    </ul>
+                </div>
+                <div class="note-card">
+                    <h4>⚠️ 山区安全提醒</h4>
+                    <ul>
+                        <li>海拔2000-3000米，注意高原反应</li>
+                        <li>不要剧烈运动，慢行多休息</li>
+                        <li>早晚温差大，带好保暖衣物</li>
+                        <li>山路弯道多，注意行车安全</li>
+                        <li>山区信号不稳定，提前下载离线地图</li>
+                        <li>尊重当地白马藏族风俗习惯</li>
+                        <li>爱护环境，不乱扔垃圾</li>
+                        <li>不触摸文物，不投喂野生动物</li>
+                    </ul>
+                </div>
+                <div class="note-card">
+                    <h4>📱 紧急联系方式</h4>
+                    <ul>
+                        <li>某景区景区电话：000-00000000</li>
+                        <li>某景点电话：000-00000000</li>
+                        <li>大方租车：13800138000</li>
+                        <li>某景区：13800138000</li>
+                        <li>派酒店：000-00000000</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 页脚 -->
+        <div class="footer">
+            <p>🌟 祝您和母亲旅途愉快！</p>
+            <p>某景区白马藏寨五一假期旅游规划 V4终极版</p>
+            <p class="disclaimer">
+                信息来源：携程、马蜂窝、小红书、12306等权威旅游平台实时查询<br>
+                更新时间：2026年4月 | 行程安排已充分考虑带母亲同行的轻松节奏
+            </p>
+        </div>
+    </div>
+</body>
+</html>

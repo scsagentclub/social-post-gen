@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>技术分享沙龙 · 技术分享沙龙</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Inter", sans-serif;
+    background: #050510;
+    color: #E5E7EB;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
+  }
+
+  .page {
+    width: 100%;
+    min-height: 100vh;
+    background:
+      radial-gradient(ellipse 80% 40% at 50% 0%, rgba(30, 58, 138, 0.35) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 30% at 85% 20%, rgba(88, 28, 135, 0.2) 0%, transparent 50%),
+      radial-gradient(ellipse 60% 30% at 15% 50%, rgba(29, 78, 216, 0.15) 0%, transparent 50%),
+      radial-gradient(ellipse 70% 35% at 70% 80%, rgba(109, 40, 217, 0.18) 0%, transparent 50%),
+      linear-gradient(175deg, #0a0e27 0%, #0d1033 15%, #0f0a2e 35%, #120b28 55%, #0e0a1f 75%, #080613 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ===== 全局网格背景 ===== */
+  .page::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      linear-gradient(rgba(120, 160, 255, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(120, 160, 255, 0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ===== 光晕 ===== */
+  .glow-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .orb-1 { width: 400px; height: 400px; top: -100px; right: -100px; background: rgba(99, 102, 241, 0.1); }
+  .orb-2 { width: 350px; height: 350px; top: 40%; left: -80px; background: rgba(139, 92, 246, 0.07); }
+  .orb-3 { width: 300px; height: 300px; bottom: 5%; right: -60px; background: rgba(59, 130, 246, 0.06); }
+
+  /* ===== 顶部发光线 ===== */
+  .glow-line-top {
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, rgba(96, 165, 250, 0.5) 20%, rgba(168, 85, 247, 0.5) 50%, rgba(96, 165, 250, 0.5) 80%, transparent 100%);
+    box-shadow: 0 0 30px rgba(96, 165, 250, 0.25), 0 0 60px rgba(168, 85, 247, 0.15);
+    position: relative;
+    z-index: 2;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 48px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    text-align: center;
+    padding: 80px 0 60px;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    padding: 10px 32px;
+    border: 1px solid rgba(148, 163, 255, 0.25);
+    border-radius: 100px;
+    font-size: 18px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: rgba(165, 180, 252, 0.7);
+    margin-bottom: 36px;
+    background: rgba(99, 102, 241, 0.05);
+  }
+
+  .hero-title {
+    font-size: 108px;
+    font-weight: 700;
+    letter-spacing: -2px;
+    line-height: 1.05;
+    background: linear-gradient(135deg, #ffffff 0%, #c7d2fe 35%, #a5b4fc 65%, #818cf8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 24px;
+  }
+
+  .hero-subtitle {
+    font-size: 33px;
+    font-weight: 300;
+    color: rgba(203, 213, 225, 0.6);
+    letter-spacing: 12px;
+    margin-bottom: 20px;
+  }
+
+  .hero-tagline {
+    font-size: 23px;
+    color: rgba(165, 180, 252, 0.4);
+    font-style: italic;
+    letter-spacing: 1px;
+    margin-bottom: 40px;
+  }
+
+  .hero-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    padding: 18px 42px;
+    border-radius: 16px;
+    background: rgba(99, 102, 241, 0.06);
+    border: 1px solid rgba(129, 140, 248, 0.12);
+    backdrop-filter: blur(10px);
+  }
+
+  .hero-meta span {
+    font-size: 23px;
+    color: rgba(199, 210, 254, 0.75);
+    letter-spacing: 0.5px;
+  }
+
+  .hero-meta .dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: rgba(129, 140, 248, 0.4);
+  }
+
+  /* ===== 通用分隔 ===== */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 56px 0;
+  }
+
+  .divider .line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(129, 140, 248, 0.15), transparent);
+  }
+
+  .divider .diamond {
+    width: 8px; height: 8px;
+    border: 1px solid rgba(129, 140, 248, 0.35);
+    transform: rotate(45deg);
+  }
+
+  .sec-label {
+    font-size: 17px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: rgba(129, 140, 248, 0.45);
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  .sec-title {
+    font-size: 27px;
+    font-weight: 600;
+    color: rgba(199, 210, 254, 0.7);
+    text-align: center;
+    margin-bottom: 28px;
+    letter-spacing: 4px;
+  }
+
+  /* ===== 亮点区 ===== */
+  .highlights {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .hl-card {
+    padding: 36px 30px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hl-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  }
+
+  .hl-card .icon { font-size: 48px; margin-bottom: 18px; display: block; }
+
+  .hl-card h3 {
+    font-size: 27px;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-bottom: 12px;
+  }
+
+  .hl-card p {
+    font-size: 20px;
+    color: rgba(203, 213, 225, 0.55);
+    line-height: 1.7;
+  }
+
+  .hl-card .tag {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 6px 18px;
+    border-radius: 10px;
+    font-size: 17px;
+    background: rgba(99, 102, 241, 0.08);
+    border: 1px solid rgba(129, 140, 248, 0.12);
+    color: rgba(165, 180, 252, 0.6);
+  }
+
+  /* ===== 福利横幅 ===== */
+  .promo-banner {
+    margin-top: 28px;
+    padding: 22px 36px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(234, 88, 12, 0.1), rgba(245, 158, 11, 0.08));
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .promo-banner .promo-icon { Font-size: 33px; }
+
+  .promo-banner .promo-text {
+    font-size: 21px;
+    font-weight: 500;
+    color: rgba(253, 224, 71, 0.85);
+    letter-spacing: 0.5px;
+  }
+
+  .promo-banner .promo-sub {
+    font-size: 18px;
+    color: rgba(253, 224, 71, 0.5);
+  }
+
+  /* ===== Q1 数据 + 表格 ===== */
+  .q1-stats {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 36px;
+  }
+
+  .stat-item {
+    flex: 1;
+    text-align: center;
+    padding: 24px 14px;
+    position: relative;
+  }
+
+  .stat-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 40px;
+    background: rgba(129, 140, 248, 0.12);
+  }
+
+  .stat-num {
+    font-size: 54px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #c7d2fe, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+  }
+
+  .stat-num .unit { Font-size: 24px; }
+
+  .stat-label {
+    font-size: 18px;
+    color: rgba(148, 163, 184, 0.55);
+    margin-top: 8px;
+    letter-spacing: 1px;
+  }
+
+  /* ===== 通用表格 ===== */
+  .table-wrap {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(129, 140, 248, 0.1);
+    background: rgba(255, 255, 255, 0.015);
+    backdrop-filter: blur(10px);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 20px;
+  }
+
+  thead th {
+    padding: 18px 22px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: 1px;
+    color: rgba(165, 180, 252, 0.7);
+    background: rgba(99, 102, 241, 0.06);
+    border-bottom: 1px solid rgba(129, 140, 248, 0.1);
+  }
+
+  tbody td {
+    padding: 18px 22px;
+    color: rgba(203, 213, 225, 0.7);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    font-size: 19px;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+
+  tbody tr:hover { background: rgba(99, 102, 241, 0.03); }
+
+  .placeholder {
+    color: rgba(148, 163, 184, 0.35);
+    font-style: italic;
+  }
+
+  /* ===== 分享人介绍 ===== */
+  .speakers {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+
+  .speaker-card {
+    padding: 30px 24px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    text-align: center;
+  }
+
+  .speaker-avatar {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.1));
+    border: 1px solid rgba(129, 140, 248, 0.2);
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    color: rgba(165, 180, 252, 0.5);
+  }
+
+  .speaker-name {
+    font-size: 23px;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin-bottom: 6px;
+  }
+
+  .speaker-title {
+    font-size: 17px;
+    color: rgba(148, 163, 184, 0.5);
+    margin-bottom: 14px;
+  }
+
+  .speaker-bio {
+    font-size: 18px;
+    color: rgba(148, 163, 184, 0.5);
+    line-height: 1.6;
+    text-align: left;
+  }
+
+  /* ===== 专利简介 ===== */
+  .patents {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .patent-card {
+    padding: 26px 28px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(12px);
+  }
+
+  .patent-id {
+    font-size: 17px;
+    color: rgba(129, 140, 248, 0.5);
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+
+  .patent-name {
+    font-size: 21px;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin-bottom: 8px;
+  }
+
+  .patent-inventor {
+    font-size: 17px;
+    color: rgba(165, 180, 252, 0.5);
+    margin-bottom: 12px;
+  }
+
+  .patent-desc {
+    font-size: 18px;
+    color: rgba(148, 163, 184, 0.5);
+    line-height: 1.6;
+  }
+
+  /* ===== 课程表 ===== */
+  .schedule-block { margin-bottom: 36px; }
+
+  .schedule-block-title {
+    font-size: 23px;
+    font-weight: 600;
+    color: rgba(199, 210, 254, 0.65);
+    margin-bottom: 20px;
+    padding-left: 16px;
+    border-left: 3px solid rgba(129, 140, 248, 0.4);
+    letter-spacing: 1px;
+  }
+
+  /* ===== 员工意见 & 改进 ===== */
+  .feedback-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .feedback-col h4 {
+    font-size: 21px;
+    font-weight: 600;
+    color: rgba(199, 210, 254, 0.65);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .feedback-col h4 .icon-sm { Font-size: 24px; }
+
+  .feedback-item {
+    padding: 20px 22px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    margin-bottom: 14px;
+  }
+
+  .feedback-item:last-child { margin-bottom: 0; }
+
+  .feedback-item .fb-label {
+    font-size: 17px;
+    color: rgba(129, 140, 248, 0.5);
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .feedback-item p {
+    font-size: 20px;
+    color: rgba(203, 213, 225, 0.6);
+    line-height: 1.6;
+  }
+
+  .improve-item {
+    padding: 20px 22px;
+    border-radius: 14px;
+    background: rgba(34, 197, 94, 0.03);
+    border: 1px solid rgba(34, 197, 94, 0.08);
+    margin-bottom: 14px;
+  }
+
+  .improve-item:last-child { margin-bottom: 0; }
+
+  .improve-item .im-label {
+    font-size: 17px;
+    color: rgba(34, 197, 94, 0.5);
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .improve-item p {
+    font-size: 20px;
+    color: rgba(203, 213, 225, 0.6);
+    line-height: 1.6;
+  }
+
+  /* ===== 时间线 ===== */
+  .timeline {
+    display: flex;
+    gap: 0;
+    position: relative;
+    padding: 20px 0;
+  }
+
+  .tl-item {
+    flex: 1;
+    text-align: center;
+    position: relative;
+    padding: 0 10px;
+  }
+
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    top: 18px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(129, 140, 248, 0.3), rgba(168, 85, 247, 0.2));
+    z-index: 0;
+  }
+
+  .tl-item:first-child::before { left: 50%; }
+  .tl-item:last-child::before { right: 50%; }
+
+  .tl-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: rgba(129, 140, 248, 0.5);
+    border: 2px solid rgba(129, 140, 248, 0.3);
+    margin: 14px auto 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .tl-item:first-child .tl-dot {
+    background: rgba(96, 165, 250, 0.7);
+    box-shadow: 0 0 14px rgba(96, 165, 250, 0.3);
+  }
+
+  .tl-time {
+    font-size: 18px;
+    color: rgba(129, 140, 248, 0.55);
+    font-weight: 500;
+    margin-bottom: 6px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tl-title {
+    font-size: 20px;
+    color: #e2e8f0;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .tl-desc {
+    font-size: 17px;
+    color: rgba(148, 163, 184, 0.4);
+  }
+
+  /* ===== 报名CTA ===== */
+  .cta-section {
+    text-align: center;
+    padding: 24px 0 12px;
+  }
+
+  .cta-button {
+    display: inline-block;
+    padding: 20px 80px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.85), rgba(139, 92, 246, 0.85));
+    color: #fff;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-decoration: none;
+    border: 1px solid rgba(165, 180, 252, 0.2);
+    box-shadow: 0 4px 30px rgba(99, 102, 241, 0.3), 0 0 0 1px rgba(99, 102, 241, 0.1);
+    cursor: pointer;
+  }
+
+  .cta-hint {
+    font-size: 18px;
+    color: rgba(148, 163, 184, 0.35);
+    margin-top: 16px;
+  }
+
+  /* ===== FAQ ===== */
+  .faq-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+
+  .faq-item {
+    padding: 24px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .faq-q {
+    font-size: 20px;
+    color: rgba(199, 210, 254, 0.65);
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+
+  .faq-a {
+    font-size: 18px;
+    color: rgba(148, 163, 184, 0.45);
+    line-height: 1.6;
+  }
+
+  /* ===== Footer ===== */
+  .footer {
+    margin-top: 56px;
+    padding: 32px 0;
+    border-top: 1px solid rgba(129, 140, 248, 0.08);
+    text-align: center;
+  }
+
+  .footer-brand {
+    font-size: 20px;
+    font-weight: 600;
+    color: rgba(199, 210, 254, 0.4);
+    letter-spacing: 4px;
+    margin-bottom: 10px;
+  }
+
+  .footer-contact {
+    font-size: 17px;
+    color: rgba(148, 163, 184, 0.25);
+  }
+
+  /* ===== 往期反馈引用块 ===== */
+  .quote-block {
+    margin-top: 28px;
+    padding: 22px 28px;
+    border-radius: 14px;
+    background: rgba(99, 102, 241, 0.03);
+    border-left: 2px solid rgba(129, 140, 248, 0.25);
+  }
+
+  .quote-block .quote-text {
+    font-size: 20px;
+    color: rgba(199, 210, 254, 0.55);
+    font-style: italic;
+    line-height: 1.7;
+  }
+
+  .quote-block .quote-source {
+    font-size: 17px;
+    color: rgba(148, 163, 184, 0.35);
+    font-style: normal;
+    margin-top: 12px;
+  }
+
+  /* ===== 响应式 ===== */
+  @media (max-width: 900px) {
+    .container { padding: 0 24px; }
+    .hero-title { font-size: 60px; }
+    .highlights { grid-template-columns: 1fr; }
+    .speakers { grid-template-columns: 1fr 1fr; }
+    .patents { grid-template-columns: 1fr; }
+    .feedback-grid { grid-template-columns: 1fr; }
+    .faq-grid { grid-template-columns: 1fr; }
+    .timeline { flex-wrap: wrap; gap: 12px; }
+    .tl-item { flex: none; width: 33.33%; }
+    .tl-item::before { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
+  <div class="glow-orb orb-3"></div>
+
+  <div class="glow-line-top"></div>
+
+  <div class="container">
+
+    <!-- ========== HERO ========== -->
+    <div class="hero">
+      <div class="hero-badge">某科技集团</div>
+      <h1 class="hero-title">技术分享沙龙</h1>
+      <p class="hero-subtitle">技 术 洞 察 集 市</p>
+      <p class="hero-tagline">"带着问题来，拿着方案走"</p>
+      <div class="hero-meta">
+        <span>6月26日（周五）</span>
+        <div class="dot"></div>
+        <span>13:30 – 17:00</span>
+        <div class="dot"></div>
+        <span>某培训场地</span>
+      </div>
+    </div>
+
+    <!-- ========== 分隔 ========== -->
+    <div class="divider"><div class="line"></div><div class="diamond"></div><div class="line"></div></div>
+
+    <!-- ========== 核心亮点 ========== -->
+    <p class="sec-label">Highlights</p>
+    <div class="highlights">
+      <div class="hl-card">
+        <span class="icon">🎯</span>
+        <h3>实战分享</h3>
+        <p>20分钟真实案例 + 30分钟深度问答<br>一线工程师讲述真实技术挑战与解法</p>
+        <span class="tag">6场平行分享</span>
+      </div>
+      <div class="hl-card">
+        <span class="icon">🔬</span>
+        <h3>专利展览</h3>
+        <p>面对面与技术发明人交流<br>近距离了解前沿专利的技术细节与应用场景</p>
+        <span class="tag">6项专利展示</span>
+      </div>
+      <div class="hl-card">
+        <span class="icon">⚡</span>
+        <h3>实操工作坊</h3>
+        <p>小班实战演练，手把手带你上手<br>从理论到落地，现场产出可交付成果</p>
+        <span class="tag">限20人 · 需提前报名</span>
+      </div>
+    </div>
+
+    <!-- 福利横幅 -->
+    <div class="promo-banner">
+      <span class="promo-icon">🎁</span>
+      <span class="promo-text">名额有限，报名参与！现场打卡即赠专属大奖</span>
+      <span class="promo-sub">集章打卡 · 限量好礼 · 先到先得</span>
+    </div>
+
+    <!-- ========== 分隔 ========== -->
+    <div class="divider"><div class="line"></div><div class="diamond"></div><div class="line"></div></div>
+
+    <!-- ========== Q1 回顾 ========== -->
+    <p class="sec-title">Q1 回顾</p>
+    <div class="q1-stats">
+      <div class="stat-item">
+        <div class="stat-num">128<span class="unit">+</span></div>
+        <div class="stat-label">参与人数</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">12</div>
+        <div class="stat-label">覆盖部门</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">24</div>
+        <div class="stat-label">产出成果</div>
+      </div>
+    </div>
+
+    <!-- Q1 优秀学员成果 -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>姓名</th>
+            <th>部门</th>
+            <th>领域</th>
+            <th>课题</th>
+            <th>成果数据</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="placeholder">张三</td>
+            <td class="placeholder">XX部门</td>
+            <td class="placeholder">XX领域</td>
+            <td class="placeholder">XX课题名称</td>
+            <td class="placeholder">XX%</td>
+          </tr>
+          <tr>
+            <td class="placeholder">李四</td>
+            <td class="placeholder">XX部门</td>
+            <td class="placeholder">XX领域</td>
+            <td class="placeholder">XX课题名称</td>
+            <td class="placeholder">XX项</td>
+          </tr>
+          <tr>
+            <td class="placeholder">王五</td>
+            <td class="placeholder">XX部门</td>
+            <td class="placeholder">XX领域</td>
+            <td class="placeholder">XX课题名称</td>
+            <td class="placeholder">XX%</td>
+          </tr>
+          <tr>
+            <td class="placeholder">赵六</td>
+            <td class="placeholder">XX部门</td>
+            <td class="placeholder">XX领域</td>
+            <td class="placeholder">XX课题名称</td>
+            <td class="placeholder">XX万</td>
+          </tr>
+          <tr>
+            <td class="placeholder">孙七</td>
+            <td class="placeholder">XX部门</td>
+            <td class="placeholder">XX领域</td>
+            <td class="placeholder">XX课题名称</td>
+            <td class="placeholder">XX项</td>
+          </tr>
+          <tr>
+            <td class="placeholder">周八</td>
+            <td class="placeholder">XX部门</td>
+            <td class="placeholder">XX领域</td>
+            <td class="placeholder">XX课题名称</td>
+            <td class="placeholder">XX%</td>
+          </tr>
+          <tr>
+            <td class="placeholder">吴九</td>
+            <td class="placeholder">XX部门</td>
+            <td class="placeholder">XX领域</td>
+            <td class="placeholder">XX课题名称</td>
+            <td class="placeholder">XX项</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 往期反馈 -->
+    <div class="quote-block">
+      <p class="quote-text">
+        "带着问题来，拿着方案走。"<br>
+        "第一次和技术发明人面对面聊天，收获很大。"
+      </p>
+      <p class="quote-source">— Q1 参与者反馈</p>
+    </div>
+
+    <!-- ========== 分隔 ========== -->
+    <div class="divider"><div class="line"></div><div class="diamond"></div><div class="line"></div></div>
+
+    <!-- ========== 分享人介绍 ========== -->
+    <p class="sec-label">Speakers</p>
+    <p class="sec-title">本次分享人介绍</p>
+    <div class="speakers">
+      <div class="speaker-card">
+        <div class="speaker-avatar">👤</div>
+        <p class="speaker-name placeholder">分享人姓名</p>
+        <p class="speaker-title placeholder">部门 · 职位</p>
+        <p class="speaker-bio placeholder">简要介绍分享人的技术背景、研究方向和主要成果，3-4行文字。后续替换为真实信息。</p>
+      </div>
+      <div class="speaker-card">
+        <div class="speaker-avatar">👤</div>
+        <p class="speaker-name placeholder">分享人姓名</p>
+        <p class="speaker-title placeholder">部门 · 职位</p>
+        <p class="speaker-bio placeholder">简要介绍分享人的技术背景、研究方向和主要成果，3-4行文字。后续替换为真实信息。</p>
+      </div>
+      <div class="speaker-card">
+        <div class="speaker-avatar">👤</div>
+        <p class="speaker-name placeholder">分享人姓名</p>
+        <p class="speaker-title placeholder">部门 · 职位</p>
+        <p class="speaker-bio placeholder">简要介绍分享人的技术背景、研究方向和主要成果，3-4行文字。后续替换为真实信息。</p>
+      </div>
+      <div class="speaker-card">
+        <div class="speaker-avatar">👤</div>
+        <p class="speaker-name placeholder">分享人姓名</p>
+        <p class="speaker-title placeholder">部门 · 职位</p>
+        <p class="speaker-bio placeholder">简要介绍分享人的技术背景、研究方向和主要成果，3-4行文字。后续替换为真实信息。</p>
+      </div>
+      <div class="speaker-card">
+        <div class="speaker-avatar">👤</div>
+        <p class="speaker-name placeholder">分享人姓名</p>
+        <p class="speaker-title placeholder">部门 · 职位</p>
+        <p class="speaker-bio placeholder">简要介绍分享人的技术背景、研究方向和主要成果，3-4行文字。后续替换为真实信息。</p>
+      </div>
+      <div class="speaker-card">
+        <div class="speaker-avatar">👤</div>
+        <p class="speaker-name placeholder">分享人姓名</p>
+        <p class="speaker-title placeholder">部门 · 职位</p>
+        <p class="speaker-bio placeholder">简要介绍分享人的技术背景、研究方向和主要成果，3-4行文字。后续替换为真实信息。</p>
+      </div>
+    </div>
+
+    <!-- ========== 分隔 ========== -->
+    <div class="divider"><div class="line"></div><div class="diamond"></div><div class="line"></div></div>
+
+    <!-- ========== 专利简介 ========== -->
+    <p class="sec-label">Patents</p>
+    <p class="sec-title">专利内容简介</p>
+    <div class="patents">
+      <div class="patent-card">
+        <p class="patent-id">PATENT 01</p>
+        <p class="patent-name placeholder">专利名称</p>
+        <p class="patent-inventor placeholder">发明人：XXX</p>
+        <p class="patent-desc placeholder">简要介绍该专利的技术原理、创新点和应用价值，2-3行文字。</p>
+      </div>
+      <div class="patent-card">
+        <p class="patent-id">PATENT 02</p>
+        <p class="patent-name placeholder">专利名称</p>
+        <p class="patent-inventor placeholder">发明人：XXX</p>
+        <p class="patent-desc placeholder">简要介绍该专利的技术原理、创新点和应用价值，2-3行文字。</p>
+      </div>
+      <div class="patent-card">
+        <p class="patent-id">PATENT 03</p>
+        <p class="patent-name placeholder">专利名称</p>
+        <p class="patent-inventor placeholder">发明人：XXX</p>
+        <p class="patent-desc placeholder">简要介绍该专利的技术原理、创新点和应用价值，2-3行文字。</p>
+      </div>
+      <div class="patent-card">
+        <p class="patent-id">PATENT 04</p>
+        <p class="patent-name placeholder">专利名称</p>
+        <p class="patent-inventor placeholder">发明人：XXX</p>
+        <p class="patent-desc placeholder">简要介绍该专利的技术原理、创新点和应用价值，2-3行文字。</p>
+      </div>
+      <div class="patent-card">
+        <p class="patent-id">PATENT 05</p>
+        <p class="patent-name placeholder">专利名称</p>
+        <p class="patent-inventor placeholder">发明人：XXX</p>
+        <p class="patent-desc placeholder">简要介绍该专利的技术原理、创新点和应用价值，2-3行文字。</p>
+      </div>
+      <div class="patent-card">
+        <p class="patent-id">PATENT 06</p>
+        <p class="patent-name placeholder">专利名称</p>
+        <p class="patent-inventor placeholder">发明人：XXX</p>
+        <p class="patent-desc placeholder">简要介绍该专利的技术原理、创新点和应用价值，2-3行文字。</p>
+      </div>
+    </div>
+
+    <!-- ========== 分隔 ========== -->
+    <div class="divider"><div class="line"></div><div class="diamond"></div><div class="line"></div></div>
+
+    <!-- ========== 课程表 ========== -->
+    <p class="sec-label">Courses</p>
+
+    <!-- 6场实战分享 -->
+    <div class="schedule-block">
+      <p class="schedule-block-title">实战分享课程（6场）</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 60px;">编号</th>
+              <th style="width: 180px;">课题名称</th>
+              <th style="width: 130px;">分享人</th>
+              <th style="width: 130px;">部门</th>
+              <th>课题简介</th>
+              <th style="width: 110px;">时间</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="color: rgba(129,140,248,0.5); font-weight: 600;">01</td>
+              <td class="placeholder">课题名称</td>
+              <td class="placeholder">分享人</td>
+              <td class="placeholder">XX部门</td>
+              <td class="placeholder">课题简介，1-2行文字</td>
+              <td class="placeholder">13:30</td>
+            </tr>
+            <tr>
+              <td style="color: rgba(129,140,248,0.5); font-weight: 600;">02</td>
+              <td class="placeholder">课题名称</td>
+              <td class="placeholder">分享人</td>
+              <td class="placeholder">XX部门</td>
+              <td class="placeholder">课题简介，1-2行文字</td>
+              <td class="placeholder">13:30</td>
+            </tr>
+            <tr>
+              <td style="color: rgba(129,140,248,0.5); font-weight: 600;">03</td>
+              <td class="placeholder">课题名称</td>
+              <td class="placeholder">分享人</td>
+              <td class="placeholder">XX部门</td>
+              <td class="placeholder">课题简介，1-2行文字</td>
+              <td class="placeholder">14:20</td>
+            </tr>
+            <tr>
+              <td style="color: rgba(129,140,248,0.5); font-weight: 600;">04</td>
+              <td class="placeholder">课题名称</td>
+              <td class="placeholder">分享人</td>
+              <td class="placeholder">XX部门</td>
+              <td class="placeholder">课题简介，1-2行文字</td>
+              <td class="placeholder">14:20</td>
+            </tr>
+            <tr>
+              <td style="color: rgba(129,140,248,0.5); font-weight: 600;">05</td>
+              <td class="placeholder">课题名称</td>
+              <td class="placeholder">分享人</td>
+              <td class="placeholder">XX部门</td>
+              <td class="placeholder">课题简介，1-2行文字</td>
+              <td class="placeholder">15:10</td>
+            </tr>
+            <tr>
+              <td style="color: rgba(129,140,248,0.5); font-weight: 600;">06</td>
+              <td class="placeholder">课题名称</td>
+              <td class="placeholder">分享人</td>
+              <td class="placeholder">XX部门</td>
+              <td class="placeholder">课题简介，1-2行文字</td>
+              <td class="placeholder">15:10</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 6场专利课程 -->
+    <div class="schedule-block">
+      <p class="schedule-block-title">专利课程（6场）</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 60px;">编号</th>
+              <th style="width: 180px;">专利名称</th>
+              <th style="width: 130px;">发明人</th>
+              <th style="width: 130px;">部门</th>
+              <th>专利简介</th>
+              <th style="width: 110px;">时间</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="color: rgba(168,85,247,0.5); font-weight: 600;">P1</td>
+              <td class="placeholder">专利名称</td>
+              <td class="placeholder">发明人</td>
+              <td class="placeholder">XX部门</td>
+              <td class="placeholder">专利简介，1-2行文字</td>
+              <td class="placeholder">13:30</td>
+            </tr>
+            <tr>
+              <td style="color: rgba(168,85,247,0.5); font-weight: 600;">P2</td>
+              <td class="placeholder">专利名称</td>
+              <td class="placeholder">发明人</td>
+              <td class="placeholder">XX部门</td>
+              <td class="placeholder">专利简介，1-2行文字</td>
+              <td class="placeholder">13:30</td>
+            </tr>
+            <tr>
+              <td style="color: rgba(168,85,247,0.5); font-weight: 600;">P3</td>
+              <td class="placeholder">专利名称</td>
+              <td class="placeholder">发明人</td>
+              <td class="placeholder">XX部门</td>
+              <td class="placeholder">专利简介，1-2行文字</td>
+              <td class="placeholder">14:20</td>
+            </tr>
+            <tr>
+              <td style="color: rgba(168,85,247,0.5); font-weight: 600;">P4</td>
+              <td class="placeholder">专利名称</td>
+              <td class="placeholder">发明人</td>
+              <td class="placeholder">XX部门</td>
+              <td class="placeholder">专利简介，1-2行文字</td>
+              <td class="placeholder">14:20</td>
+            </tr>
+            <tr>
+              <td style="color: rgba(168,85,247,0.5); font-weight: 600;">P5</td>
+              <td class="placeholder">专利名称</td>
+              <td class="placeholder">发明人</td>
+              <td class="placeholder">XX部门</td>
+              <td class="placeholder">专利简介，1-2行文字</td>
+              <td class="placeholder">15:10</td>
+            </tr>
+            <tr>
+              <td style="color: rgba(168,85,247,0.5); font-weight: 600;">P6</td>
+              <td class="placeholder">专利名称</td>
+              <td class="placeholder">发明人</td>
+              <td class="placeholder">XX部门</td>
+              <td class="placeholder">专利简介，1-2行文字</td>
+              <td class="placeholder">15:10</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ========== 分隔 ========== -->
+    <div class="divider"><div class="line"></div><div class="diamond"></div><div class="line"></div></div>
+
+    <!-- ========== 员工意见 & 改进计划 ========== -->
+    <p class="sec-label">Feedback & Improvement</p>
+    <div class="feedback-grid">
+      <div class="feedback-col">
+        <h4><span class="icon-sm">💬</span> 员工意见</h4>
+        <div class="feedback-item">
+          <p class="fb-label">反馈 1</p>
+          <p class="placeholder">关于分享时长、内容深度、互动形式等方面的员工真实反馈。</p>
+        </div>
+        <div class="feedback-item">
+          <p class="fb-label">反馈 2</p>
+          <p class="placeholder">关于专利展览体验、资料准备、现场组织等方面的意见。</p>
+        </div>
+        <div class="feedback-item">
+          <p class="fb-label">反馈 3</p>
+          <p class="placeholder">关于后续活动期望、主题偏好、形式建议等。</p>
+        </div>
+      </div>
+      <div class="feedback-col">
+        <h4><span class="icon-sm">🚀</span> 改进计划</h4>
+        <div class="improve-item">
+          <p class="im-label">改进 1</p>
+          <p class="placeholder">针对反馈1的具体改进措施，包括执行方案、负责人、时间节点等。</p>
+        </div>
+        <div class="improve-item">
+          <p class="im-label">改进 2</p>
+          <p class="placeholder">针对反馈2的具体改进措施，包括新增环节、流程优化等。</p>
+        </div>
+        <div class="improve-item">
+          <p class="im-label">改进 3</p>
+          <p class="placeholder">针对反馈3的具体改进措施，包括资源投入、机制建设等。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== 分隔 ========== -->
+    <div class="divider"><div class="line"></div><div class="diamond"></div><div class="line"></div></div>
+
+    <!-- ========== 活动流程 ========== -->
+    <p class="sec-label">Schedule</p>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-time">13:00 – 13:30</div>
+        <div class="tl-dot"></div>
+        <div class="tl-title">签到 & 展览</div>
+        <div class="tl-desc">领取资料，参观专利区</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">13:30 – 15:30</div>
+        <div class="tl-dot"></div>
+        <div class="tl-title">平行分享会</div>
+        <div class="tl-desc">6场实战 + 6场专利</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">13:30 – 14:30</div>
+        <div class="tl-dot"></div>
+        <div class="tl-title">实操工作坊</div>
+        <div class="tl-desc">限20人 · 需提前报名</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">15:30 – 16:10</div>
+        <div class="tl-dot"></div>
+        <div class="tl-title">自由交流</div>
+        <div class="tl-desc">茶歇 + 深度探讨</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">16:10 – 16:30</div>
+        <div class="tl-dot"></div>
+        <div class="tl-title">闭幕 & 抽奖</div>
+        <div class="tl-desc">活动总结 + 幸运抽奖</div>
+      </div>
+    </div>
+
+    <!-- ========== 报名 ========== -->
+    <div class="cta-section">
+      <a class="cta-button">立即报名</a>
+      <p class="cta-hint">名额有限，请关注后续报名通知</p>
+    </div>
+
+    <!-- ========== FAQ ========== -->
+    <div class="divider"><div class="line"></div><div class="diamond"></div><div class="line"></div></div>
+
+    <p class="sec-label">FAQ</p>
+    <div class="faq-grid">
+      <div class="faq-item">
+        <p class="faq-q">Q：允许多主题串场吗？</p>
+        <p class="faq-a">可以。分享环节支持自由串场，可根据兴趣选择不同主题。</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">Q：工作坊怎么报名？</p>
+        <p class="faq-a">报名时勾选即可，限20人先到先得。</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">Q：现场打卡有什么奖品？</p>
+        <p class="faq-a">完成打卡任务即可获得限定好礼，集齐全部印章还有额外惊喜。</p>
+      </div>
+    </div>
+
+    <!-- ========== Footer ========== -->
+    <div class="footer">
+      <p class="footer-brand">某科技集团</p>
+      <p class="footer-contact">咨询请联系 某科技集团</p>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

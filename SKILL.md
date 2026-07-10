@@ -91,5 +91,28 @@ font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", "P
 
 ## Assets
 
+### Working Examples
+
 - `assets/template.html` — complete working example (Deep Space variant) demonstrating all patterns.
 - `assets/gathering-template.html` — complete working example (Warm Gathering / Event Recap variant) with CSS-only gallery reveal.
+
+### Template Library (desensitized)
+
+Ready-to-adapt templates distilled from real-world pages. All project-specific text, names, locations, contact info, and dates have been replaced with generic placeholders.
+
+| File | Style | Use Case |
+|------|-------|----------|
+| `assets/templates/apple-glassmorphism-callout.html` | Apple glassmorphism, light blue-purple gradient | Internal call-for-submissions / tool contest |
+| `assets/templates/geek-light-callout.html` | Geek light, flat cards, step timeline | Internal tool campaign / submission guide |
+| `assets/templates/tech-platform-launch.html` | Light blue, floating bubbles, bento grid | SaaS / internal platform launch |
+| `assets/templates/event-recap-light.html` | Editorial, pastel gradient, photo grids | Event recap article |
+| `assets/templates/event-promo-light-blue.html` | Light blue, soft blobs, speaker cards | Event promo landing page |
+| `assets/templates/event-newsletter.html` | Light blue, data cards, news report | Quarterly activity newsletter |
+| `assets/templates/event-dark-tech.html` | Dark tech, neon glow, glass cards | Tech bazaar / dark-theme event landing |
+| `assets/templates/tech-community-promo.html` | Light purple, glass cards, stats | Tech-expert community promotion |
+| `assets/templates/tech-platform-dashboard.html` | Dark navy, dashboard UI, SaaS | Platform dashboard mockup |
+| `assets/templates/travel-itinerary.html` | Nature green, timeline, cost tables | Travel itinerary guide |
+| `assets/templates/miniprogram-guide.html` | Dark theme, orange accent, infographic | Mini-program usage guide |
+| `assets/templates/event-ppt-export.html` | JSON metadata export | PPT-to-HTML export data |
+
+When adapting a template, keep structure and styles, replace placeholder text (`某科技集团`, `某工程师`, `example.com`, `QUESTIONNAIRE_LINK_PLACEHOLDER`, etc.) with the user's actual content, and ensure zero JavaScript unless explicitly requested.

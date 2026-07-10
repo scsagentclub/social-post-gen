@@ -1,0 +1,2006 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>技术知识平台</title>
+<style>
+/* ===== CSS Variables ===== */
+:root {
+  --bg-primary: #0a0e27;
+  --bg-secondary: #0d1033;
+  --bg-deep: #080613;
+  --card-bg: rgba(255,255,255,0.03);
+  --card-border: rgba(255,255,255,0.06);
+  --card-hover-border: rgba(255,255,255,0.15);
+  --text-primary: #E5E7EB;
+  --text-secondary: #94A3B8;
+  --text-heading: #f1f5f9;
+  --accent-blue: #3B82F6;
+  --accent-purple: #8B5CF6;
+  --accent-cyan: #06B6D4;
+  --success: #4ade80;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --radius-card: 16px;
+  --radius-btn: 100px;
+  --radius-btn-sm: 8px;
+  --container-width: 1200px;
+  --container-padding: 48px;
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --font-stack: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+}
+
+/* ===== Reset & Base ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-stack);
+  background: linear-gradient(160deg, var(--bg-primary) 0%, var(--bg-secondary) 40%, #0f0a2e 100%);
+  color: var(--text-primary);
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+ul, ol { list-style: none; }
+button, input, select, textarea {
+  font-family: inherit; font-size: inherit; color: inherit;
+  background: transparent; border: none; outline: none;
+}
+button { cursor: pointer; }
+
+/* ===== Background Ambience ===== */
+body::before {
+  content: '';
+  position: fixed; top: -200px; right: -200px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+}
+body::after {
+  content: '';
+  position: fixed; bottom: -200px; left: -200px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+}
+
+/* ===== Container ===== */
+.container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+  position: relative; z-index: 1;
+}
+
+/* ===== Navbar ===== */
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  background: rgba(10,14,39,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--card-border);
+  z-index: 1000; height: 64px;
+}
+.navbar .container {
+  display: flex; align-items: center; height: 100%;
+  gap: 32px;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  cursor: pointer; flex-shrink: 0;
+}
+.nav-logo-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 700; color: #fff;
+}
+.nav-logo-text {
+  font-size: 16px; font-weight: 700;
+  background: linear-gradient(90deg, #fff, #c7d2fe);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; white-space: nowrap;
+}
+.nav-menu {
+  display: flex; align-items: center; gap: 4px; flex-shrink: 0;
+}
+.nav-menu-item {
+  padding: 8px 16px; border-radius: var(--radius-btn);
+  font-size: 14px; font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer; transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+.nav-menu-item:hover { color: var(--text-primary); background: rgba(255,255,255,0.05); }
+.nav-menu-item.active {
+  color: #fff;
+  background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(139,92,246,0.2));
+  border: 1px solid rgba(59,130,246,0.3);
+}
+.nav-search {
+  flex: 1; max-width: 280px; position: relative;
+}
+.nav-search-input {
+  width: 100%; padding: 8px 16px 8px 36px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-btn);
+  color: var(--text-primary); font-size: 14px;
+  transition: all var(--transition-fast);
+}
+.nav-search-input:focus {
+  border-color: var(--accent-blue);
+  background: rgba(255,255,255,0.08);
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+}
+.nav-search-input::placeholder { color: var(--text-secondary); }
+.nav-search-icon {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  color: var(--text-secondary); font-size: 14px; pointer-events: none;
+}
+.nav-search-dropdown {
+  position: absolute; top: calc(100% + 8px); left: 0; right: 0;
+  background: rgba(13,16,51,0.95); backdrop-filter: blur(20px);
+  border: 1px solid var(--card-border); border-radius: 12px;
+  padding: 8px; display: none; max-height: 300px; overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+.nav-search-dropdown.show { display: block; }
+.nav-search-item {
+  padding: 10px 12px; border-radius: 8px;
+  font-size: 13px; color: var(--text-secondary);
+  cursor: pointer; transition: background var(--transition-fast);
+}
+.nav-search-item:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
+.nav-search-item span { color: var(--accent-blue); }
+.nav-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 600; color: #fff;
+  cursor: pointer; flex-shrink: 0;
+  border: 2px solid rgba(255,255,255,0.1);
+  transition: border-color var(--transition-fast);
+}
+.nav-avatar:hover { border-color: var(--accent-blue); }
+.hamburger {
+  display: none; flex-direction: column; gap: 5px; cursor: pointer;
+  padding: 4px; flex-shrink: 0;
+}
+.hamburger span {
+  width: 22px; height: 2px; background: var(--text-secondary);
+  border-radius: 2px; transition: all var(--transition-fast);
+}
+
+/* ===== Page System ===== */
+.page-wrapper { padding-top: 96px; padding-bottom: 48px; }
+.page { display: none; opacity: 0; transition: opacity 0.3s ease; }
+.page.active { display: block; opacity: 1; }
+
+/* ===== Cards ===== */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
+  padding: 24px;
+  transition: all var(--transition-fast);
+}
+.card:hover {
+  transform: translateY(-4px);
+  border-color: var(--card-hover-border);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.05);
+}
+.card-clickable { cursor: pointer; }
+.card-glow-blue { position: relative; }
+.card-glow-blue::before {
+  content: ''; position: absolute; top: -1px; left: 20%; right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+  opacity: 0; transition: opacity var(--transition-fast);
+}
+.card-glow-blue:hover::before { opacity: 1; }
+
+/* ===== Section Titles ===== */
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 24px;
+}
+.section-title {
+  font-size: 24px; font-weight: 600; color: var(--text-heading);
+}
+.section-title-gradient {
+  font-size: 32px; font-weight: 700;
+  background: linear-gradient(180deg, #ffffff, #c7d2fe);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===== Buttons ===== */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 24px; border-radius: var(--radius-btn);
+  font-size: 14px; font-weight: 500;
+  transition: all var(--transition-fast);
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  color: #fff; border: none;
+}
+.btn-primary:hover { box-shadow: 0 4px 20px rgba(59,130,246,0.4); transform: translateY(-1px); }
+.btn-secondary {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--card-border);
+  color: var(--text-primary);
+}
+.btn-secondary:hover { border-color: var(--accent-blue); background: rgba(255,255,255,0.08); }
+.btn-danger {
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.3);
+  color: var(--danger);
+}
+.btn-danger:hover { background: rgba(239,68,68,0.2); }
+.btn-sm { padding: 6px 16px; font-size: 13px; }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; }
+
+/* ===== Badge / Tags ===== */
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 4px 10px; border-radius: var(--radius-btn);
+  font-size: 12px; font-weight: 500;
+}
+.badge-blue { background: rgba(59,130,246,0.15); color: var(--accent-blue); border: 1px solid rgba(59,130,246,0.2); }
+.badge-purple { background: rgba(139,92,246,0.15); color: var(--accent-purple); border: 1px solid rgba(139,92,246,0.2); }
+.badge-green { background: rgba(74,222,128,0.15); color: var(--success); border: 1px solid rgba(74,222,128,0.2); }
+.badge-yellow { background: rgba(245,158,11,0.15); color: var(--warning); border: 1px solid rgba(245,158,11,0.2); }
+.badge-red { background: rgba(239,68,68,0.15); color: var(--danger); border: 1px solid rgba(239,68,68,0.2); }
+.badge-cyan { background: rgba(6,182,212,0.15); color: var(--accent-cyan); border: 1px solid rgba(6,182,212,0.2); }
+.badge-gray { background: rgba(148,163,184,0.15); color: var(--text-secondary); border: 1px solid rgba(148,163,184,0.2); }
+
+/* ===== Grid ===== */
+.grid { display: grid; gap: 20px; }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-60-40 { grid-template-columns: 3fr 2fr; }
+
+/* ===== Forms ===== */
+.form-group { margin-bottom: 20px; }
+.form-label {
+  display: block; margin-bottom: 8px;
+  font-size: 14px; font-weight: 500; color: var(--text-heading);
+}
+.form-input, .form-select, .form-textarea {
+  width: 100%; padding: 12px 16px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--card-border);
+  border-radius: 10px; color: var(--text-primary);
+  font-size: 14px; transition: all var(--transition-fast);
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+}
+.form-input::placeholder, .form-textarea::placeholder { color: rgba(148,163,184,0.5); }
+.form-textarea { min-height: 120px; resize: vertical; }
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394A3B8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+  cursor: pointer;
+}
+.form-select option { background: var(--bg-secondary); color: var(--text-primary); }
+
+/* ===== Filters ===== */
+.filters {
+  display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; align-items: center;
+}
+.filter-select {
+  padding: 8px 36px 8px 14px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--card-border);
+  border-radius: 8px; color: var(--text-primary);
+  font-size: 13px; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394A3B8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  cursor: pointer;
+}
+.filter-select option { background: var(--bg-secondary); }
+.filter-input {
+  padding: 8px 14px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--card-border);
+  border-radius: 8px; color: var(--text-primary);
+  font-size: 13px; flex: 1; min-width: 200px;
+}
+.filter-input::placeholder { color: rgba(148,163,184,0.5); }
+
+/* ===== Pagination ===== */
+.pagination {
+  display: flex; justify-content: center; gap: 8px; margin-top: 32px;
+}
+.page-btn {
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 8px; font-size: 14px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--card-border);
+  color: var(--text-secondary); cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.page-btn:hover { border-color: var(--accent-blue); color: var(--text-primary); }
+.page-btn.active {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  border-color: transparent; color: #fff;
+}
+
+/* ===== Tabs ===== */
+.tabs {
+  display: flex; gap: 4px; margin-bottom: 24px;
+  border-bottom: 1px solid var(--card-border);
+  padding-bottom: 0;
+}
+.tab-item {
+  padding: 12px 20px; font-size: 14px; font-weight: 500;
+  color: var(--text-secondary); cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px; transition: all var(--transition-fast);
+}
+.tab-item:hover { color: var(--text-primary); }
+.tab-item.active { color: var(--accent-blue); border-bottom-color: var(--accent-blue); }
+
+/* ===== Detail Page ===== */
+.detail-header {
+  display: flex; align-items: flex-start; gap: 16px; margin-bottom: 32px;
+}
+.back-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border-radius: 8px;
+  font-size: 14px; color: var(--text-secondary);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--card-border);
+  cursor: pointer; transition: all var(--transition-fast);
+  margin-bottom: 20px;
+}
+.back-btn:hover { color: var(--text-primary); border-color: var(--accent-blue); }
+.detail-title { font-size: 28px; font-weight: 700; color: var(--text-heading); line-height: 1.3; }
+.detail-meta {
+  display: flex; gap: 16px; margin-top: 12px; flex-wrap: wrap;
+  font-size: 14px; color: var(--text-secondary);
+}
+.detail-meta-item { display: flex; align-items: center; gap: 6px; }
+.detail-body { margin-top: 24px; }
+.detail-section { margin-bottom: 24px; }
+.detail-section-title {
+  font-size: 16px; font-weight: 600; color: var(--text-heading);
+  margin-bottom: 12px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--card-border);
+}
+.detail-section-content {
+  font-size: 15px; color: var(--text-primary); line-height: 1.8;
+}
+
+/* ===== Upload Area ===== */
+.upload-area {
+  border: 2px dashed rgba(255,255,255,0.1);
+  border-radius: 12px; padding: 32px;
+  text-align: center; color: var(--text-secondary);
+  cursor: pointer; transition: all var(--transition-fast);
+}
+.upload-area:hover {
+  border-color: var(--accent-blue);
+  background: rgba(59,130,246,0.03);
+}
+.upload-icon { font-size: 32px; margin-bottom: 8px; }
+.upload-text { font-size: 14px; }
+
+/* ===== Modal ===== */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+  z-index: 2000; display: none; align-items: center; justify-content: center;
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: var(--bg-secondary);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
+  padding: 28px; width: 90%; max-width: 560px;
+  max-height: 80vh; overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  animation: modalIn 0.25s ease;
+}
+.modal-sm { max-width: 400px; }
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 20px;
+}
+.modal-title { font-size: 18px; font-weight: 600; color: var(--text-heading); }
+.modal-close {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--text-secondary);
+  cursor: pointer; transition: all var(--transition-fast);
+}
+.modal-close:hover { background: rgba(255,255,255,0.1); color: var(--text-primary); }
+.modal-footer { display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px; }
+
+/* ===== Toast ===== */
+.toast-container {
+  position: fixed; top: 80px; right: 24px; z-index: 3000;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.toast {
+  padding: 14px 20px; border-radius: 10px;
+  font-size: 14px; font-weight: 500;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  animation: toastIn 0.3s ease;
+  display: flex; align-items: center; gap: 10px;
+}
+.toast-success { background: rgba(74,222,128,0.15); border: 1px solid rgba(74,222,128,0.3); color: var(--success); }
+.toast-error { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); color: var(--danger); }
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes toastOut {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(40px); }
+}
+
+/* ===== Home Page Specific ===== */
+.stat-card { text-align: center; }
+.stat-number {
+  font-size: 42px; font-weight: 800; line-height: 1;
+  margin-bottom: 8px;
+}
+.stat-number.blue { color: var(--accent-blue); }
+.stat-number.purple { color: var(--accent-purple); }
+.stat-number.cyan { color: var(--accent-cyan); }
+.stat-number.green { color: var(--success); }
+.stat-label { font-size: 14px; color: var(--text-secondary); margin-bottom: 6px; }
+.stat-trend {
+  font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 4px;
+}
+.stat-trend.up { color: var(--success); }
+.stat-trend.down { color: var(--danger); }
+
+.quick-entry { text-align: center; }
+.quick-entry-icon { font-size: 36px; margin-bottom: 12px; }
+.quick-entry-title { font-size: 15px; font-weight: 600; color: var(--text-heading); margin-bottom: 6px; }
+.quick-entry-desc { font-size: 13px; color: var(--text-secondary); }
+
+.timeline-item {
+  display: flex; gap: 16px; padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.timeline-item:last-child { border-bottom: none; }
+.timeline-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent-blue); margin-top: 7px; flex-shrink: 0;
+}
+.timeline-dot.green { background: var(--success); }
+.timeline-dot.purple { background: var(--accent-purple); }
+.timeline-dot.yellow { background: var(--warning); }
+.timeline-content { flex: 1; }
+.timeline-title { font-size: 14px; color: var(--text-primary); margin-bottom: 4px; }
+.timeline-time { font-size: 12px; color: var(--text-secondary); }
+
+.todo-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.todo-item:last-child { border-bottom: none; }
+.todo-label { font-size: 14px; color: var(--text-primary); }
+.todo-count {
+  font-size: 20px; font-weight: 700; color: var(--accent-blue);
+}
+
+.hot-qa-item {
+  padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.03);
+  cursor: pointer;
+}
+.hot-qa-item:last-child { border-bottom: none; }
+.hot-qa-item:hover .hot-qa-title { color: var(--accent-blue); }
+.hot-qa-rank {
+  display: inline-flex; width: 20px; height: 20px; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; border-radius: 4px;
+  margin-right: 8px;
+}
+.hot-qa-rank.top { background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); color: #fff; }
+.hot-qa-rank.normal { background: rgba(255,255,255,0.05); color: var(--text-secondary); }
+.hot-qa-title { font-size: 14px; color: var(--text-primary); transition: color var(--transition-fast); }
+
+/* ===== QA Card ===== */
+.qa-card { cursor: pointer; }
+.qa-title { font-size: 16px; font-weight: 600; color: var(--text-heading); margin-bottom: 8px; }
+.qa-excerpt { font-size: 14px; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.6;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.qa-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.qa-stats {
+  display: flex; gap: 16px; font-size: 13px; color: var(--text-secondary);
+}
+
+/* ===== Expert Card ===== */
+.expert-card { text-align: center; }
+.expert-avatar {
+  width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 12px;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; color: #fff; font-weight: 700;
+}
+.expert-name { font-size: 18px; font-weight: 600; color: var(--text-heading); margin-bottom: 4px; }
+.expert-dept { font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; }
+.expert-tags { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-bottom: 12px; }
+.expert-bio { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+
+/* ===== Profile Page ===== */
+.profile-card { text-align: center; padding: 40px 24px; }
+.profile-avatar {
+  width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 16px;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; color: #fff; font-weight: 700;
+  border: 3px solid rgba(255,255,255,0.1);
+}
+.profile-name { font-size: 24px; font-weight: 700; color: var(--text-heading); }
+.profile-dept { font-size: 14px; color: var(--text-secondary); margin-top: 4px; }
+.profile-email { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+
+.msg-item {
+  display: flex; gap: 12px; padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.msg-item:last-child { border-bottom: none; }
+.msg-icon {
+  width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.msg-icon.blue { background: rgba(59,130,246,0.15); }
+.msg-icon.green { background: rgba(74,222,128,0.15); }
+.msg-icon.yellow { background: rgba(245,158,11,0.15); }
+.msg-icon.purple { background: rgba(139,92,246,0.15); }
+.msg-content { flex: 1; }
+.msg-title { font-size: 14px; color: var(--text-primary); margin-bottom: 2px; }
+.msg-desc { font-size: 13px; color: var(--text-secondary); }
+.msg-time { font-size: 12px; color: var(--text-secondary); white-space: nowrap; flex-shrink: 0; }
+
+/* ===== Search Results ===== */
+.search-result-item { cursor: pointer; }
+.search-result-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.search-result-title { font-size: 16px; font-weight: 600; color: var(--text-heading); }
+.search-result-excerpt { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 8px; }
+.search-result-meta { font-size: 13px; color: var(--text-secondary); }
+
+/* ===== Answer Section ===== */
+.answer-card { margin-bottom: 16px; }
+.answer-card.best { border-color: rgba(74,222,128,0.3); }
+.answer-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.answer-author { display: flex; align-items: center; gap: 10px; }
+.answer-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: #fff; font-weight: 600;
+}
+.answer-name { font-size: 14px; font-weight: 600; color: var(--text-heading); }
+.answer-time { font-size: 12px; color: var(--text-secondary); }
+.answer-body { font-size: 15px; color: var(--text-primary); line-height: 1.8; }
+.answer-actions { display: flex; gap: 12px; margin-top: 12px; }
+.answer-action-btn {
+  font-size: 13px; color: var(--text-secondary); cursor: pointer;
+  display: flex; align-items: center; gap: 4px;
+  transition: color var(--transition-fast);
+}
+.answer-action-btn:hover { color: var(--accent-blue); }
+.answer-editor { margin-top: 24px; }
+
+/* ===== Responsive ===== */
+@media (max-width: 1199px) {
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .container { padding: 0 32px; }
+}
+@media (max-width: 991px) {
+  .grid-60-40 { grid-template-columns: 1fr; }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .container { padding: 0 24px; }
+}
+@media (max-width: 767px) {
+  .container { padding: 0 16px; }
+  .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+  .nav-menu { display: none; }
+  .hamburger { display: flex; }
+  .nav-menu.mobile-open {
+    display: flex; flex-direction: column;
+    position: fixed; top: 64px; left: 0; right: 0; bottom: 0;
+    background: rgba(10,14,39,0.98); backdrop-filter: blur(20px);
+    padding: 24px; gap: 8px; z-index: 999;
+  }
+  .nav-search { max-width: 180px; }
+  .detail-title { font-size: 22px; }
+  .section-title-gradient { font-size: 26px; }
+  .filters { flex-direction: column; }
+  .filter-input { min-width: 100%; }
+}
+
+/* ===== Checkbox Group ===== */
+.checkbox-group { display: flex; flex-wrap: wrap; gap: 10px; }
+.checkbox-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 14px; border-radius: 8px;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--card-border);
+  font-size: 13px; cursor: pointer; transition: all var(--transition-fast);
+}
+.checkbox-item:hover { border-color: var(--accent-blue); }
+.checkbox-item.checked {
+  background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.3);
+  color: var(--accent-blue);
+}
+
+/* ===== Loading Spinner ===== */
+.spinner {
+  display: inline-block; width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,0.2);
+  border-top-color: #fff; border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ===== Misc ===== */
+.text-gradient {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.divider { height: 1px; background: var(--card-border); margin: 24px 0; }
+.mb-16 { margin-bottom: 16px; }
+.mb-24 { margin-bottom: 24px; }
+.mb-32 { margin-bottom: 32px; }
+.mt-16 { margin-top: 16px; }
+.mt-24 { margin-top: 24px; }
+
+/* ===== Home Search Page ===== */
+.home-search-container {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 200px);
+  padding: 48px 0;
+}
+.home-logo {
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 12px;
+}
+.home-logo-icon {
+  width: 56px; height: 56px; border-radius: 16px;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; font-weight: 700; color: #fff;
+  box-shadow: 0 8px 32px rgba(59,130,246,0.3);
+}
+.home-logo-text {
+  font-size: 36px; font-weight: 700;
+  background: linear-gradient(90deg, #fff, #c7d2fe);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.home-tagline {
+  font-size: 15px; color: var(--text-secondary);
+  margin-bottom: 40px; letter-spacing: 4px;
+}
+.home-search-box {
+  width: 100%; max-width: 640px;
+  display: flex; align-items: center;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--card-border);
+  border-radius: 28px;
+  padding: 4px 4px 4px 20px;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+.home-search-box:focus-within {
+  border-color: var(--accent-blue);
+  background: rgba(255,255,255,0.08);
+  box-shadow: 0 0 0 4px rgba(59,130,246,0.12), 0 8px 32px rgba(0,0,0,0.2);
+}
+.home-search-icon {
+  font-size: 18px; color: var(--text-secondary);
+  flex-shrink: 0; margin-right: 12px;
+}
+.home-search-input {
+  flex: 1; padding: 14px 0;
+  background: transparent; border: none; outline: none;
+  color: var(--text-primary); font-size: 16px;
+}
+.home-search-input::placeholder { color: var(--text-secondary); }
+.home-search-btn {
+  padding: 12px 28px;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  color: #fff; font-size: 15px; font-weight: 600;
+  border-radius: 24px; border: none; cursor: pointer;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+.home-search-btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 20px rgba(59,130,246,0.4);
+}
+.home-categories {
+  display: flex; align-items: center; gap: 10px;
+  margin-top: 24px; flex-wrap: wrap; justify-content: center;
+}
+.home-category-tag {
+  padding: 8px 18px; border-radius: 20px;
+  font-size: 14px; color: var(--text-secondary);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--card-border);
+  cursor: pointer; transition: all var(--transition-fast);
+}
+.home-category-tag:hover {
+  color: var(--text-primary);
+  border-color: var(--card-hover-border);
+  background: rgba(255,255,255,0.06);
+}
+.home-category-tag.active {
+  color: #fff;
+  background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(139,92,246,0.2));
+  border-color: rgba(59,130,246,0.3);
+}
+.home-quick-links {
+  display: flex; align-items: center; gap: 12px;
+  margin-top: 48px; flex-wrap: wrap; justify-content: center;
+}
+.home-quick-link {
+  font-size: 14px; color: var(--accent-blue);
+  cursor: pointer; transition: color var(--transition-fast);
+}
+.home-quick-link:hover { color: #60a5fa; text-decoration: underline; }
+.home-quick-divider { color: rgba(255,255,255,0.1); font-size: 14px; }
+
+@media (max-width: 767px) {
+  .home-logo-icon { width: 44px; height: 44px; font-size: 22px; border-radius: 12px; }
+  .home-logo-text { font-size: 26px; }
+  .home-tagline { font-size: 13px; margin-bottom: 28px; }
+  .home-search-box { max-width: 100%; padding: 3px 3px 3px 14px; }
+  .home-search-input { font-size: 15px; padding: 12px 0; }
+  .home-search-btn { padding: 10px 20px; font-size: 14px; }
+  .home-categories { gap: 8px; margin-top: 20px; }
+  .home-quick-links { margin-top: 32px; gap: 10px; }
+}
+.flex-between { display: flex; align-items: center; justify-content: space-between; }
+.flex-gap-8 { display: flex; align-items: center; gap: 8px; }
+.flex-gap-12 { display: flex; align-items: center; gap: 12px; }
+.w-full { width: 100%; }
+</style>
+</head>
+<body>
+
+<!-- ===== Navbar ===== -->
+<nav class="navbar">
+  <div class="container">
+    <div class="nav-logo" onclick="navigate('home')">
+      <div class="nav-logo-icon">T</div>
+      <div class="nav-logo-text">技术知识平台</div>
+    </div>
+    <div class="nav-menu" id="navMenu">
+      <div class="nav-menu-item active" data-page="home" onclick="navigate('home')">首页</div>
+      <div class="nav-menu-item" data-page="patent" onclick="navigate('patent')">专利</div>
+      <div class="nav-menu-item" data-page="paper" onclick="navigate('paper')">论文</div>
+      <div class="nav-menu-item" data-page="qa" onclick="navigate('qa')">问答</div>
+      <div class="nav-menu-item" data-page="技术专家社区" onclick="navigate('技术专家社区')">技术专家社区</div>
+    </div>
+    <div class="nav-search">
+      <span class="nav-search-icon">🔍</span>
+      <input type="text" class="nav-search-input" placeholder="搜索专利、论文、问答..." id="globalSearch" oninput="onSearchInput()" onkeydown="onSearchKeydown(event)" onfocus="onSearchFocus()" />
+      <div class="nav-search-dropdown" id="searchDropdown"></div>
+    </div>
+    <div class="nav-avatar" onclick="navigate('profile')">李</div>
+    <div class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== Toast Container ===== -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ===== Modal ===== -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modalContent">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">提示</div>
+      <div class="modal-close" onclick="hideModal()">✕</div>
+    </div>
+    <div id="modalBody"></div>
+    <div class="modal-footer" id="modalFooter"></div>
+  </div>
+</div>
+
+<!-- ===== Page Wrapper ===== -->
+<div class="page-wrapper">
+<div class="container">
+
+<!-- ============ HOME PAGE ============ -->
+<div class="page active" id="page-home">
+  <div class="home-search-container">
+    <!-- Logo -->
+    <div class="home-logo">
+      <div class="home-logo-icon">T</div>
+      <div class="home-logo-text">技术知识平台</div>
+    </div>
+    <div class="home-tagline">探索 · 创新 · 共享</div>
+
+    <!-- Search Box -->
+    <div class="home-search-box">
+      <span class="home-search-icon">🔍</span>
+      <input type="text" class="home-search-input" id="homeSearchInput" placeholder="搜索专利、论文、问答..." onkeydown="onHomeSearchKeydown(event)" />
+      <button class="home-search-btn" onclick="onHomeSearch()">搜索</button>
+    </div>
+
+    <!-- Category Tags -->
+    <div class="home-categories">
+      <div class="home-category-tag active" onclick="setHomeCategory(this, 'all')">全部</div>
+      <div class="home-category-tag" onclick="setHomeCategory(this, 'patent')">💡 专利</div>
+      <div class="home-category-tag" onclick="setHomeCategory(this, 'paper')">📄 论文</div>
+      <div class="home-category-tag" onclick="setHomeCategory(this, 'qa')">❓ 问答</div>
+      <div class="home-category-tag" onclick="setHomeCategory(this, '技术专家社区')">⭐ 技术专家社区</div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="home-quick-links">
+      <div class="home-quick-link" onclick="navigate('patent-apply')">申请专利</div>
+      <span class="home-quick-divider">|</span>
+      <div class="home-quick-link" onclick="navigate('paper-submit')">提交论文</div>
+      <span class="home-quick-divider">|</span>
+      <div class="home-quick-link" onclick="navigate('qa-ask')">我要提问</div>
+      <span class="home-quick-divider">|</span>
+      <div class="home-quick-link" onclick="navigate('技术专家社区-apply')">申请认证</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PATENT LIST PAGE ============ -->
+<div class="page" id="page-patent">
+  <div class="section-header">
+    <h2 class="section-title">专利管理</h2>
+    <button class="btn btn-primary" onclick="navigate('patent-apply')">＋ 申请专利</button>
+  </div>
+  <div class="filters">
+    <select class="filter-select" id="patentCategoryFilter" onchange="filte某自动化工具tents()">
+      <option value="">全部分类</option>
+      <option value="发明专利">发明专利</option>
+      <option value="实用新型">实用新型</option>
+      <option value="外观设计">外观设计</option>
+    </select>
+    <select class="filter-select" id="patentStatusFilter" onchange="filte某自动化工具tents()">
+      <option value="">全部状态</option>
+      <option value="已授权">已授权</option>
+      <option value="审核中">审核中</option>
+      <option value="已提交">已提交</option>
+      <option value="已驳回">已驳回</option>
+    </select>
+    <input type="text" class="filter-input" placeholder="搜索专利名称或发明人..." id="patentSearchInput" oninput="filte某自动化工具tents()" />
+  </div>
+  <div id="patentList"></div>
+  <div class="pagination" id="patentPagination"></div>
+</div>
+
+<!-- ============ PATENT DETAIL PAGE ============ -->
+<div class="page" id="page-patent-detail">
+  <button class="back-btn" onclick="navigate('patent')">← 返回列表</button>
+  <div id="patentDetailContent"></div>
+</div>
+
+<!-- ============ PATENT APPLY PAGE ============ -->
+<div class="page" id="page-patent-apply">
+  <button class="back-btn" onclick="navigate('patent')">← 返回列表</button>
+  <h2 class="section-title mb-24">申请专利</h2>
+  <div class="card" style="max-width:720px;">
+    <form id="patentApplyForm" onsubmit="submitPatentApply(event)">
+      <div class="form-group">
+        <label class="form-label">专利名称 *</label>
+        <input type="text" class="form-input" placeholder="请输入专利名称" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">发明人 *</label>
+        <input type="text" class="form-input" placeholder="请输入发明人姓名" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">专利分类 *</label>
+        <select class="form-select" required>
+          <option value="">请选择分类</option>
+          <option value="发明专利">发明专利</option>
+          <option value="实用新型">实用新型</option>
+          <option value="外观设计">外观设计</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">交底书描述 *</label>
+        <textarea class="form-textarea" placeholder="请详细描述技术方案..." required></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">效益数据</label>
+        <textarea class="form-textarea" placeholder="请描述该专利的预期效益和数据..." style="min-height:80px;"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">附件上传</label>
+        <div class="upload-area" onclick="showToast('附件上传功能（模拟）', 'success')">
+          <div class="upload-icon">📎</div>
+          <div class="upload-text">点击或拖拽文件到此处上传<br><span style="font-size:12px;color:var(--text-secondary);">支持 PDF、Word、图片格式，单个文件不超过 50MB</span></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:24px;">
+        <button type="button" class="btn btn-secondary" onclick="navigate('patent')">取消</button>
+        <button type="submit" class="btn btn-primary" id="patentApplyBtn">提交申请</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ============ PAPER LIST PAGE ============ -->
+<div class="page" id="page-paper">
+  <div class="section-header">
+    <h2 class="section-title">论文管理</h2>
+    <button class="btn btn-primary" onclick="navigate('paper-submit')">＋ 提交论文</button>
+  </div>
+  <div class="filters">
+    <select class="filter-select" id="paperJournalFilter" onchange="filte某自动化工具pers()">
+      <option value="">全部期刊</option>
+      <option value="Nature">Nature</option>
+      <option value="Science">Science</option>
+      <option value="IEEE">IEEE</option>
+      <option value="ACM">ACM</option>
+      <option value="Springer">Springer</option>
+    </select>
+    <select class="filter-select" id="paperStatusFilter" onchange="filte某自动化工具pers()">
+      <option value="">全部状态</option>
+      <option value="已发表">已发表</option>
+      <option value="审稿中">审稿中</option>
+      <option value="已录用">已录用</option>
+      <option value="已退稿">已退稿</option>
+    </select>
+    <input type="text" class="filter-input" placeholder="搜索论文标题或作者..." id="paperSearchInput" oninput="filte某自动化工具pers()" />
+  </div>
+  <div id="paperList"></div>
+  <div class="pagination" id="pape某自动化工具gination"></div>
+</div>
+
+<!-- ============ PAPER DETAIL PAGE ============ -->
+<div class="page" id="page-paper-detail">
+  <button class="back-btn" onclick="navigate('paper')">← 返回列表</button>
+  <div id="paperDetailContent"></div>
+</div>
+
+<!-- ============ PAPER SUBMIT PAGE ============ -->
+<div class="page" id="page-paper-submit">
+  <button class="back-btn" onclick="navigate('paper')">← 返回列表</button>
+  <h2 class="section-title mb-24">提交论文</h2>
+  <div class="card" style="max-width:720px;">
+    <form id="paperSubmitForm" onsubmit="submitPaper(event)">
+      <div class="form-group">
+        <label class="form-label">论文标题 *</label>
+        <input type="text" class="form-input" placeholder="请输入论文标题" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">作者 *</label>
+        <input type="text" class="form-input" placeholder="请输入作者姓名（多人用逗号分隔）" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">期刊/会议 *</label>
+        <select class="form-select" required>
+          <option value="">请选择期刊/会议</option>
+          <option value="Nature">Nature</option>
+          <option value="Science">Science</option>
+          <option value="IEEE">IEEE Transactions</option>
+          <option value="ACM">ACM Computing Surveys</option>
+          <option value="Springer">Springer LNCS</option>
+          <option value="NeurIPS">NeurIPS</option>
+          <option value="CVPR">CVPR</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">摘要 *</label>
+        <textarea class="form-textarea" placeholder="请输入论文摘要（200-500字）..." required></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">关键词 *</label>
+        <input type="text" class="form-input" placeholder="请输入关键词（用逗号分隔）" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">论文附件 *</label>
+        <div class="upload-area" onclick="showToast('附件上传功能（模拟）', 'success')">
+          <div class="upload-icon">📄</div>
+          <div class="upload-text">点击或拖拽论文文件到此处上传<br><span style="font-size:12px;color:var(--text-secondary);">支持 PDF 格式，单个文件不超过 100MB</span></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:24px;">
+        <button type="button" class="btn btn-secondary" onclick="navigate('paper')">取消</button>
+        <button type="submit" class="btn btn-primary" id="paperSubmitBtn">提交论文</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ============ QA LIST PAGE ============ -->
+<div class="page" id="page-qa">
+  <div class="section-header">
+    <h2 class="section-title">技术问答</h2>
+    <button class="btn btn-primary" onclick="navigate('qa-ask')">＋ 我要提问</button>
+  </div>
+  <div class="tabs" id="qaTabs">
+    <div class="tab-item active" data-tab="latest" onclick="switchQATab('latest')">最新</div>
+    <div class="tab-item" data-tab="hot" onclick="switchQATab('hot')">热门</div>
+    <div class="tab-item" data-tab="unsolved" onclick="switchQATab('unsolved')">待解决</div>
+    <div class="tab-item" data-tab="solved" onclick="switchQATab('solved')">已解决</div>
+  </div>
+  <div id="qaList"></div>
+  <div class="pagination" id="qaPagination"></div>
+</div>
+
+<!-- ============ QA DETAIL PAGE ============ -->
+<div class="page" id="page-qa-detail">
+  <button class="back-btn" onclick="navigate('qa')">← 返回列表</button>
+  <div id="qaDetailContent"></div>
+</div>
+
+<!-- ============ QA ASK PAGE ============ -->
+<div class="page" id="page-qa-ask">
+  <button class="back-btn" onclick="navigate('qa')">← 返回列表</button>
+  <h2 class="section-title mb-24">我要提问</h2>
+  <div class="card" style="max-width:720px;">
+    <form id="qaAskForm" onsubmit="submitQuestion(event)">
+      <div class="form-group">
+        <label class="form-label">问题标题 *</label>
+        <input type="text" class="form-input" placeholder="请简洁描述你的问题" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">详细描述 *</label>
+        <textarea class="form-textarea" placeholder="请详细描述问题背景、已尝试的方案等..." required style="min-height:160px;"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">标签</label>
+        <div class="checkbox-group" id="qaTagsGroup">
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">前端开发</div>
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">后端架构</div>
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">人工智能</div>
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">云计算</div>
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">数据库</div>
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">安全</div>
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">算法</div>
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">运维</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">附件</label>
+        <div class="upload-area" onclick="showToast('附件上传功能（模拟）', 'success')">
+          <div class="upload-icon">📎</div>
+          <div class="upload-text">点击上传截图或相关文件<br><span style="font-size:12px;color:var(--text-secondary);">支持图片、PDF、文档格式</span></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:24px;">
+        <button type="button" class="btn btn-secondary" onclick="navigate('qa')">取消</button>
+        <button type="submit" class="btn btn-primary" id="qaAskBtn">发布问题</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ============ 技术专家社区 PAGE ============ -->
+<div class="page" id="page-技术专家社区">
+  <div class="section-header">
+    <h2 class="section-title">技术专家社区 专家</h2>
+    <button class="btn btn-primary" onclick="navigate('技术专家社区-apply')">＋ 申请认证</button>
+  </div>
+  <div class="filters" id="技术专家社区Filters">
+    <div class="checkbox-item checked" onclick="filterExperts(this, '')">全部</div>
+    <div class="checkbox-item" onclick="filterExperts(this, '人工智能')">人工智能</div>
+    <div class="checkbox-item" onclick="filterExperts(this, '云计算')">云计算</div>
+    <div class="checkbox-item" onclick="filterExperts(this, '前端开发')">前端开发</div>
+    <div class="checkbox-item" onclick="filterExperts(this, '后端架构')">后端架构</div>
+    <div class="checkbox-item" onclick="filterExperts(this, '数据库')">数据库</div>
+    <div class="checkbox-item" onclick="filterExperts(this, '安全')">安全</div>
+  </div>
+  <div class="grid grid-3" id="expertList"></div>
+</div>
+
+<!-- ============ 技术专家社区 APPLY PAGE ============ -->
+<div class="page" id="page-技术专家社区-apply">
+  <button class="back-btn" onclick="navigate('技术专家社区')">← 返回列表</button>
+  <h2 class="section-title mb-24">申请 技术专家社区 认证</h2>
+  <div class="card" style="max-width:720px;">
+    <form id="技术专家社区ApplyForm" onsubmit="subm某技术部门专家社区(event)">
+      <div class="form-group">
+        <label class="form-label">技术领域 *（可多选）</label>
+        <div class="checkbox-group" id="技术专家社区TagsGroup">
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">人工智能</div>
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">云计算</div>
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">前端开发</div>
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">后端架构</div>
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">数据库</div>
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">安全</div>
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">算法</div>
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">运维</div>
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">大数据</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">自述理由 *</label>
+        <textarea class="form-textarea" placeholder="请描述你的技术背景、成就和申请理由..." required style="min-height:160px;"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">证明材料</label>
+        <div class="upload-area" onclick="showToast('附件上传功能（模拟）', 'success')">
+          <div class="upload-icon">📋</div>
+          <div class="upload-text">上传技术证书、论文、专利等证明材料<br><span style="font-size:12px;color:var(--text-secondary);">支持 PDF、图片格式</span></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:24px;">
+        <button type="button" class="btn btn-secondary" onclick="navigate('技术专家社区')">取消</button>
+        <button type="submit" class="btn btn-primary" id="技术专家社区ApplyBtn">提交申请</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ============ PROFILE PAGE ============ -->
+<div class="page" id="page-profile">
+  <h2 class="section-title mb-24">个人中心</h2>
+  <div class="grid grid-60-40">
+    <div>
+      <div class="card profile-card mb-16">
+        <div class="profile-avatar">李</div>
+        <div class="profile-name">某成员</div>
+        <div class="profile-dept">某研发部门 · 高级工程师</div>
+        <div class="profile-email">user@example.com</div>
+      </div>
+      <div class="card">
+        <h3 style="font-size:18px;font-weight:600;color:var(--text-heading);margin-bottom:20px;">我的内容统计</h3>
+        <div class="grid grid-2" style="gap:16px;">
+          <div style="text-align:center;padding:16px;background:rgba(59,130,246,0.05);border-radius:12px;">
+            <div style="font-size:28px;font-weight:700;color:var(--accent-blue);">12</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-top:4px;">我的专利</div>
+          </div>
+          <div style="text-align:center;padding:16px;background:rgba(139,92,246,0.05);border-radius:12px;">
+            <div style="font-size:28px;font-weight:700;color:var(--accent-purple);">8</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-top:4px;">我的论文</div>
+          </div>
+          <div style="text-align:center;padding:16px;background:rgba(6,182,212,0.05);border-radius:12px;">
+            <div style="font-size:28px;font-weight:700;color:var(--accent-cyan);">23</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-top:4px;">我的提问</div>
+          </div>
+          <div style="text-align:center;padding:16px;background:rgba(74,222,128,0.05);border-radius:12px;">
+            <div style="font-size:28px;font-weight:700;color:var(--success);">45</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-top:4px;">我的回答</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <h3 style="font-size:18px;font-weight:600;color:var(--text-heading);margin-bottom:20px;">消息通知</h3>
+        <div id="profileMessages"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEARCH RESULTS PAGE ============ -->
+<div class="page" id="page-search">
+  <div class="section-header">
+    <div>
+      <h2 class="section-title" id="searchResultTitle">搜索结果</h2>
+      <p style="font-size:14px;color:var(--text-secondary);margin-top:8px;" id="searchResultCount"></p>
+    </div>
+  </div>
+  <div class="tabs" id="searchTabs">
+    <div class="tab-item active" data-filter="all" onclick="filterSearch('all')">全部</div>
+    <div class="tab-item" data-filter="patent" onclick="filterSearch('patent')">专利</div>
+    <div class="tab-item" data-filter="paper" onclick="filterSearch('paper')">论文</div>
+    <div class="tab-item" data-filter="qa" onclick="filterSearch('qa')">问答</div>
+    <div class="tab-item" data-filter="技术专家社区" onclick="filterSearch('技术专家社区')">技术专家社区</div>
+  </div>
+  <div id="searchResultsList"></div>
+</div>
+
+</div><!-- /container -->
+</div><!-- /page-wrapper -->
+
+<script>
+// ============================================================
+//  MOCK DATA
+// ============================================================
+
+const statsData = [
+  { label: '专利总数', value: 128, color: 'blue', trend: '+12%', up: true },
+  { label: '论文总数', value: 256, color: 'purple', trend: '+8%', up: true },
+  { label: '问答总数', value: 512, color: 'cyan', trend: '+23%', up: true },
+  { label: '技术专家社区专家', value: 32, color: 'green', trend: '+3', up: true }
+];
+
+const quickEntryData = [
+  { icon: '💡', title: '申请专利', desc: '提交新的专利申请', page: 'patent-apply' },
+  { icon: '📄', title: '提交论文', desc: '提交学术论文', page: 'paper-submit' },
+  { icon: '❓', title: '我要提问', desc: '提出技术问题', page: 'qa-ask' },
+  { icon: '⭐', title: '申请技术专家社区', desc: '成为认证专家', page: '技术专家社区-apply' }
+];
+
+const activityData = [
+  { text: '某成员 提交了新专利「基于深度学习的图像识别方法」', time: '10分钟前', dot: 'blue' },
+  { text: '某成员 的论文被 Nature 期刊录用', time: '30分钟前', dot: 'green' },
+  { text: '某成员 回答了问题「如何优化微服务架构？」', time: '1小时前', dot: 'purple' },
+  { text: '某成员 申请成为 技术专家社区 认证专家（AI方向）', time: '2小时前', dot: 'yellow' },
+  { text: '某成员 的专利「分布式缓存优化方案」已通过审核', time: '3小时前', dot: 'green' },
+  { text: '某成员 提交了新论文「大语言模型在代码生成中的应用」', time: '4小时前', dot: 'blue' },
+  { text: '某成员 提问「容器化部署的最佳实践是什么？」', time: '5小时前', dot: 'purple' },
+  { text: '某成员 的论文通过 IEEE 期刊二审', time: '6小时前', dot: 'green' },
+  { text: '某成员 更新了专利「智能推荐系统」的技术方案', time: '昨天', dot: 'yellow' },
+  { text: '某成员 获得了 技术专家社区 认证（云计算方向）', time: '昨天', dot: 'green' }
+];
+
+const todoData = [
+  { label: '待审核专利', count: 5 },
+  { label: '待回答问题', count: 12 },
+  { label: '待处理评审', count: 3 }
+];
+
+const hotQAData = [
+  { title: '如何实现高可用的微服务架构？' },
+  { title: '大模型微调的最佳实践是什么？' },
+  { title: '前端性能优化的关键指标有哪些？' },
+  { title: '云原生应用如何实现自动扩缩容？' },
+  { title: '数据库分库分表的策略如何选择？' }
+];
+
+const patentsData = [
+  { id: 1, title: '基于深度学习的智能图像识别方法', inventor: '某成员', category: '发明专利', status: '已授权', date: '2025-01-15', desc: '本发明提出了一种基于深度卷积神经网络的图像识别方法，通过引入注意力机制和多尺度特征融合技术，显著提升了复杂场景下的图像识别准确率。该方法在ImageNet数据集上达到了98.5%的Top-5准确率。', benefit: '预计可为公司带来年均500万元的技术许可收入，同时提升产品在智能视觉领域的核心竞争力。' },
+  { id: 2, title: '分布式系统数据一致性保障装置', inventor: '某成员', category: '发明专利', status: '审核中', date: '2025-02-20', desc: '本实用新型涉及分布式数据处理领域，提出了一种基于改进Raft协议的数据一致性保障方案，支持跨区域数据中心的实时同步。', benefit: '降低数据不一致风险90%以上，减少系统故障恢复时间至秒级。' },
+  { id: 3, title: '智能推荐系统用户画像构建方法', inventor: '某成员', category: '发明专利', status: '已提交', date: '2025-03-10', desc: '本发明公开了一种基于多模态数据的用户画像构建方法，融合用户行为数据、社交数据和场景数据，实现精准推荐。', benefit: '推荐准确率提升35%，用户留存率提升20%。' },
+  { id: 4, title: '新型散热模组结构设计', inventor: '陈磊', category: '实用新型', status: '已授权', date: '2024-11-05', desc: '本实用新型涉及电子设备散热技术领域，提出了一种新型均温板与热管复合散热模组，有效降低高功率芯片的工作温度。', benefit: '散热效率提升40%，芯片温度降低15°C。' },
+  { id: 5, title: '移动端应用界面交互设计系统', inventor: '某成员', category: '外观设计', status: '已授权', date: '2024-12-18', desc: '本外观设计涉及图形用户界面领域，提出了一套完整的移动端交互设计规范，包含手势操作、动画过渡和自适应布局。', benefit: '用户操作效率提升25%，用户满意度评分提升1.2分。' },
+  { id: 6, title: '基于联邦学习的隐私保护数据分析方法', inventor: '某成员', category: '发明专利', status: '审核中', date: '2025-04-01', desc: '本发明提出了一种联邦学习框架下的隐私保护数据分析方法，通过差分隐私和安全聚合技术，实现多方数据协作而不泄露原始数据。', benefit: '在保护隐私的同时，模型精度仅下降2%以内。' },
+  { id: 7, title: '智能语音交互降噪处理装置', inventor: '某成员', category: '实用新型', status: '已提交', date: '2025-03-22', desc: '本实用新型涉及语音信号处理领域，提出了一种硬件级降噪处理装置，适用于智能语音交互场景。', benefit: '语音识别准确率在嘈杂环境下提升30%。' },
+  { id: 8, title: '自动化测试用例生成系统', inventor: '某成员', category: '发明专利', status: '已驳回', date: '2024-10-15', desc: '本发明涉及软件测试技术领域，提出了一种基于代码变更自动分析生成测试用例的系统。', benefit: '测试覆盖率提升40%，测试周期缩短50%。' }
+];
+
+const papersData = [
+  { id: 1, title: 'Attention-Enhanced Multi-Scale Feature Fusion for Image Recognition', authors: '某成员, 某成员', journal: 'Nature', status: '已发表', date: '2025-01-20', abstract: 'This paper presents a novel attention-enhanced multi-scale feature fusion framework for image recognition. Our approach integrates channel attention and spatial attention mechanisms with a hierarchical feature extraction pipeline.', keywords: 'Deep Learning, Image Recognition, Attention Mechanism, Feature Fusion' },
+  { id: 2, title: '分布式一致性协议的优化与实践', authors: '某成员, 某成员', journal: 'IEEE', status: '审稿中', date: '2025-03-05', abstract: '本文针对大规模分布式系统中的一致性保障问题，提出了一种改进的Raft协议变体，通过引入自适应心跳机制和增量日志压缩技术，将共识延迟降低了60%。', keywords: '分布式系统, 一致性协议, Raft, 容错' },
+  { id: 3, title: 'Multimodal User Profiling for Personalized Recommendation', authors: '某成员, 某成员', journal: 'ACM', status: '已录用', date: '2025-02-15', abstract: 'We propose a multimodal user profiling framework that integrates behavioral data, social signals, and contextual information for building comprehensive user representations.', keywords: 'Recommendation System, User Profiling, Multimodal Learning' },
+  { id: 4, title: '大语言模型在智能代码生成中的应用研究', authors: '某成员, 某成员', journal: 'Science', status: '已发表', date: '2025-01-08', abstract: '本文系统性地研究了大语言模型在代码生成任务中的应用，提出了一种结合代码结构感知和上下文增强的生成方法，在HumanEval基准上达到了89%的Pass@1准确率。', keywords: '大语言模型, 代码生成, AI编程, 软件工程' },
+  { id: 5, title: 'Privacy-Preserving Federated Learning with Differential Privacy', authors: '某成员, 某成员', journal: 'Springer', status: '审稿中', date: '2025-04-10', abstract: 'This work presents a privacy-preserving federated learning framework that combines differential privacy guarantees with secure aggregation to enable multi-party collaborative model training.', keywords: 'Federated Learning, Differential Privacy, Secure Aggregation' },
+  { id: 6, title: '云原生架构下的微服务弹性伸缩策略', authors: '某成员, 某成员', journal: 'IEEE', status: '已发表', date: '2024-11-20', abstract: '本文提出了一种基于强化学习的微服务弹性伸缩策略，能够根据实时负载预测自动调整资源分配，在保证服务质量的前提下降低30%的资源消耗。', keywords: '云原生, 微服务, 弹性伸缩, 强化学习' },
+  { id: 7, title: 'Edge Computing Framework for Real-time IoT Analytics', authors: '陈磊, 某成员', journal: 'ACM', status: '已退稿', date: '2024-09-12', abstract: 'We present an edge computing framework designed for real-time IoT data analytics, featuring adaptive computation offloading and intelligent data filtering at the network edge.', keywords: 'Edge Computing, IoT, Real-time Analytics' }
+];
+
+const qaData = [
+  { id: 1, title: '如何实现高可用的微服务架构？', excerpt: '我们团队正在将单体应用拆分为微服务架构，想了解在实践中如何实现高可用？特别是在服务降级、熔断、限流等方面的最佳实践...', tags: ['后端架构', '微服务'], answers: [{author:'某成员',avatar:'陈',time:'2小时前',content:'关于微服务高可用，我建议从以下几个层面来考虑：\n\n1. **服务注册与发现**：使用 Nacos 或 Consul 实现服务的自动注册和发现，确保服务实例的动态管理。\n\n2. **熔断与降级**：采用 Sentinel 或 Hystrix 实现熔断机制，当某个下游服务出现异常时快速失败，避免雪崩效应。\n\n3. **限流策略**：根据业务场景选择合适的限流算法（令牌桶/漏桶/滑动窗口），在网关层和服务层分别设置限流规则。\n\n4. **多活部署**：核心服务采用多机房多活部署，通过全局流量管理实现故障自动切换。\n\n5. **监控告警**：建立完善的监控体系，包括链路追踪（SkyWalking）、指标监控（Prometheus + Grafana）、日志聚合（ELK）。',best:true},{author:'某成员',avatar:'黄',time:'1小时前',content:'补充一点：数据库层面也需要注意高可用设计。建议使用主从复制+读写分离，配合 MHA 或 Orchestrator 实现自动故障切换。缓存层使用 Redis Cluster 保证高可用。'}], views: 234, time: '3小时前', solved: true },
+  { id: 2, title: '大模型微调的最佳实践是什么？', excerpt: '在将通用大语言模型适配到垂直领域时，LoRA、QLoRA、Full Fine-tuning 等不同微调方法各自适用于什么场景？数据质量和数量如何平衡？', tags: ['人工智能', '大模型'], answers: [{author:'某成员',avatar:'周',time:'5小时前',content:'关于大模型微调的实践建议：\n\n**LoRA** 适用于大多数场景，尤其是资源有限的情况。秩（rank）建议从8-16开始，根据任务复杂度调整。\n\n**QLoRA** 在显存极其有限时使用，4bit量化带来的精度损失通常在可接受范围内。\n\n**Full Fine-tuning** 适用于对精度要求极高且算力充足的场景，通常用于基座模型的深度适配。\n\n数据方面，质量远比数量重要。1000条高质量的指令数据可能比10000条普通数据效果更好。建议使用 GPT-4 或 Claude 辅助生成高质量的训练数据，然后进行人工审核。',best:false},{author:'某成员',avatar:'李',time:'4小时前',content:'从我们团队的实践经验来看，数据预处理是最关键的环节。清洗、去重、格式标准化这些步骤花的时间往往比训练本身还多。另外，建议使用 eval loss 而非 train loss 来判断是否过拟合。'}], views: 456, time: '6小时前', solved: true },
+  { id: 3, title: '前端性能优化的关键指标有哪些？', excerpt: '在做一个大型SPA应用的性能优化，想了解有哪些关键的性能指标需要关注，以及对应的优化手段是什么？', tags: ['前端开发', '性能优化'], answers: [{author:'某成员',avatar:'王',time:'1天前',content:'前端性能优化的核心指标（Core Web Vitals）：\n\n- **LCP** (Largest Contentful Paint): 最大内容绘制，目标 < 2.5s\n- **FID** (First Input Delay): 首次输入延迟，目标 < 100ms\n- **CLS** (Cumulative Layout Shift): 累积布局偏移，目标 < 0.1\n\n优化手段包括：代码分割、图片懒加载、关键CSS内联、预加载关键资源、使用Service Worker缓存等。'}], views: 189, time: '1天前', solved: true },
+  { id: 4, title: '云原生应用如何实现自动扩缩容？', excerpt: '我们的Kubernetes集群需要实现基于业务指标的自动扩缩容，而不是简单的CPU/内存指标。有没有推荐的方案？', tags: ['云计算', '运维'], answers: [{author:'某成员',avatar:'黄',time:'8小时前',content:'推荐使用 KEDA（Kubernetes Event-Driven Autoscaling）来实现基于自定义指标的扩缩容。它支持基于消息队列深度、HTTP请求量、自定义Prometheus指标等多种触发器。'}], views: 145, time: '10小时前', solved: false },
+  { id: 5, title: '数据库分库分表的策略如何选择？', excerpt: '业务数据量快速增长，单表已接近千万级别。想了解分库分表的常见策略以及各自的优缺点？', tags: ['数据库', '后端架构'], answers: [{author:'某成员',avatar:'刘',time:'2天前',content:'分库分表的常见策略：\n\n**Hash分片**：数据分布均匀，但范围查询困难\n**Range分片**：范围查询友好，但可能数据倾斜\n**一致性Hash**：扩容方便，但实现复杂\n\n建议优先考虑 ShardingSphere 或 Vitess 这类成熟的中间件方案。'}], views: 312, time: '2天前', solved: false },
+  { id: 6, title: '如何设计一个安全的API网关？', excerpt: '我们的微服务架构需要一个统一的API网关来处理认证、授权、限流等功能。在安全性方面有哪些需要重点考虑的？', tags: ['安全', '后端架构'], answers: [], views: 98, time: '5小时前', solved: false },
+  { id: 7, title: 'React 19 的新特性有哪些值得关注的？', excerpt: 'React 19 发布了一段时间了，想了解一下有哪些新特性对实际开发影响比较大？', tags: ['前端开发'], answers: [{author:'某成员',avatar:'王',time:'3天前',content:'React 19 值得关注的特性：\n\n1. **Actions** - 简化表单和异步操作的处理\n2. **use() Hook** - 可以在渲染时读取 Promise 和 Context\n3. **Server Components** - 正式支持服务端组件\n4. **文档元数据** - 直接在组件中管理 title、meta 等\n5. **样式表支持** - 改进的CSS样式表处理'}], views: 267, time: '3天前', solved: true },
+  { id: 8, title: '机器学习模型部署到生产环境的最佳流程是什么？', excerpt: '从模型训练完成到生产环境部署，中间的流程应该如何设计？MLOps的实践中有哪些关键步骤？', tags: ['人工智能', '运维'], answers: [{author:'某成员',avatar:'陈',time:'1天前',content:'MLOps 的关键流程：\n\n1. 模型版本管理（MLflow）\n2. 模型验证和测试\n3. 容器化打包（Docker）\n4. CI/CD 流水线\n5. 灰度发布\n6. A/B 测试\n7. 监控与告警\n8. 模型再训练机制'}], views: 201, time: '1天前', solved: false }
+];
+
+const expertsData = [
+  { id: 1, name: '某成员', dept: '某研发部门', avatar: '张', fields: ['人工智能', '算法'], bio: '10年深度学习研究经验，发表顶会论文20+篇，主导多个AI产品落地。' },
+  { id: 2, name: '某成员', dept: '某研发部门', avatar: '刘', fields: ['后端架构', '数据库'], bio: '分布式系统专家，主导设计过日均亿级请求量的核心系统架构。' },
+  { id: 3, name: '某成员', dept: '某研发部门', avatar: '王', fields: ['前端开发'], bio: '大前端技术专家，精通React/Vue生态，主导公司前端基础设施建设。' },
+  { id: 4, name: '某成员', dept: '某研发部门', avatar: '陈', fields: ['云计算', '运维'], bio: 'Kubernetes社区核心贡献者，云原生架构设计与实践经验非常丰富。' },
+  { id: 5, name: '某成员', dept: '某研发部门', avatar: '黄', fields: ['安全', '后端架构'], bio: '网络安全领域15年从业经验，多次在国际安全会议上发表研究成果。' },
+  { id: 6, name: '某成员', dept: '某研发部门', avatar: '周', fields: ['人工智能', '大数据'], bio: 'NLP方向资深专家，大语言模型应用和工程化落地的先行者。' },
+  { id: 7, name: '某成员', dept: '某研发部门', avatar: '李', fields: ['人工智能', '安全'], bio: '联邦学习和隐私计算领域专家，多项相关专利持有者。' },
+  { id: 8, name: '某成员', dept: '某研发部门', avatar: '赵', fields: ['算法'], bio: '信号处理和嵌入式AI专家，在边缘智能计算领域有深厚的技术积累。' }
+];
+
+const profileMessages = [
+  { icon: '📋', color: 'blue', title: '专利审核通知', desc: '您的专利「基于联邦学习的隐私保护数据分析方法」进入二审阶段', time: '1小时前' },
+  { icon: '✅', color: 'green', title: '论文录用通知', desc: '您提交的论文已被 Science 期刊正式录用', time: '3小时前' },
+  { icon: '💬', color: 'purple', title: '问答被采纳', desc: '您在「大模型微调最佳实践」中的回答被提问者采纳为最佳答案', time: '5小时前' },
+  { icon: '⭐', color: 'yellow', title: '技术专家社区 认证进度', desc: '您的 技术专家社区 认证申请已通过初审，请等待终审结果', time: '1天前' },
+  { icon: '🔔', color: 'blue', title: '系统通知', desc: '平台已升级至 v3.2 版本，新增批量导出功能', time: '2天前' },
+  { icon: '👍', color: 'green', title: '获得点赞', desc: '您的回答「微服务高可用架构设计」获得了 15 个点赞', time: '3天前' }
+];
+
+// ============================================================
+//  STATE
+// ============================================================
+let currentPage = 'home';
+let currentQATab = 'latest';
+let currentSearchFilter = 'all';
+let currentSearchQuery = '';
+let patentPage = 1;
+let pape某自动化工具ge = 1;
+let qaPage = 1;
+const PAGE_SIZE = 5;
+let expertFilterField = '';
+
+// ============================================================
+//  NAVIGATION
+// ============================================================
+function navigate(page) {
+  // Close mobile menu
+  document.getElementById('navMenu').classList.remove('mobile-open');
+  // Close search dropdown
+  document.getElementById('searchDropdown').classList.remove('show');
+
+  const pages = document.querySelectorAll('.page');
+  pages.forEach(p => { p.classList.remove('active'); });
+
+  // Update nav highlights
+  const navItems = document.querySelectorAll('.nav-menu-item');
+  navItems.forEach(item => {
+    item.classList.remove('active');
+    if (item.dataset.page === page || page.startsWith(item.dataset.page + '-') && !['patent-apply','paper-submit','qa-ask','技术专家社区-apply'].includes(page)) {
+      // Only highlight main pages in nav
+    }
+  });
+
+  // Determine which nav item to highlight
+  let navPage = page;
+  if (page.startsWith('patent')) navPage = 'patent';
+  else if (page.startsWith('paper')) navPage = 'paper';
+  else if (page.startsWith('qa')) navPage = 'qa';
+  else if (page.startsWith('技术专家社区')) navPage = '技术专家社区';
+  else if (page === 'search') navPage = null;
+
+  navItems.forEach(item => {
+    if (item.dataset.page === navPage) item.classList.add('active');
+  });
+
+  // Show target page with fade
+  const targetPage = document.getElementById('page-' + page);
+  if (targetPage) {
+    setTimeout(() => {
+      targetPage.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 50);
+  }
+
+  currentPage = page;
+
+  // Render page-specific content
+  if (page === 'home') renderHome();
+  else if (page === 'patent') rende某自动化工具tentList();
+  else if (page === 'paper') rende某自动化工具perList();
+  else if (page === 'qa') renderQAList();
+  else if (page === '技术专家社区') renderExpertList();
+  else if (page === 'profile') renderProfile();
+}
+
+function toggleMobileMenu() {
+  document.getElementById('navMenu').classList.toggle('mobile-open');
+}
+
+// ============================================================
+//  RENDER: HOME
+// ============================================================
+let homeCategory = 'all';
+
+function renderHome() {
+  // 重置首页搜索框
+  const input = document.getElementById('homeSearchInput');
+  if (input) { input.value = ''; }
+}
+
+function setHomeCategory(el, category) {
+  homeCategory = category;
+  document.querySelectorAll('.home-category-tag').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function onHomeSearchKeydown(event) {
+  if (event.key === 'Enter') onHomeSearch();
+}
+
+function onHomeSearch() {
+  const input = document.getElementById('homeSearchInput');
+  const query = input ? input.value.trim() : '';
+  if (!query) { showToast('请输入搜索关键词', 'warning'); return; }
+  currentSearchQuery = query;
+  currentSearchFilter = homeCategory;
+  navigate('search');
+  renderSearchResults();
+}
+
+// ============================================================
+//  RENDER: PATENT LIST
+// ============================================================
+function getFilteredPatents() {
+  const cat = document.getElementById('patentCategoryFilter').value;
+  const status = document.getElementById('patentStatusFilter').value;
+  const search = document.getElementById('patentSearchInput').value.toLowerCase();
+  return patentsData.filter(p => {
+    if (cat && p.category !== cat) return false;
+    if (status && p.status !== status) return false;
+    if (search && !p.title.toLowerCase().includes(search) && !p.inventor.toLowerCase().includes(search)) return false;
+    return true;
+  });
+}
+
+function rende某自动化工具tentList() {
+  const filtered = getFilteredPatents();
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  if (patentPage > totalPages) patentPage = totalPages;
+  const start = (patentPage - 1) * PAGE_SIZE;
+  const items = filtered.slice(start, start + PAGE_SIZE);
+
+  const list = document.getElementById('patentList');
+  list.innerHTML = items.map(p => `
+    <div class="card card-clickable mb-16" onclick="showPatentDetail(${p.id})" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+      <div style="flex:1;min-width:200px;">
+        <div style="font-size:16px;font-weight:600;color:var(--text-heading);margin-bottom:6px;">${p.title}</div>
+        <div style="font-size:13px;color:var(--text-secondary);">发明人：${p.inventor} · ${p.category}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;flex-shrink:0;">
+        <span class="badge ${getStatusBadge(p.status)}">${p.status}</span>
+        <span style="font-size:13px;color:var(--text-secondary);">${p.date}</span>
+      </div>
+    </div>
+  `).join('');
+
+  if (items.length === 0) {
+    list.innerHTML = '<div style="text-align:center;padding:48px;color:var(--text-secondary);">暂无匹配的专利记录</div>';
+  }
+
+  rende某自动化工具gination('patentPagination', totalPages, (pg) => { patentPage = pg; rende某自动化工具tentList(); });
+}
+
+function filte某自动化工具tents() { patentPage = 1; rende某自动化工具tentList(); }
+
+function getStatusBadge(status) {
+  const map = { '已授权': 'badge-green', '审核中': 'badge-yellow', '已提交': 'badge-blue', '已驳回': 'badge-red', '已发表': 'badge-green', '审稿中': 'badge-yellow', '已录用': 'badge-blue', '已退稿': 'badge-red' };
+  return map[status] || 'badge-gray';
+}
+
+// ============================================================
+//  RENDER: PATENT DETAIL
+// ============================================================
+function showPatentDetail(id) {
+  const p = patentsData.find(x => x.id === id);
+  if (!p) return;
+  const content = document.getElementById('patentDetailContent');
+  content.innerHTML = `
+    <div class="detail-header" style="flex-direction:column;">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <h1 class="detail-title">${p.title}</h1>
+        <span class="badge ${getStatusBadge(p.status)}">${p.status}</span>
+      </div>
+      <div class="detail-meta">
+        <div class="detail-meta-item">👤 发明人：${p.inventor}</div>
+        <div class="detail-meta-item">📂 分类：${p.category}</div>
+        <div class="detail-meta-item">📅 日期：${p.date}</div>
+        <div class="detail-meta-item">🔖 编号：PAT-${String(p.id).padStart(4,'0')}</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap;">
+      <button class="btn btn-primary btn-sm" onclick="showModal('审核确认', '<p style=\"color:var(--text-primary);\">确认通过该专利审核？</p>', [{text:'取消',cls:'btn-secondary',action:'hideModal()'},{text:'确认通过',cls:'btn-primary',action:'hideModal();showToast(\\'审核已通过\\',\\'success\\')'}])">审核通过</button>
+      <button class="btn btn-secondary btn-sm" onclick="showToast('编辑功能（模拟）', 'success')">编辑</button>
+      <button class="btn btn-danger btn-sm" onclick="showModal('删除确认', '<p style=\"color:var(--text-primary);\">确认删除该专利？此操作不可撤销。</p>', [{text:'取消',cls:'btn-secondary',action:'hideModal()'},{text:'确认删除',cls:'btn-danger',action:'hideModal();showToast(\\'已删除\\',\\'success\\')'}])">删除</button>
+    </div>
+    <div class="card">
+      <div class="detail-section">
+        <div class="detail-section-title">技术方案描述</div>
+        <div class="detail-section-content">${p.desc}</div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">效益数据</div>
+        <div class="detail-section-content">${p.benefit}</div>
+      </div>
+    </div>
+  `;
+  navigate('patent-detail');
+}
+
+// ============================================================
+//  RENDER: PAPER LIST
+// ============================================================
+function getFilteredPapers() {
+  const journal = document.getElementById('paperJournalFilter').value;
+  const status = document.getElementById('paperStatusFilter').value;
+  const search = document.getElementById('paperSearchInput').value.toLowerCase();
+  return papersData.filter(p => {
+    if (journal && p.journal !== journal) return false;
+    if (status && p.status !== status) return false;
+    if (search && !p.title.toLowerCase().includes(search) && !p.authors.toLowerCase().includes(search)) return false;
+    return true;
+  });
+}
+
+function rende某自动化工具perList() {
+  const filtered = getFilteredPapers();
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  if (pape某自动化工具ge > totalPages) pape某自动化工具ge = totalPages;
+  const start = (pape某自动化工具ge - 1) * PAGE_SIZE;
+  const items = filtered.slice(start, start + PAGE_SIZE);
+
+  const list = document.getElementById('paperList');
+  list.innerHTML = items.map(p => `
+    <div class="card card-clickable mb-16" onclick="showPaperDetail(${p.id})" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+      <div style="flex:1;min-width:200px;">
+        <div style="font-size:16px;font-weight:600;color:var(--text-heading);margin-bottom:6px;">${p.title}</div>
+        <div style="font-size:13px;color:var(--text-secondary);">作者：${p.authors} · ${p.journal}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;flex-shrink:0;">
+        <span class="badge ${getStatusBadge(p.status)}">${p.status}</span>
+        <span style="font-size:13px;color:var(--text-secondary);">${p.date}</span>
+      </div>
+    </div>
+  `).join('');
+
+  if (items.length === 0) {
+    list.innerHTML = '<div style="text-align:center;padding:48px;color:var(--text-secondary);">暂无匹配的论文记录</div>';
+  }
+
+  rende某自动化工具gination('pape某自动化工具gination', totalPages, (pg) => { pape某自动化工具ge = pg; rende某自动化工具perList(); });
+}
+
+function filte某自动化工具pers() { pape某自动化工具ge = 1; rende某自动化工具perList(); }
+
+// ============================================================
+//  RENDER: PAPER DETAIL
+// ============================================================
+function showPaperDetail(id) {
+  const p = papersData.find(x => x.id === id);
+  if (!p) return;
+  const content = document.getElementById('paperDetailContent');
+  content.innerHTML = `
+    <div class="detail-header" style="flex-direction:column;">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <h1 class="detail-title">${p.title}</h1>
+        <span class="badge ${getStatusBadge(p.status)}">${p.status}</span>
+      </div>
+      <div class="detail-meta">
+        <div class="detail-meta-item">👤 作者：${p.authors}</div>
+        <div class="detail-meta-item">📰 期刊：${p.journal}</div>
+        <div class="detail-meta-item">📅 日期：${p.date}</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="detail-section">
+        <div class="detail-section-title">摘要</div>
+        <div class="detail-section-content">${p.abstract}</div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">关键词</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          ${p.keywords.split(',').map(k => `<span class="badge badge-blue">${k.trim()}</span>`).join('')}
+        </div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">论文附件</div>
+        <div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(255,255,255,0.03);border-radius:8px;">
+          <span>📄</span>
+          <span style="font-size:14px;color:var(--text-primary);">${p.title}.pdf</span>
+          <span style="font-size:12px;color:var(--text-secondary);margin-left:auto;">2.3 MB</span>
+        </div>
+      </div>
+    </div>
+  `;
+  navigate('paper-detail');
+}
+
+// ============================================================
+//  RENDER: QA LIST
+// ============================================================
+function getFilteredQA() {
+  let items = [...qaData];
+  if (currentQATab === 'hot') items.sort((a, b) => b.views - a.views);
+  else if (currentQATab === 'unsolved') items = items.filter(q => !q.solved);
+  else if (currentQATab === 'solved') items = items.filter(q => q.solved);
+  else items.sort((a, b) => b.id - a.id); // latest
+  return items;
+}
+
+function renderQAList() {
+  const filtered = getFilteredQA();
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  if (qaPage > totalPages) qaPage = totalPages;
+  const start = (qaPage - 1) * PAGE_SIZE;
+  const items = filtered.slice(start, start + PAGE_SIZE);
+
+  const list = document.getElementById('qaList');
+  list.innerHTML = items.map(q => `
+    <div class="card card-clickable qa-card mb-16" onclick="showQADetail(${q.id})">
+      <div class="qa-title">${q.title}</div>
+      <div class="qa-excerpt">${q.excerpt}</div>
+      <div class="qa-tags">${q.tags.map(t => `<span class="badge badge-blue">${t}</span>`).join('')}</div>
+      <div class="qa-stats">
+        <span>💬 ${q.answers.length} 个回答</span>
+        <span>👁 ${q.views} 次浏览</span>
+        <span>🕐 ${q.time}</span>
+        ${q.solved ? '<span class="badge badge-green" style="margin-left:auto;">已解决</span>' : '<span class="badge badge-yellow" style="margin-left:auto;">待解决</span>'}
+      </div>
+    </div>
+  `).join('');
+
+  if (items.length === 0) {
+    list.innerHTML = '<div style="text-align:center;padding:48px;color:var(--text-secondary);">暂无匹配的问题</div>';
+  }
+
+  rende某自动化工具gination('qaPagination', totalPages, (pg) => { qaPage = pg; renderQAList(); });
+}
+
+function switchQATab(tab) {
+  currentQATab = tab;
+  qaPage = 1;
+  document.querySelectorAll('#qaTabs .tab-item').forEach(t => {
+    t.classList.toggle('active', t.dataset.tab === tab);
+  });
+  renderQAList();
+}
+
+// ============================================================
+//  RENDER: QA DETAIL
+// ============================================================
+function showQADetail(id) {
+  const q = qaData.find(x => x.id === id);
+  if (!q) return;
+
+  // Sort answers: best first
+  const sortedAnswers = [...q.answers].sort((a, b) => (b.best ? 1 : 0) - (a.best ? 1 : 0));
+
+  const content = document.getElementById('qaDetailContent');
+  content.innerHTML = `
+    <div class="detail-header" style="flex-direction:column;">
+      <div style="display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;">
+        <h1 class="detail-title">${q.title}</h1>
+        ${q.solved ? '<span class="badge badge-green">已解决</span>' : '<span class="badge badge-yellow">待解决</span>'}
+      </div>
+      <div class="qa-tags" style="margin-top:12px;">${q.tags.map(t => `<span class="badge badge-blue">${t}</span>`).join('')}</div>
+      <div class="detail-meta" style="margin-top:8px;">
+        <div class="detail-meta-item">💬 ${q.answers.length} 个回答</div>
+        <div class="detail-meta-item">👁 ${q.views} 次浏览</div>
+        <div class="detail-meta-item">🕐 ${q.time}</div>
+      </div>
+    </div>
+    <div class="card mb-24">
+      <div class="detail-section-content">${q.excerpt}</div>
+    </div>
+    <h3 style="font-size:18px;font-weight:600;color:var(--text-heading);margin-bottom:16px;">
+      ${q.answers.length} 个回答
+    </h3>
+    ${sortedAnswers.map(a => `
+      <div class="card answer-card ${a.best ? 'best' : ''}">
+        ${a.best ? '<div style="display:flex;align-items:center;gap:6px;margin-bottom:12px;"><span class="badge badge-green">✓ 最佳答案</span></div>' : ''}
+        <div class="answer-header">
+          <div class="answer-author">
+            <div class="answer-avatar">${a.avatar}</div>
+            <div>
+              <div class="answer-name">${a.author}</div>
+              <div class="answer-time">${a.time}</div>
+            </div>
+          </div>
+        </div>
+        <div class="answer-body">${a.content.replace(/\n/g, '<br>')}</div>
+        ${!q.solved ? `<div class="answer-actions"><span class="answer-action-btn" onclick="showModal('采纳确认','<p style=\\'color:var(--text-primary);\\'>确认采纳该回答为最佳答案？</p>',[{text:'取消',cls:'btn-secondary',action:'hideModal()'},{text:'确认采纳',cls:'btn-primary',action:'hideModal();showToast(\\'已采纳该回答\\',\\'success\\')'}])">✓ 采纳为最佳答案</span></div>` : ''}
+      </div>
+    `).join('')}
+    ${q.answers.length === 0 ? '<div class="card" style="text-align:center;padding:32px;color:var(--text-secondary);">暂无回答，成为第一个回答者吧！</div>' : ''}
+    <div class="answer-editor">
+      <h3 style="font-size:18px;font-weight:600;color:var(--text-heading);margin-bottom:16px;">撰写回答</h3>
+      <div class="card">
+        <textarea class="form-textarea" placeholder="分享你的见解和经验..." style="min-height:120px;margin-bottom:16px;"></textarea>
+        <div style="display:flex;justify-content:flex-end;">
+          <button class="btn btn-primary" onclick="simulateSubmit(this, '回答已提交', function(){ showToast('回答已提交', 'success'); })">提交回答</button>
+        </div>
+      </div>
+    </div>
+  `;
+  navigate('qa-detail');
+}
+
+// ============================================================
+//  RENDER: EXPERT LIST
+// ============================================================
+function renderExpertList() {
+  const filters = document.getElementById('技术专家社区Filters');
+  let items = expertsData;
+  if (expertFilterField) {
+    items = items.filter(e => e.fields.includes(expertFilterField));
+  }
+
+  const list = document.getElementById('expertList');
+  list.innerHTML = items.map(e => `
+    <div class="card expert-card">
+      <div class="expert-avatar">${e.avatar}</div>
+      <div class="expert-name">${e.name}</div>
+      <div class="expert-dept">${e.dept}</div>
+      <div class="expert-tags">${e.fields.map(f => `<span class="badge badge-purple">${f}</span>`).join('')}</div>
+      <div class="expert-bio">${e.bio}</div>
+    </div>
+  `).join('');
+
+  if (items.length === 0) {
+    list.innerHTML = '<div style="text-align:center;padding:48px;color:var(--text-secondary);grid-column:1/-1;">该领域暂无认证专家</div>';
+  }
+}
+
+function filterExperts(el, field) {
+  expertFilterField = field;
+  const items = document.querySelectorAll('#技术专家社区Filters .checkbox-item');
+  items.forEach(i => i.classList.remove('checked'));
+  el.classList.add('checked');
+  renderExpertList();
+}
+
+// ============================================================
+//  RENDER: PROFILE
+// ============================================================
+function renderProfile() {
+  const container = document.getElementById('profileMessages');
+  container.innerHTML = profileMessages.map(m => `
+    <div class="msg-item">
+      <div class="msg-icon ${m.color}">${m.icon}</div>
+      <div class="msg-content">
+        <div class="msg-title">${m.title}</div>
+        <div class="msg-desc">${m.desc}</div>
+      </div>
+      <div class="msg-time">${m.time}</div>
+    </div>
+  `).join('');
+}
+
+// ============================================================
+//  SEARCH
+// ============================================================
+function getAllSearchableItems() {
+  const items = [];
+  patentsData.forEach(p => items.push({ type: 'patent', label: '专利', title: p.title, sub: `${p.inventor} · ${p.category}`, id: p.id }));
+  papersData.forEach(p => items.push({ type: 'paper', label: '论文', title: p.title, sub: `${p.authors} · ${p.journal}`, id: p.id }));
+  qaData.forEach(q => items.push({ type: 'qa', label: '问答', title: q.title, sub: `${q.answers.length} 个回答 · ${q.views} 次浏览`, id: q.id }));
+  expertsData.forEach(e => items.push({ type: '技术专家社区', label: '技术专家社区', title: e.name, sub: `${e.dept} · ${e.fields.join(', ')}`, id: e.id }));
+  return items;
+}
+
+function onSearchFocus() {
+  const q = document.getElementById('globalSearch').value.trim();
+  if (q.length > 0) showSearchDropdown(q);
+}
+
+function onSearchInput() {
+  const q = document.getElementById('globalSearch').value.trim();
+  if (q.length > 0) showSearchDropdown(q);
+  else document.getElementById('searchDropdown').classList.remove('show');
+}
+
+function onSearchKeydown(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    const q = document.getElementById('globalSearch').value.trim();
+    if (q) {
+      document.getElementById('searchDropdown').classList.remove('show');
+      performSearch(q);
+    }
+  }
+}
+
+function showSearchDropdown(query) {
+  const all = getAllSearchableItems();
+  const results = all.filter(item =>
+    item.title.toLowerCase().includes(query.toLowerCase()) ||
+    item.sub.toLowerCase().includes(query.toLowerCase())
+  ).slice(0, 8);
+
+  const dropdown = document.getElementById('searchDropdown');
+  if (results.length === 0) {
+    dropdown.innerHTML = '<div class="nav-search-item" style="color:var(--text-secondary);cursor:default;">未找到匹配结果，按回车搜索</div>';
+  } else {
+    dropdown.innerHTML = results.map(r => {
+      const highlighted = r.title.replace(new RegExp(`(${query})`, 'gi'), '<span>$1</span>');
+      return `<div class="nav-search-item" onclick="event.stopPropagation();performSearch('${query}');navigate('${r.type === 'patent' ? 'patent' : r.type === 'paper' ? 'paper' : r.type === 'qa' ? 'qa' : '技术专家社区'}');">${highlighted}<br><small style="color:var(--text-secondary);font-size:11px;">[${r.label}] ${r.sub}</small></div>`;
+    }).join('') + `<div class="nav-search-item" style="color:var(--accent-blue);border-top:1px solid var(--card-border);margin-top:4px;padding-top:10px;" onclick="event.stopPropagation();performSearch('${query}');">按回车查看所有结果 →</div>`;
+  }
+  dropdown.classList.add('show');
+}
+
+function performSearch(query) {
+  currentSearchQuery = query;
+  currentSearchFilter = 'all';
+  document.getElementById('globalSearch').value = query;
+  document.getElementById('searchDropdown').classList.remove('show');
+
+  document.getElementById('searchResultTitle').textContent = `"${query}" 的搜索结果`;
+  renderSearchResults();
+  navigate('search');
+
+  // Reset search tabs
+  document.querySelectorAll('#searchTabs .tab-item').forEach(t => {
+    t.classList.toggle('active', t.dataset.filter === 'all');
+  });
+}
+
+function renderSearchResults() {
+  const all = getAllSearchableItems();
+  let results = all.filter(item =>
+    item.title.toLowerCase().includes(currentSearchQuery.toLowerCase()) ||
+    item.sub.toLowerCase().includes(currentSearchQuery.toLowerCase())
+  );
+  if (currentSearchFilter !== 'all') {
+    results = results.filter(r => r.type === currentSearchFilter);
+  }
+
+  document.getElementById('searchResultCount').textContent = `共找到 ${results.length} 条结果`;
+
+  const list = document.getElementById('searchResultsList');
+  list.innerHTML = results.map(r => {
+    const oc = r.type === 'patent' ? `showPatentDetail(${r.id})` :
+               r.type === 'paper' ? `showPaperDetail(${r.id})` :
+               r.type === 'qa'    ? `showQADetail(${r.id})` :
+               "navigate('技术专家社区')";
+    const badgeCls = r.type === 'patent' ? 'badge-blue' : r.type === 'paper' ? 'badge-purple' : r.type === 'qa' ? 'badge-cyan' : 'badge-green';
+    const highlighted = r.title.replace(new RegExp(`(${currentSearchQuery})`, 'gi'), '<span style="color:var(--accent-blue);">$1</span>');
+    return `<div class="card search-result-item mb-16" onclick="${oc}">
+      <div class="search-result-header">
+        <span class="search-result-title">${highlighted}</span>
+        <span class="badge ${badgeCls}">${r.label}</span>
+      </div>
+      <div class="search-result-meta">${r.sub}</div>
+    </div>`;
+  }).join('');
+
+  if (results.length === 0) {
+    list.innerHTML = '<div style="text-align:center;padding:48px;color:var(--text-secondary);">未找到匹配的结果</div>';
+  }
+}
+
+function filterSearch(filter) {
+  currentSearchFilter = filter;
+  document.querySelectorAll('#searchTabs .tab-item').forEach(t => {
+    t.classList.toggle('active', t.dataset.filter === filter);
+  });
+  renderSearchResults();
+}
+
+// ============================================================
+//  PAGINATION
+// ============================================================
+function rende某自动化工具gination(containerId, totalPages, callback) {
+  const container = document.getElementById(containerId);
+  if (totalPages <= 1) { container.innerHTML = ''; return; }
+
+  let currentPg = containerId === 'patentPagination' ? patentPage : containerId === 'pape某自动化工具gination' ? pape某自动化工具ge : qaPage;
+  let html = '';
+  html += `<div class="page-btn" onclick="void(0)" id="${containerId}-prev">‹</div>`;
+  for (let i = 1; i <= totalPages; i++) {
+    html += `<div class="page-btn ${i === currentPg ? 'active' : ''}" data-pg="${i}">${i}</div>`;
+  }
+  html += `<div class="page-btn" onclick="void(0)" id="${containerId}-next">›</div>`;
+  container.innerHTML = html;
+
+  container.querySelectorAll('.page-btn[data-pg]').forEach(btn => {
+    btn.addEventListener('click', () => callback(parseInt(btn.dataset.pg)));
+  });
+  document.getElementById(`${containerId}-prev`).addEventListener('click', () => {
+    if (currentPg > 1) callback(currentPg - 1);
+  });
+  document.getElementById(`${containerId}-next`).addEventListener('click', () => {
+    if (currentPg < totalPages) callback(currentPg + 1);
+  });
+}
+
+// ============================================================
+//  FORM SUBMISSIONS
+// ============================================================
+function simulateSubmit(btn, successMsg, onSuccess) {
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> 提交中...';
+  setTimeout(() => {
+    btn.disabled = false;
+    btn.textContent = originalText;
+    if (onSuccess) onSuccess();
+    else showToast(successMsg, 'success');
+  }, 2000);
+}
+
+function submitPatentApply(e) {
+  e.preventDefault();
+  const btn = document.getElementById('patentApplyBtn');
+  simulateSubmit(btn, '专利申请已提交', () => {
+    showToast('专利申请已成功提交！', 'success');
+    setTimeout(() => navigate('patent'), 1000);
+  });
+}
+
+function submitPaper(e) {
+  e.preventDefault();
+  const btn = document.getElementById('paperSubmitBtn');
+  simulateSubmit(btn, '论文已提交', () => {
+    showToast('论文已成功提交！', 'success');
+    setTimeout(() => navigate('paper'), 1000);
+  });
+}
+
+function submitQuestion(e) {
+  e.preventDefault();
+  const btn = document.getElementById('qaAskBtn');
+  simulateSubmit(btn, '问题已发布', () => {
+    showToast('问题已成功发布！', 'success');
+    setTimeout(() => navigate('qa'), 1000);
+  });
+}
+
+function subm某技术部门专家社区(e) {
+  e.preventDefault();
+  const btn = document.getElementById('技术专家社区ApplyBtn');
+  simulateSubmit(btn, '申请已提交', () => {
+    showToast('技术专家社区 认证申请已提交！', 'success');
+    setTimeout(() => navigate('技术专家社区'), 1000);
+  });
+}
+
+// ============================================================
+//  TOAST
+// ============================================================
+function showToast(message, type) {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type || 'success'}`;
+  toast.innerHTML = `<span>${type === 'success' ? '✓' : '✗'}</span> ${message}`;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.style.animation = 'toastOut 0.3s ease forwards';
+    setTimeout(() => toast.remove(), 300);
+  }, 2000);
+}
+
+// ============================================================
+//  MODAL
+// ============================================================
+function showModal(title, bodyHTML, buttons) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalBody').innerHTML = bodyHTML;
+  const footer = document.getElementById('modalFooter');
+  if (buttons && buttons.length) {
+    footer.innerHTML = buttons.map(b => `<button class="btn ${b.cls}" onclick="${b.action}">${b.text}</button>`).join('');
+    footer.style.display = 'flex';
+  } else {
+    footer.innerHTML = '<button class="btn btn-primary" onclick="hideModal()">确定</button>';
+    footer.style.display = 'flex';
+  }
+  document.getElementById('modalOverlay').classList.add('show');
+}
+
+function hideModal() {
+  document.getElementById('modalOverlay').classList.remove('show');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) hideModal();
+}
+
+// ============================================================
+//  CHECKBOX TOGGLE
+// ============================================================
+function toggleCheckbox(el) {
+  el.classList.toggle('checked');
+}
+
+// ============================================================
+//  CLOSE SEARCH DROPDOWN ON OUTSIDE CLICK
+// ============================================================
+document.addEventListener('click', function(e) {
+  const searchEl = document.querySelector('.nav-search');
+  if (!searchEl.contains(e.target)) {
+    document.getElementById('searchDropdown').classList.remove('show');
+  }
+});
+
+// ============================================================
+//  INIT
+// ============================================================
+renderHome();
+</script>
+</body>
+</html>

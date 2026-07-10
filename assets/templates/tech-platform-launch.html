@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>技术知识平台 · 正式上线</title>
+<style>
+  /* ===== Reset & Base ===== */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    color: #1e293b;
+    background: #f0f4ff;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ===== 动态浮动气泡背景 ===== */
+  @keyframes float1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(30px, -50px) scale(1.05); }
+    50% { transform: translate(-20px, -80px) scale(0.95); }
+    75% { transform: translate(40px, -30px) scale(1.02); }
+  }
+  @keyframes float2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(-40px, -60px) scale(1.08); }
+    66% { transform: translate(30px, -40px) scale(0.92); }
+  }
+  @keyframes float3 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    20% { transform: translate(50px, -30px) scale(1.03); }
+    40% { transform: translate(-30px, -70px) scale(0.97); }
+    60% { transform: translate(20px, -50px) scale(1.06); }
+    80% { transform: translate(-40px, -20px) scale(0.98); }
+  }
+  @keyframes float4 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    15% { transform: translate(-25px, -40px) scale(1.04); }
+    35% { transform: translate(35px, -65px) scale(0.96); }
+    55% { transform: translate(-15px, -90px) scale(1.07); }
+    75% { transform: translate(20px, -35px) scale(0.93); }
+  }
+
+  .bg-bubbles {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* 蓝色系 - 大尺寸慢速 */
+  .bubble-1 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, rgba(59,130,246,0.05) 50%, transparent 70%);
+    border-radius: 50%;
+    position: absolute;
+    bottom: -100px; left: 10%;
+    filter: blur(80px);
+    animation: float1 22s ease-in-out infinite;
+  }
+  .bubble-2 {
+    width: 550px; height: 550px;
+    background: radial-gradient(circle, rgba(59,130,246,0.12) 0%, rgba(59,130,246,0.04) 50%, transparent 70%);
+    border-radius: 50%;
+    position: absolute;
+    top: 15%; right: -80px;
+    filter: blur(90px);
+    animation: float2 26s ease-in-out infinite;
+    animation-delay: -5s;
+  }
+  .bubble-3 {
+    width: 420px; height: 420px;
+    background: radial-gradient(circle, rgba(37,99,235,0.13) 0%, rgba(59,130,246,0.04) 50%, transparent 70%);
+    border-radius: 50%;
+    position: absolute;
+    top: 55%; left: -60px;
+    filter: blur(85px);
+    animation: float3 28s ease-in-out infinite;
+    animation-delay: -8s;
+  }
+
+  /* 紫色系 - 中尺寸中速 */
+  .bubble-4 {
+    width: 380px; height: 380px;
+    background: radial-gradient(circle, rgba(139,92,246,0.16) 0%, rgba(139,92,246,0.05) 50%, transparent 70%);
+    border-radius: 50%;
+    position: absolute;
+    top: 30%; left: 50%;
+    filter: blur(75px);
+    animation: float3 20s ease-in-out infinite;
+    animation-delay: -3s;
+  }
+  .bubble-5 {
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, rgba(124,58,237,0.14) 0%, rgba(139,92,246,0.04) 50%, transparent 70%);
+    border-radius: 50%;
+    position: absolute;
+    bottom: 20%; right: 15%;
+    filter: blur(70px);
+    animation: float4 18s ease-in-out infinite;
+    animation-delay: -6s;
+  }
+  .bubble-6 {
+    width: 350px; height: 350px;
+    background: radial-gradient(circle, rgba(139,92,246,0.13) 0%, rgba(124,58,237,0.04) 50%, transparent 70%);
+    border-radius: 50%;
+    position: absolute;
+    top: 70%; left: 35%;
+    filter: blur(80px);
+    animation: float1 24s ease-in-out infinite;
+    animation-delay: -10s;
+  }
+
+  /* 青色系 */
+  .bubble-7 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(6,182,212,0.14) 0%, rgba(6,182,212,0.04) 50%, transparent 70%);
+    border-radius: 50%;
+    position: absolute;
+    top: 10%; left: 25%;
+    filter: blur(85px);
+    animation: float2 22s ease-in-out infinite;
+    animation-delay: -12s;
+  }
+  .bubble-8 {
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, rgba(6,182,212,0.16) 0%, rgba(6,182,212,0.05) 50%, transparent 70%);
+    border-radius: 50%;
+    position: absolute;
+    bottom: 5%; right: 30%;
+    filter: blur(65px);
+    animation: float4 25s ease-in-out infinite;
+    animation-delay: -4s;
+  }
+
+  /* 粉色系 */
+  .bubble-9 {
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(236,72,153,0.12) 0%, rgba(236,72,153,0.04) 50%, transparent 70%);
+    border-radius: 50%;
+    position: absolute;
+    top: 45%; right: -40px;
+    filter: blur(75px);
+    animation: float3 19s ease-in-out infinite;
+    animation-delay: -7s;
+  }
+  .bubble-10 {
+    width: 240px; height: 240px;
+    background: radial-gradient(circle, rgba(236,72,153,0.14) 0%, rgba(236,72,153,0.04) 50%, transparent 70%);
+    border-radius: 50%;
+    position: absolute;
+    bottom: 35%; left: 5%;
+    filter: blur(60px);
+    animation: float1 17s ease-in-out infinite;
+    animation-delay: -2s;
+  }
+
+  /* ===== Utility ===== */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
+  .section-padding { padding: 120px 0; position: relative; overflow: hidden; z-index: 1; }
+  .gradient-text {
+    background: linear-gradient(135deg, #3B82F6, #8B5CF6, #06B6D4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .section-title {
+    font-size: 2.6em;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #2563EB, #7C3AED, #0891B2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .section-subtitle {
+    text-align: center;
+    color: #64748b;
+    font-size: 1.1em;
+    margin-bottom: 64px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ===== 区块顶部彩虹装饰线 ===== */
+  .section-padding::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 3px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #3B82F6, #8B5CF6, #EC4899, #06B6D4);
+    opacity: 0.6;
+  }
+
+  /* ===== 通用光晕装饰 mixin ===== */
+  .glow {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(100px);
+  }
+
+  /* ===== 1. Hero ===== */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    background: linear-gradient(180deg, #f0f4ff 0%, #e8efff 40%, #f0e6ff 100%);
+    z-index: 1;
+  }
+  /* Hero 装饰光圈 */
+  .hero-glow-1 {
+    position: absolute;
+    width: 800px; height: 800px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(59,130,246,0.2) 0%, rgba(139,92,246,0.08) 40%, transparent 70%);
+    top: -200px; right: -200px;
+    filter: blur(100px);
+    pointer-events: none;
+  }
+  .hero-glow-2 {
+    position: absolute;
+    width: 700px; height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(139,92,246,0.18) 0%, rgba(6,182,212,0.06) 40%, transparent 70%);
+    bottom: -150px; left: -200px;
+    filter: blur(100px);
+    pointer-events: none;
+  }
+  .hero-glow-3 {
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(236,72,153,0.12) 0%, rgba(139,92,246,0.05) 40%, transparent 70%);
+    top: 30%; left: -100px;
+    filter: blur(120px);
+    pointer-events: none;
+  }
+  .hero-glow-4 {
+    position: absolute;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(6,182,212,0.14) 0%, transparent 70%);
+    top: 10%; right: 10%;
+    filter: blur(90px);
+    pointer-events: none;
+  }
+  .hero-glow-center {
+    position: absolute;
+    width: 1000px; height: 1000px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(139,92,246,0.08) 0%, rgba(59,130,246,0.04) 40%, transparent 60%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    filter: blur(80px);
+    pointer-events: none;
+  }
+  /* Hero 网格 */
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(59,130,246,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59,130,246,0.05) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+  .hero-content { position: relative; z-index: 2; padding: 40px 24px; }
+  .hero-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+    color: #fff;
+    font-size: 0.85em;
+    font-weight: 600;
+    padding: 8px 24px;
+    border-radius: 100px;
+    margin-bottom: 32px;
+    letter-spacing: 0.04em;
+    box-shadow: 0 4px 24px rgba(59,130,246,0.3);
+  }
+  .hero h1 {
+    font-size: 4.2em;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #2563EB 0%, #7C3AED 50%, #0891B2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 80px rgba(59,130,246,0.15);
+  }
+  .hero .en-title {
+    font-size: 1.3em;
+    font-weight: 500;
+    color: #64748b;
+    letter-spacing: 0.12em;
+    margin-bottom: 28px;
+    text-transform: uppercase;
+  }
+  .hero .tagline {
+    font-size: 1.35em;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 20px;
+  }
+  .hero .tagline span {
+    background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero .tagline-sub {
+    font-size: 1.05em;
+    font-weight: 400;
+    color: #64748b;
+    margin-bottom: 24px;
+  }
+  .hero .desc {
+    font-size: 1.05em;
+    color: #64748b;
+    max-width: 520px;
+    margin: 0 auto 40px;
+    line-height: 1.8;
+  }
+  .hero-cta {
+    display: inline-block;
+    background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+    color: #fff;
+    font-size: 1.05em;
+    font-weight: 600;
+    padding: 14px 40px;
+    border-radius: 14px;
+    text-decoration: none;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 0 4px 24px rgba(59,130,246,0.25);
+  }
+  .hero-cta:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 8px 40px rgba(139,92,246,0.35);
+  }
+  /* Hero 底部曲线分隔 */
+  .hero-curve {
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    z-index: 3;
+  }
+  .hero-curve svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ===== 2. 背景与目的 ===== */
+  .bg-purpose {
+    background: linear-gradient(180deg, #f8faff 0%, #f0e6ff 50%, #f0f4ff 100%);
+    position: relative;
+  }
+  .bg-purpose .glow-a {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%);
+    top: -50px; right: -150px;
+  }
+  .bg-purpose .glow-b {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(6,182,212,0.1) 0%, transparent 70%);
+    bottom: -100px; left: -100px;
+  }
+  .purpose-text {
+    max-width: 780px;
+    margin: 0 auto 64px;
+    text-align: center;
+  }
+  .purpose-text p {
+    font-size: 1.05em;
+    color: #475569;
+    margin-bottom: 14px;
+    line-height: 1.85;
+  }
+  .purpose-text p strong {
+    background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+  }
+
+  /* Before → After 卡片 */
+  .compare-row {
+    display: flex;
+    gap: 32px;
+    max-width: 900px;
+    margin: 0 auto;
+    align-items: stretch;
+  }
+  .compare-card {
+    flex: 1;
+    border-radius: 20px;
+    padding: 36px 32px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    position: relative;
+  }
+  .compare-card:hover { transform: translateY(-4px); }
+  .compare-before {
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  }
+  .compare-before::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 21px;
+    padding: 1px;
+    background: linear-gradient(135deg, #F97316, #EF4444, #F59E0B);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  .compare-before .compare-label {
+    background: linear-gradient(135deg, #F97316, #EF4444);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .compare-before h3 { color: #dc2626; }
+  .compare-before ul { color: #64748b; }
+  .compare-before ul li::before { background: linear-gradient(135deg, #F97316, #EF4444); }
+  .compare-after {
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 4px 30px rgba(59,130,246,0.1);
+  }
+  .compare-after::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 21px;
+    padding: 1px;
+    background: linear-gradient(135deg, #3B82F6, #06B6D4, #8B5CF6);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  .compare-after .compare-label {
+    background: linear-gradient(135deg, #3B82F6, #06B6D4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .compare-after h3 { color: #2563EB; }
+  .compare-after ul { color: #1e293b; }
+  .compare-after ul li::before { background: linear-gradient(135deg, #3B82F6, #06B6D4); }
+  .compare-label {
+    font-size: 0.85em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+  .compare-card h3 {
+    font-size: 1.3em;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .compare-card ul {
+    list-style: none;
+    font-size: 0.98em;
+    line-height: 2;
+  }
+  .compare-card ul li::before {
+    content: '';
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+  .compare-arrow {
+    display: flex;
+    align-items: center;
+    font-size: 2em;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ===== 3. 四大模块 ===== */
+  .modules {
+    background: linear-gradient(180deg, #f0f4ff 0%, #f8faff 50%, #f0e6ff 100%);
+    position: relative;
+  }
+  .modules .glow-c {
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(59,130,246,0.1) 0%, transparent 70%);
+    top: -100px; left: -200px;
+  }
+  .modules .glow-d {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(236,72,153,0.08) 0%, transparent 70%);
+    bottom: -50px; right: -100px;
+  }
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .module-card {
+    background: rgba(255,255,255,0.8);
+    border-radius: 20px;
+    padding: 40px 32px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .module-card::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 21px;
+    padding: 1.5px;
+    background: linear-gradient(135deg, rgba(59,130,246,0.4), rgba(139,92,246,0.4), rgba(6,182,212,0.4));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    transition: background 0.3s ease;
+  }
+  .module-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 40px rgba(59,130,246,0.12);
+  }
+  .module-card:hover::before {
+    background: linear-gradient(135deg, rgba(59,130,246,0.7), rgba(139,92,246,0.7), rgba(6,182,212,0.7));
+  }
+  .module-emoji-wrap {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, rgba(59,130,246,0.12), rgba(139,92,246,0.12));
+  }
+  .module-emoji {
+    font-size: 2em;
+    display: block;
+  }
+  .module-card h3 {
+    font-size: 1.25em;
+    font-weight: 700;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #2563EB, #7C3AED);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .module-card p {
+    font-size: 0.98em;
+    color: #64748b;
+    line-height: 1.7;
+  }
+
+  /* ===== 4. 亮点功能 ===== */
+  .highlights {
+    background: linear-gradient(180deg, #f0e6ff 0%, #e8efff 50%, #f0f4ff 100%);
+    position: relative;
+  }
+  .highlights .glow-e {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%);
+    top: -50px; left: 50%;
+    transform: translateX(-50%);
+  }
+  .highlights .glow-f {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(236,72,153,0.1) 0%, transparent 70%);
+    bottom: 50px; right: -80px;
+  }
+  .highlights-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .highlight-card {
+    background: rgba(255,255,255,0.85);
+    border-radius: 20px;
+    padding: 40px 24px;
+    text-align: center;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+    position: relative;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .highlight-card::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 21px;
+    padding: 1.5px;
+    background: linear-gradient(135deg, rgba(139,92,246,0.35), rgba(6,182,212,0.35), rgba(59,130,246,0.35));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    transition: background 0.3s ease;
+  }
+  .highlight-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 40px rgba(139,92,246,0.12);
+  }
+  .highlight-card:hover::before {
+    background: linear-gradient(135deg, rgba(139,92,246,0.7), rgba(6,182,212,0.7), rgba(59,130,246,0.7));
+  }
+  .highlight-emoji-wrap {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    background: linear-gradient(135deg, rgba(139,92,246,0.12), rgba(6,182,212,0.12));
+  }
+  .highlight-emoji { font-size: 2em; display: block; }
+  .highlight-card h4 {
+    font-size: 1.1em;
+    font-weight: 700;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #7C3AED, #2563EB);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .highlight-card p {
+    font-size: 0.9em;
+    color: #64748b;
+    line-height: 1.7;
+  }
+
+  /* ===== 5. 新旧对比 ===== */
+  .comparison {
+    background: linear-gradient(180deg, #f0f4ff 0%, #f8faff 50%, #e8efff 100%);
+    position: relative;
+  }
+  .comparison .glow-g {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(59,130,246,0.1) 0%, transparent 70%);
+    top: 50%; right: -100px;
+    transform: translateY(-50%);
+  }
+  .comparison .glow-h {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 70%);
+    bottom: -50px; left: -50px;
+  }
+  .comparison-table {
+    max-width: 860px;
+    margin: 0 auto;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.06);
+    position: relative;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  .comparison-table::before {
+    content: '';
+    position: absolute;
+    inset: -1.5px;
+    border-radius: 21px;
+    padding: 1.5px;
+    background: linear-gradient(135deg, rgba(59,130,246,0.3), rgba(139,92,246,0.3), rgba(6,182,212,0.3));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .comp-row {
+    display: flex;
+    align-items: stretch;
+  }
+  .comp-header {
+    background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(139,92,246,0.15));
+    border-bottom: 1px solid rgba(59,130,246,0.1);
+  }
+  .comp-header .comp-cell {
+    font-weight: 700;
+    font-size: 1.05em;
+    color: #1e293b;
+    justify-content: center;
+  }
+  .comp-cell {
+    flex: 1;
+    padding: 22px 28px;
+    font-size: 0.98em;
+    line-height: 1.6;
+    display: flex;
+    align-items: center;
+  }
+  .comp-cell-before {
+    background: linear-gradient(135deg, rgba(249,115,22,0.06), rgba(239,68,68,0.04));
+    color: #b91c1c;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+  }
+  .comp-cell-after {
+    background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(6,182,212,0.06));
+    color: #1d4ed8;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+  }
+  .comp-row:last-child .comp-cell-before,
+  .comp-row:last-child .comp-cell-after { border-bottom: none; }
+
+  /* ===== 6. 价值数据 ===== */
+  .value {
+    background: linear-gradient(180deg, #e8efff 0%, #f0e6ff 50%, #f0f4ff 100%);
+    position: relative;
+  }
+  .value .glow-i {
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(6,182,212,0.1) 0%, rgba(139,92,246,0.04) 40%, transparent 60%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .value-grid {
+    display: flex;
+    gap: 32px;
+    max-width: 960px;
+    margin: 0 auto;
+    justify-content: center;
+  }
+  .value-card {
+    flex: 1;
+    text-align: center;
+    background: rgba(255,255,255,0.85);
+    border-radius: 20px;
+    padding: 48px 24px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+    position: relative;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .value-card::before {
+    content: '';
+    position: absolute;
+    inset: -1.5px;
+    border-radius: 21px;
+    padding: 1.5px;
+    background: linear-gradient(135deg, rgba(6,182,212,0.3), rgba(59,130,246,0.3), rgba(139,92,246,0.3));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    transition: background 0.3s ease;
+  }
+  .value-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(6,182,212,0.12);
+  }
+  .value-card:hover::before {
+    background: linear-gradient(135deg, rgba(6,182,212,0.6), rgba(59,130,246,0.6), rgba(139,92,246,0.6));
+  }
+  .value-number {
+    font-size: 3.8em;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #0891B2, #2563EB, #7C3AED);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .value-label {
+    font-size: 1em;
+    color: #64748b;
+    font-weight: 500;
+  }
+
+  /* ===== 7. CTA + Footer ===== */
+  .cta-section {
+    background: linear-gradient(180deg, #f0f4ff 0%, #e8efff 100%);
+    text-align: center;
+    padding: 120px 0 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-section .glow-j {
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(59,130,246,0.12) 0%, rgba(139,92,246,0.05) 40%, transparent 70%);
+    top: -100px; left: 50%;
+    transform: translateX(-50%);
+  }
+  .cta-section .glow-k {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(236,72,153,0.08) 0%, transparent 70%);
+    bottom: 0; right: -50px;
+  }
+  .cta-status {
+    font-size: 1.15em;
+    color: #1e293b;
+    margin-bottom: 32px;
+    font-weight: 500;
+  }
+  .cta-button {
+    display: inline-block;
+    background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+    color: #fff;
+    font-size: 1.15em;
+    font-weight: 700;
+    padding: 18px 56px;
+    border-radius: 16px;
+    text-decoration: none;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 0 6px 30px rgba(59,130,246,0.25);
+    letter-spacing: 0.04em;
+  }
+  .cta-button:hover {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 12px 50px rgba(139,92,246,0.35);
+  }
+  .footer {
+    text-align: center;
+    padding: 40px 0 48px;
+    background: linear-gradient(180deg, #e8efff, #e0e8f8);
+    border-top: 1px solid rgba(59,130,246,0.08);
+    position: relative;
+    z-index: 1;
+  }
+  .footer p {
+    font-size: 0.85em;
+    color: #64748b;
+  }
+
+  /* ===== 区块标题装饰线 ===== */
+  .section-title::before {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 3px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #3B82F6, #8B5CF6, #06B6D4);
+    margin: 0 auto 20px;
+    box-shadow: 0 0 12px rgba(59,130,246,0.25);
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 900px) {
+    .hero h1 { font-size: 2.8em; }
+    .hero .en-title { font-size: 1em; }
+    .modules-grid { grid-template-columns: 1fr; max-width: 480px; }
+    .highlights-grid { grid-template-columns: repeat(2, 1fr); }
+    .highlights-grid .highlight-card:last-child {
+      grid-column: 1 / -1;
+      max-width: 280px;
+      margin: 0 auto;
+    }
+    .value-grid { flex-direction: column; max-width: 360px; }
+    .compare-row { flex-direction: column; gap: 16px; }
+    .compare-arrow { justify-content: center; transform: rotate(90deg); }
+    .section-title { font-size: 1.7em; }
+    .section-padding { padding: 80px 0; }
+    .hero-glow-3, .hero-glow-4 { display: none; }
+  }
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 2.2em; }
+    .hero .tagline { font-size: 1.1em; }
+    .highlights-grid { grid-template-columns: 1fr; max-width: 320px; margin: 0 auto; }
+    .highlights-grid .highlight-card:last-child { max-width: none; }
+    .comp-cell { padding: 14px 16px; font-size: 0.88em; }
+    .value-number { font-size: 2.8em; }
+    .cta-button { padding: 16px 40px; font-size: 1.05em; }
+    .container { padding: 0 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 动态浮动气泡背景 -->
+<div class="bg-bubbles">
+  <div class="bubble-1"></div>
+  <div class="bubble-2"></div>
+  <div class="bubble-3"></div>
+  <div class="bubble-4"></div>
+  <div class="bubble-5"></div>
+  <div class="bubble-6"></div>
+  <div class="bubble-7"></div>
+  <div class="bubble-8"></div>
+  <div class="bubble-9"></div>
+  <div class="bubble-10"></div>
+</div>
+
+<!-- ==================== 1. Hero ==================== -->
+<section class="hero">
+  <div class="hero-glow-1"></div>
+  <div class="hero-glow-2"></div>
+  <div class="hero-glow-3"></div>
+  <div class="hero-glow-4"></div>
+  <div class="hero-glow-center"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🔥 已正式上线</div>
+    <h1>技术知识平台</h1>
+    <p class="en-title">TechKnowledge Platform</p>
+    <p class="tagline">一个平台，<span>四倍效能</span></p>
+    <p class="tagline-sub">专利 · 论文 · 问答 · 专家，一站打通</p>
+    <p class="desc">整合内部专利、技术论文、技术专家社区、线上问答四大模块，让知识流动更高效。</p>
+    <a href="#purpose" class="hero-cta">了解更多 ↓</a>
+  </div>
+</section>
+
+<!-- ==================== 2. 背景与目的 ==================== -->
+<section class="bg-purpose section-padding" id="purpose">
+  <div class="glow glow-a"></div>
+  <div class="glow glow-b"></div>
+  <div class="container">
+    <h2 class="section-title">为什么做这个平台？</h2>
+    <p class="section-subtitle">从分散到统一，让技术知识不再孤岛</p>
+
+    <div class="purpose-text">
+      <p><strong>过去</strong>——专利、论文、问答、技术专家社区 分散在四个独立系统，入口不同、体验割裂，知识像散落的拼图，难以形成完整画面。</p>
+      <p><strong>现在</strong>——一个平台统一承载，一站式访问。所有技术资产触手可及，无需反复切换。</p>
+      <p><strong>目标</strong>——降低知识获取门槛，加速技术沉淀与复用，让每一份技术产出都被看见、被利用。</p>
+    </div>
+
+    <div class="compare-row">
+      <div class="compare-card compare-before">
+        <div class="compare-label">Before</div>
+        <h3>分散 · 割裂</h3>
+        <ul>
+          <li>4 个独立系统入口</li>
+          <li>信息无法互通</li>
+          <li>维护成本高</li>
+        </ul>
+      </div>
+      <div class="compare-arrow">→</div>
+      <div class="compare-card compare-after">
+        <div class="compare-label">After</div>
+        <h3>统一 · 高效</h3>
+        <ul>
+          <li>1 个平台入口</li>
+          <li>数据互通，知识流转</li>
+          <li>集中运营，降本增效</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 3. 四大模块 ==================== -->
+<section class="modules section-padding" id="modules">
+  <div class="glow glow-c"></div>
+  <div class="glow glow-d"></div>
+  <div class="container">
+    <h2 class="section-title">四大模块 · 一站集成</h2>
+    <p class="section-subtitle">覆盖技术成果全生命周期，从产出到沉淀，一个平台全搞定</p>
+
+    <div class="modules-grid">
+      <div class="module-card">
+        <div class="module-emoji-wrap"><span class="module-emoji">💡</span></div>
+        <h3>内部专利</h3>
+        <p>专利提案、审核、授权、检索一站式管理，从创意到授权全程在线可追踪。</p>
+      </div>
+      <div class="module-card">
+        <div class="module-emoji-wrap"><span class="module-emoji">📄</span></div>
+        <h3>技术论文</h3>
+        <p>论文投稿、评审、发布、检索全流程覆盖，让学术成果集中管理、高效流通。</p>
+      </div>
+      <div class="module-card">
+        <div class="module-emoji-wrap"><span class="module-emoji">⭐</span></div>
+        <h3>技术专家社区 专家</h3>
+        <p>专家认证、技术分享、影响力追踪，打造内部技术专家网络与知识生态。</p>
+      </div>
+      <div class="module-card">
+        <div class="module-emoji-wrap"><span class="module-emoji">❓</span></div>
+        <h3>线上问答</h3>
+        <p>提问、回答、采纳、知识沉淀，让技术经验在问答中流转，减少重复踩坑。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 4. 亮点功能 ==================== -->
+<section class="highlights section-padding">
+  <div class="glow glow-e"></div>
+  <div class="glow glow-f"></div>
+  <div class="container">
+    <h2 class="section-title">✨ 亮点功能</h2>
+    <p class="section-subtitle">不只是整合，更是体验的全面升级</p>
+
+    <div class="highlights-grid">
+      <div class="highlight-card">
+        <div class="highlight-emoji-wrap"><span class="highlight-emoji">🔍</span></div>
+        <h4>统一搜索</h4>
+        <p>跨模块检索专利、论文、问答、专家，一个搜索框搞定</p>
+      </div>
+      <div class="highlight-card">
+        <div class="highlight-emoji-wrap"><span class="highlight-emoji">📊</span></div>
+        <h4>个人知识主页</h4>
+        <p>聚合你的专利、论文、问答、认证数据，一目了然</p>
+      </div>
+      <div class="highlight-card">
+        <div class="highlight-emoji-wrap"><span class="highlight-emoji">🔔</span></div>
+        <h4>统一消息中心</h4>
+        <p>待审、回答、评论一目了然，重要动态不遗漏</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 5. 新旧对比 ==================== -->
+<section class="comparison section-padding">
+  <div class="glow glow-g"></div>
+  <div class="glow glow-h"></div>
+  <div class="container">
+    <h2 class="section-title">改变，从"整合"开始</h2>
+    <p class="section-subtitle">看看整合前后，日常工作有哪些不同</p>
+
+    <div class="comparison-table">
+      <div class="comp-row comp-header">
+        <div class="comp-cell" style="background:linear-gradient(135deg, rgba(255,255,255,0.5), rgba(255,255,255,0.3));">😣 改善前</div>
+        <div class="comp-cell" style="background:linear-gradient(135deg, rgba(59,130,246,0.12), rgba(6,182,212,0.08));">😄 改善后</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell comp-cell-before">各自搜索，信息割裂，查找耗时</div>
+        <div class="comp-cell comp-cell-after">统一检索，一键直达，跨模块穿透</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell comp-cell-before">分散管理，维护成本高，数据孤岛</div>
+        <div class="comp-cell comp-cell-after">集中运营，高效协同，知识流转</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 6. 价值数据 ==================== -->
+<section class="value section-padding">
+  <div class="glow glow-i"></div>
+  <div class="container">
+    <h2 class="section-title">📊 平台价值</h2>
+    <p class="section-subtitle">用数据说话，整合带来的真实改变</p>
+
+    <div class="value-grid">
+      <div class="value-card">
+        <div class="value-number">67%</div>
+        <div class="value-label">查找资料时间缩短</div>
+      </div>
+      <div class="value-card">
+        <div class="value-number">78%</div>
+        <div class="value-label">个人成果汇总时间缩短</div>
+      </div>
+      <div class="value-card">
+        <div class="value-number">38%</div>
+        <div class="value-label">管理员审核效率提升</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 7. CTA + Footer ==================== -->
+<section class="cta-section">
+  <div class="glow glow-j"></div>
+  <div class="glow glow-k"></div>
+  <div class="container">
+    <p class="cta-status">🔥 已正式上线，欢迎体验</p>
+    <!-- ===== 链接说明：此处 href 替换为实际平台地址 ===== -->
+    <a href="https://platform.example.com" class="cta-button">立即体验 →</a>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>主办 &nbsp;某科技集团</p>
+</footer>
+
+</body>
+</html>

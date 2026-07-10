@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>技术分享沙龙 Q2 活动回顾</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    color: #1e293b;
+    background: #f5f7fc;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* === Shared === */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .section-title {
+    font-size: 28px; font-weight: 700; text-align: center;
+    margin-bottom: 48px; color: #1e293b; letter-spacing: 0.5px;
+  }
+  .section-title span { margin-right: 8px; }
+
+  /* === Background Grid === */
+  .bg-grid {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0;
+    background-image:
+      linear-gradient(rgba(59,130,246,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59,130,246,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  /* === HERO === */
+  .hero {
+    position: relative; z-index: 1;
+    padding: 100px 24px 80px;
+    text-align: center;
+    background:
+      radial-gradient(ellipse 70% 50% at 30% 20%, rgba(59,130,246,0.10) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 75% 70%, rgba(147,197,253,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 30% at 50% 50%, rgba(219,234,254,0.15) 0%, transparent 60%),
+      linear-gradient(175deg, #eef2ff 0%, #f5f7fc 40%, #ffffff 100%);
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -120px; right: -80px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(59,130,246,0.07) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero::after {
+    content: '';
+    position: absolute; bottom: -60px; left: -40px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(147,197,253,0.06) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-badge {
+    display: inline-block;
+    padding: 6px 20px; border-radius: 20px;
+    background: linear-gradient(135deg, rgba(30,58,138,0.08), rgba(59,130,246,0.08));
+    color: #1E3A8A; font-size: 13px; font-weight: 600;
+    letter-spacing: 1px; margin-bottom: 28px;
+    border: 1px solid rgba(59,130,246,0.12);
+  }
+  .hero h1 {
+    font-size: 52px; font-weight: 800;
+    background: linear-gradient(135deg, #1E3A8A, #3B82F6);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; margin-bottom: 12px; line-height: 1.25;
+  }
+  .hero .subtitle {
+    font-size: 18px; color: #64748b; font-weight: 400; margin-bottom: 8px;
+  }
+  .hero .tagline {
+    font-size: 22px; font-weight: 500; color: #1e293b;
+    margin-top: 20px; letter-spacing: 1px;
+  }
+  .hero .tagline::before, .hero .tagline::after {
+    content: '·'; margin: 0 10px; color: #94a3b8;
+  }
+  .hero-brand {
+    position: absolute; top: 32px; left: 36px;
+    font-size: 14px; font-weight: 600; color: #94a3b8;
+    letter-spacing: 0.5px;
+  }
+
+  /* === DATA CARDS === */
+  .data-section {
+    position: relative; z-index: 1;
+    margin-top: -36px; padding-bottom: 72px;
+  }
+  .data-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .data-card {
+    background: #ffffff;
+    border-radius: 16px; padding: 32px 20px;
+    text-align: center;
+    box-shadow: 0 2px 16px rgba(30,58,138,0.06), 0 0 0 1px rgba(30,58,138,0.03);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .data-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(30,58,138,0.10), 0 0 0 1px rgba(30,58,138,0.05);
+  }
+  .data-number {
+    font-size: 52px; font-weight: 800; line-height: 1.1;
+    background: linear-gradient(135deg, #1E3A8A, #3B82F6);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; margin-bottom: 8px;
+  }
+  .data-label { font-size: 15px; color: #64748b; font-weight: 500; }
+  .data-sub { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+
+  /* === HIGHLIGHTS === */
+  .highlights-section {
+    position: relative; z-index: 1; padding: 72px 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 80% 30%, rgba(219,234,254,0.25) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 35% at 15% 70%, rgba(238,242,255,0.30) 0%, transparent 70%),
+      #f5f7fc;
+  }
+  .highlights-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .highlight-card {
+    background: #ffffff; border-radius: 16px;
+    padding: 36px 28px; position: relative;
+    box-shadow: 0 2px 12px rgba(30,58,138,0.05);
+    border: 1px solid rgba(219,234,254,0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .highlight-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 28px rgba(30,58,138,0.09);
+  }
+  .highlight-icon {
+    font-size: 32px; margin-bottom: 16px; display: block;
+  }
+  .highlight-card h3 {
+    font-size: 18px; font-weight: 700; color: #1e293b; margin-bottom: 10px;
+  }
+  .highlight-card p {
+    font-size: 14px; color: #64748b; line-height: 1.7;
+  }
+  .highlight-extra {
+    grid-column: 1 / -1;
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;
+  }
+  .highlight-extra .highlight-card { margin: 0; }
+
+  /* === TOPICS (分享主题 & 专利主题) === */
+  .topics-section {
+    position: relative; z-index: 1; padding: 72px 0;
+  }
+  .topics-section.alt-bg {
+    background:
+      radial-gradient(ellipse 55% 40% at 75% 25%, rgba(219,234,254,0.22) 0%, transparent 70%),
+      radial-gradient(ellipse 45% 35% at 20% 75%, rgba(238,242,255,0.28) 0%, transparent 70%),
+      #f5f7fc;
+  }
+  .topics-section.white-bg {
+    background: linear-gradient(180deg, #ffffff 0%, #f8faff 100%);
+  }
+  .topics-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .topic-card {
+    background: #ffffff; border-radius: 16px;
+    padding: 28px 24px 24px;
+    box-shadow: 0 2px 12px rgba(30,58,138,0.05);
+    border: 1px solid rgba(219,234,254,0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex; flex-direction: column;
+  }
+  .topic-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 28px rgba(30,58,138,0.09);
+  }
+  .topic-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; border-radius: 10px;
+    background: linear-gradient(135deg, #1E3A8A, #3B82F6);
+    color: #fff; font-size: 14px; font-weight: 700;
+    margin-bottom: 14px; flex-shrink: 0;
+  }
+  .patent-card .topic-num {
+    background: linear-gradient(135deg, #065F46, #10B981);
+  }
+  .topic-card h3 {
+    font-size: 16px; font-weight: 700; color: #1e293b;
+    margin-bottom: 10px; line-height: 1.5;
+  }
+  .topic-meta {
+    font-size: 12px; color: #3B82F6; font-weight: 600;
+    margin-bottom: 12px; letter-spacing: 0.3px;
+  }
+  .patent-card .topic-meta { color: #10B981; }
+  .topic-desc {
+    font-size: 13px; color: #64748b; line-height: 1.7;
+    flex-grow: 1;
+  }
+  .topics-legend {
+    text-align: center; margin-top: 32px;
+    font-size: 13px; color: #94a3b8;
+  }
+
+  /* === PHOTOS === */
+  .photos-section {
+    position: relative; z-index: 1; padding: 72px 0;
+    background: linear-gradient(180deg, #ffffff 0%, #f5f7fc 100%);
+  }
+  .photos-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .photo-item {
+    border-radius: 16px; overflow: hidden;
+    background: linear-gradient(135deg, #eef2ff, #dbeafe);
+    aspect-ratio: 16/10; position: relative;
+    box-shadow: 0 2px 12px rgba(30,58,138,0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .photo-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 24px rgba(30,58,138,0.10);
+  }
+  .photo-placeholder {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    color: #94a3b8; font-size: 40px;
+    background:
+      radial-gradient(circle at 30% 40%, rgba(59,130,246,0.06) 0%, transparent 50%),
+      linear-gradient(135deg, #eef2ff, #dbeafe);
+  }
+  .photo-caption {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 12px 16px;
+    background: linear-gradient(transparent, rgba(255,255,255,0.95));
+    font-size: 13px; color: #64748b; text-align: center;
+  }
+
+  /* === FEEDBACK === */
+  .feedback-section {
+    position: relative; z-index: 1; padding: 72px 0;
+    background:
+      radial-gradient(ellipse 55% 40% at 20% 50%, rgba(238,242,255,0.35) 0%, transparent 70%),
+      radial-gradient(ellipse 45% 35% at 80% 60%, rgba(219,234,254,0.20) 0%, transparent 70%),
+      #f5f7fc;
+  }
+  .feedback-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 24px; margin-bottom: 40px;
+  }
+  .feedback-card {
+    background: #ffffff; border-radius: 16px;
+    padding: 28px 28px 24px;
+    border-left: 3px solid #3B82F6;
+    box-shadow: 0 2px 12px rgba(30,58,138,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .feedback-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 22px rgba(30,58,138,0.08);
+  }
+  .feedback-text {
+    font-size: 15px; color: #1e293b; font-style: italic;
+    line-height: 1.7; margin-bottom: 14px;
+  }
+  .feedback-text::before { content: '"'; font-size: 24px; color: #3B82F6; font-weight: 700; margin-right: 4px; }
+  .feedback-text::after { content: '"'; font-size: 24px; color: #3B82F6; font-weight: 700; margin-left: 4px; }
+  .feedback-source {
+    font-size: 13px; color: #94a3b8; font-weight: 500;
+  }
+  .feedback-note {
+    text-align: center; font-size: 14px; color: #94a3b8;
+    padding-top: 8px; border-top: 1px solid #e2e8f0;
+  }
+
+  /* === FUTURE PLAN === */
+  .plan-section {
+    position: relative; z-index: 1; padding: 72px 0;
+    background: linear-gradient(180deg, #ffffff 0%, #f5f7fc 100%);
+  }
+  .plan-list {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .plan-card {
+    background: #ffffff; border-radius: 16px;
+    padding: 36px 28px; text-align: center;
+    box-shadow: 0 2px 12px rgba(30,58,138,0.05);
+    border: 1px solid rgba(219,234,254,0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .plan-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 28px rgba(30,58,138,0.09);
+  }
+  .plan-icon { font-size: 36px; margin-bottom: 16px; display: block; }
+  .plan-card h3 {
+    font-size: 17px; font-weight: 700; color: #1e293b; margin-bottom: 10px;
+  }
+  .plan-card p { font-size: 14px; color: #64748b; line-height: 1.7; }
+
+  /* === FOOTER === */
+  .footer {
+    position: relative; z-index: 1;
+    padding: 48px 24px;
+    text-align: center;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 100%, rgba(219,234,254,0.15) 0%, transparent 70%),
+      #f5f7fc;
+    border-top: 1px solid rgba(226,232,240,0.6);
+  }
+  .footer-brand {
+    font-size: 15px; font-weight: 600; color: #64748b;
+    letter-spacing: 0.5px; margin-bottom: 6px;
+  }
+  .footer-copy {
+    font-size: 12px; color: #94a3b8;
+  }
+
+  /* === Responsive === */
+  @media (max-width: 900px) {
+    .hero h1 { font-size: 36px; }
+    .hero .tagline { font-size: 18px; }
+    .data-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .data-number { font-size: 40px; }
+    .highlights-grid { grid-template-columns: 1fr; }
+    .highlight-extra { grid-template-columns: 1fr; }
+    .topics-grid { grid-template-columns: 1fr; }
+    .photos-grid { grid-template-columns: 1fr; }
+    .feedback-grid { grid-template-columns: 1fr; }
+    .plan-list { grid-template-columns: 1fr; }
+    .hero-brand { position: static; display: block; margin-bottom: 20px; }
+  }
+  @media (max-width: 480px) {
+    .hero { padding: 60px 16px 56px; }
+    .hero h1 { font-size: 28px; }
+    .data-grid { grid-template-columns: repeat(2, 1fr); }
+    .data-card { padding: 24px 12px; }
+    .data-number { font-size: 34px; }
+    .section-title { font-size: 22px; margin-bottom: 32px; }
+    .container { padding: 0 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Background Grid -->
+<div class="bg-grid"></div>
+
+<!-- 1. HERO -->
+<section class="hero">
+  <div class="hero-brand">某科技集团</div>
+  <div class="hero-badge">Q2 ACTIVITY REVIEW</div>
+  <h1>技术分享沙龙<br>技术分享沙龙</h1>
+  <div class="subtitle">Q2 活动回顾 &nbsp;·&nbsp; 某年某月某日</div>
+  <div class="tagline">带着问题来，拿着方案走</div>
+</section>
+
+<!-- 2. DATA CARDS -->
+<section class="data-section">
+  <div class="container">
+    <div class="data-grid">
+      <div class="data-card">
+        <div class="data-number">141</div>
+        <div class="data-label">人</div>
+        <div class="data-sub">报名参与</div>
+      </div>
+      <div class="data-card">
+        <div class="data-number">6+6</div>
+        <div class="data-label">场</div>
+        <div class="data-sub">实战分享 & 专利展览</div>
+      </div>
+      <div class="data-card">
+        <div class="data-number">1</div>
+        <div class="data-label">场</div>
+        <div class="data-sub">首次实操工作坊（满员）</div>
+      </div>
+      <div class="data-card">
+        <div class="data-number">XX%</div>
+        <div class="data-label">整体满意度</div>
+        <div class="data-sub">待填充</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. HIGHLIGHTS -->
+<section class="highlights-section">
+  <div class="container">
+    <div class="section-title"><span>✨</span>活动亮点</div>
+    <div class="highlights-grid">
+      <div class="highlight-card">
+        <span class="highlight-icon">🎯</span>
+        <h3>实战导向</h3>
+        <p>6场真实技术案例分享，不讲概念只讲解法，每一个方案都来自一线实战经验</p>
+      </div>
+      <div class="highlight-card">
+        <span class="highlight-icon">💬</span>
+        <h3>深度互动</h3>
+        <p>单场延长至60分钟，答疑环节占比翻倍，充分交流碰撞思想火花</p>
+      </div>
+      <div class="highlight-card">
+        <span class="highlight-icon">🔄</span>
+        <h3>自由串场</h3>
+        <p>取消报名限制，员工按兴趣自由选择课题，灵活安排参与节奏</p>
+      </div>
+    </div>
+    <div class="highlight-extra">
+      <div class="highlight-card">
+        <span class="highlight-icon">🛠️</span>
+        <h3>工作坊首秀</h3>
+        <p>限20人小班实操，需求超出预期，动手实践让知识真正落地</p>
+      </div>
+      <div class="highlight-card">
+        <span class="highlight-icon">📡</span>
+        <h3>线上延续</h3>
+        <p>全部资料已上传问答平台，未到场同事也可随时学习，长尾效应持续发酵</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3.5 分享主题 -->
+<section class="topics-section alt-bg">
+  <div class="container">
+    <div class="section-title"><span>🎤</span>分享主题 · 6场实战分享</div>
+    <div class="topics-grid">
+      <div class="topic-card">
+        <div class="topic-num">01</div>
+        <h3>设备故障排查的"5步法"</h3>
+        <div class="topic-meta">某部门 · 王工</div>
+        <p class="topic-desc">结合3个真实故障案例，总结出一套可复用的快速排查流程，帮助一线人员将平均诊断时间从2小时压缩至20分钟。</p>
+      </div>
+      <div class="topic-card">
+        <div class="topic-num">02</div>
+        <h3>良率波动根因分析的实战套路</h3>
+        <div class="topic-meta">某部门 · 刘工</div>
+        <p class="topic-desc">分享一套结合SPC和相关性分析的数据分析方法，帮助找到隐藏的工艺参数偏移点。</p>
+      </div>
+      <div class="topic-card">
+        <div class="topic-num">03</div>
+        <h3>某自动化工具在报表自动化中的落地经验</h3>
+        <div class="topic-meta">某部门 · 陈工</div>
+        <p class="topic-desc">从需求识别到脚本编写，分享某自动化工具在月度报表自动生成中的完整落地过程及避坑指南。</p>
+      </div>
+      <div class="topic-card">
+        <div class="topic-num">04</div>
+        <h3>老旧设备精度恢复的创新改造</h3>
+        <div class="topic-meta">某部门 · 赵工</div>
+        <p class="topic-desc">通过低成本传感器加装和数据采集，让老旧设备的CPK值从1.0恢复到1.5以上。</p>
+      </div>
+      <div class="topic-card">
+        <div class="topic-num">05</div>
+        <h3>AI辅助编程：从入门到提效</h3>
+        <div class="topic-meta">某部门 · 孙工</div>
+        <p class="topic-desc">分享如何利用AI工具辅助代码编写、调试和优化，帮助非专业开发人员快速上手。</p>
+      </div>
+      <div class="topic-card">
+        <div class="topic-num">06</div>
+        <h3>跨部门协作的3个关键沟通技巧</h3>
+        <div class="topic-meta">某部门 · 周工</div>
+        <p class="topic-desc">从实际项目经验出发，分享跨部门协作中常见的沟通误区和有效对话方法。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3.6 专利主题 -->
+<section class="topics-section white-bg">
+  <div class="container">
+    <div class="section-title"><span>💡</span>专利主题 · 6项创新展览</div>
+    <div class="topics-grid">
+      <div class="topic-card patent-card">
+        <div class="topic-num">01</div>
+        <h3>晶圆边缘缺陷自动检测系统</h3>
+        <div class="topic-meta">某部门 · 张工</div>
+        <p class="topic-desc">基于图像识别技术，实现晶圆边缘缺陷的自动检测与分类，检测速度提升80%。</p>
+      </div>
+      <div class="topic-card patent-card">
+        <div class="topic-num">02</div>
+        <h3>高效数据清洗工具</h3>
+        <div class="topic-meta">某部门 · 李工</div>
+        <p class="topic-desc">针对半导体产线数据的多源异构特点，开发的一套快速数据清洗与标准化工具。</p>
+      </div>
+      <div class="topic-card patent-card">
+        <div class="topic-num">03</div>
+        <h3>新型设备减震支架结构</h3>
+        <div class="topic-meta">某部门 · 吴工</div>
+        <p class="topic-desc">采用新型复合材料，减少设备运行时的高频振动，提升检测精度和稳定性。</p>
+      </div>
+      <div class="topic-card patent-card">
+        <div class="topic-num">04</div>
+        <h3>自动化报表生成系统</h3>
+        <div class="topic-meta">某部门 · 郑工</div>
+        <p class="topic-desc">打通MES与ERP数据，实现按需自动生成日报、周报、月报，支持自定义维度筛选。</p>
+      </div>
+      <div class="topic-card patent-card">
+        <div class="topic-num">05</div>
+        <h3>智能温控算法在刻蚀设备中的应用</h3>
+        <div class="topic-meta">某部门 · 黄工</div>
+        <p class="topic-desc">通过AI算法对刻蚀腔体温度进行动态调节，将温度波动范围控制在±0.5℃以内。</p>
+      </div>
+      <div class="topic-card patent-card">
+        <div class="topic-num">06</div>
+        <h3>低成本气体流量校准装置</h3>
+        <div class="topic-meta">某部门 · 林工</div>
+        <p class="topic-desc">自主研发的校准装置，替代进口设备，单台成本降低70%，校准精度满足工艺要求。</p>
+      </div>
+    </div>
+    <div class="topics-legend">* 以上主题名称为示例，实际使用时可根据Q2真实分享人与专利内容替换</div>
+  </div>
+</section>
+
+<!-- 4. PHOTOS -->
+<section class="photos-section">
+  <div class="container">
+    <div class="section-title"><span>📸</span>现场直击</div>
+    <div class="photos-grid">
+      <div class="photo-item">
+        <div class="photo-placeholder">📷</div>
+        <div class="photo-caption">课题分享现场</div>
+      </div>
+      <div class="photo-item">
+        <div class="photo-placeholder">📷</div>
+        <div class="photo-caption">互动交流环节</div>
+      </div>
+      <div class="photo-item">
+        <div class="photo-placeholder">📷</div>
+        <div class="photo-caption">专利展览区</div>
+      </div>
+      <div class="photo-item">
+        <div class="photo-placeholder">📷</div>
+        <div class="photo-caption">工作坊实操</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. FEEDBACK -->
+<section class="feedback-section">
+  <div class="container">
+    <div class="section-title"><span>💬</span>员工声音</div>
+    <div class="feedback-grid">
+      <div class="feedback-card">
+        <div class="feedback-text">时间比上次充足，讨论环节收获更大，终于有时间把问题聊透了。</div>
+        <div class="feedback-source">— 技术部工程师</div>
+      </div>
+      <div class="feedback-card">
+        <div class="feedback-text">工作坊的形式很新颖，上手实操比听十场讲座都管用。</div>
+        <div class="feedback-source">— 工艺部同事</div>
+      </div>
+      <div class="feedback-card">
+        <div class="feedback-text">自由串场这点很好，我终于能挑自己最感兴趣的课题深入听了。</div>
+        <div class="feedback-source">— 研发部员工</div>
+      </div>
+      <div class="feedback-card">
+        <div class="feedback-text">专利展让我大开眼界，原来公司内部有这么多硬核创新。</div>
+        <div class="feedback-source">— 新入职同事</div>
+      </div>
+    </div>
+    <div class="feedback-note">更多反馈正在收集中，将持续优化改进</div>
+  </div>
+</section>
+
+<!-- 6. FUTURE PLAN -->
+<section class="plan-section">
+  <div class="container">
+    <div class="section-title"><span>📌</span>后续计划</div>
+    <div class="plan-list">
+      <div class="plan-card">
+        <span class="plan-icon">🔍</span>
+        <h3>成果跟踪</h3>
+        <p>1个月后回访各课题方案落地情况，确保分享不止于现场</p>
+      </div>
+      <div class="plan-card">
+        <span class="plan-icon">📂</span>
+        <h3>资料共享</h3>
+        <p>课件 & 专利资料已上传问答平台，随时可回顾学习</p>
+      </div>
+      <div class="plan-card">
+        <span class="plan-icon">🚀</span>
+        <h3>下期预告</h3>
+        <p>Q3 技术分享沙龙 敬请期待，更多惊喜正在筹备中</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. FOOTER -->
+<footer class="footer">
+  <div class="footer-brand">主办：某科技集团</div>
+  <div class="footer-copy">技术分享沙龙 · 技术分享沙龙 · 2026 Q2</div>
+</footer>
+
+</body>
+</html>

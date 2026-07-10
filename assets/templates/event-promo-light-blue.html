@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>技术分享沙龙 技术分享沙龙</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --accent-blue: #2563eb;
+            --accent-blue-light: #3b82f6;
+            --accent-blue-glow: rgba(37, 99, 235, 0.4);
+            --accent-blue-dim: rgba(37, 99, 235, 0.08);
+            --accent-blue-gradient: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+            --accent-gold: #f59e0b;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', 'Roboto', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 背景装饰 - 苹果风格渐变 */
+        .bg-decoration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+            background: 
+                radial-gradient(ellipse 80% 50% at 20% 40%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse 60% 80% at 80% 20%, rgba(59, 130, 246, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse 50% 60% at 60% 80%, rgba(147, 51, 234, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse 70% 40% at 10% 90%, rgba(236, 72, 153, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse 40% 70% at 90% 60%, rgba(14, 165, 233, 0.1) 0%, transparent 50%);
+        }
+
+        .bg-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: blob-float 20s ease-in-out infinite;
+        }
+
+        .bg-blob-1 {
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(59, 130, 246, 0.15));
+            top: -10%;
+            left: -5%;
+            animation-delay: 0s;
+        }
+
+        .bg-blob-2 {
+            width: 600px;
+            height: 600px;
+            background: linear-gradient(135deg, rgba(147, 51, 234, 0.15), rgba(236, 72, 153, 0.1));
+            bottom: -15%;
+            right: -10%;
+            animation-delay: -7s;
+        }
+
+        .bg-blob-3 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.18), rgba(59, 130, 246, 0.12));
+            top: 30%;
+            right: 5%;
+            animation-delay: -14s;
+        }
+
+        .bg-blob-4 {
+            width: 350px;
+            height: 350px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.12), rgba(99, 102, 241, 0.1));
+            top: 60%;
+            left: 10%;
+            animation-delay: -10s;
+        }
+
+        @keyframes blob-float {
+            0%, 100% { 
+                transform: translate(0, 0) scale(1); 
+            }
+            25% { 
+                transform: translate(30px, -40px) scale(1.1); 
+            }
+            50% { 
+                transform: translate(-20px, 20px) scale(0.95); 
+            }
+            75% { 
+                transform: translate(40px, 10px) scale(1.05); 
+            }
+        }
+
+        /* 页面整体背景渐变 */
+        body {
+            background: linear-gradient(180deg, 
+                #f8fafc 0%, 
+                #f1f5f9 20%, 
+                #eef2ff 40%, 
+                #f5f3ff 60%, 
+                #fdf4ff 80%, 
+                #f8fafc 100%
+            );
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ========== HERO SECTION ========== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 100px 0 80px;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 28px;
+            background: var(--accent-blue-dim);
+            border: 1px solid var(--accent-blue);
+            border-radius: 50px;
+            font-size: 13px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--accent-blue);
+            font-family: 'Roboto', sans-serif;
+            font-weight: 600;
+            margin-bottom: 40px;
+        }
+
+        .hero-title-main {
+            font-size: clamp(48px, 10vw, 120px);
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 16px;
+            letter-spacing: -2px;
+        }
+
+        .hero-title-main span {
+            display: inline;
+            background: var(--accent-blue-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(18px, 2.5vw, 28px);
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-bottom: 50px;
+            letter-spacing: 4px;
+        }
+
+        .hero-info-grid {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .info-block {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 24px 32px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .info-block i {
+            font-size: 36px;
+            color: var(--accent-blue);
+        }
+
+        .info-content {
+            text-align: left;
+        }
+
+        .info-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-top: 4px;
+        }
+
+        .hero-cta-wrapper {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .hero-register-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px 48px;
+            background: var(--accent-blue-gradient);
+            border: none;
+            border-radius: 60px;
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffffff;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+        }
+
+        .hero-register-btn:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(37, 99, 235, 0.4);
+        }
+
+        .hero-register-btn i {
+            font-size: 18px;
+        }
+
+        .hero-gift-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 36px;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%);
+            border: 2px solid var(--accent-gold);
+            border-radius: 60px;
+            font-size: 18px;
+            color: var(--accent-gold);
+            font-weight: 700;
+        }
+
+        .hero-gift-badge i {
+            font-size: 22px;
+        }
+
+        /* ========== SECTION STYLES ========== */
+        .section {
+            padding: 100px 0;
+        }
+
+        .section-header {
+            margin-bottom: 60px;
+        }
+
+        .section-number {
+            font-size: 120px;
+            font-weight: 900;
+            color: rgba(37, 99, 235, 0.1);
+            font-family: 'Roboto', sans-serif;
+            line-height: 1;
+            margin-bottom: -30px;
+            position: relative;
+            z-index: -1;
+        }
+
+        .section-title {
+            font-size: clamp(40px, 6vw, 72px);
+            font-weight: 900;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+        }
+
+        .section-desc {
+            font-size: 18px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        /* ========== TOPICS GRID ========== */
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .topic-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 35px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .topic-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        /* 课题类型主题色 - 顶部彩色条 */
+        .topic-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            opacity: 1;
+        }
+
+        .topic-card[data-theme="ai"]::before { background: linear-gradient(90deg, #8b5cf6, #a78bfa); }
+        .topic-card[data-theme="automation"]::before { background: linear-gradient(90deg, #2563eb, #3b82f6); }
+        .topic-card[data-theme="data"]::before { background: linear-gradient(90deg, #0891b2, #06b6d4); }
+        .topic-card[data-theme="某自动化工具"]::before { background: linear-gradient(90deg, #059669, #10b981); }
+        .topic-card[data-theme="excel"]::before { background: linear-gradient(90deg, #ea580c, #f97316); }
+        .topic-card[data-theme="python"]::before { background: linear-gradient(90deg, #db2777, #ec4899); }
+
+        /* 悬停时边框变为主题色 */
+        .topic-card[data-theme="ai"]:hover { border-color: #8b5cf6; box-shadow: var(--shadow-xl), 0 0 0 4px rgba(139, 92, 246, 0.1); }
+        .topic-card[data-theme="automation"]:hover { border-color: #2563eb; box-shadow: var(--shadow-xl), 0 0 0 4px rgba(37, 99, 235, 0.1); }
+        .topic-card[data-theme="data"]:hover { border-color: #0891b2; box-shadow: var(--shadow-xl), 0 0 0 4px rgba(8, 145, 178, 0.1); }
+        .topic-card[data-theme="某自动化工具"]:hover { border-color: #059669; box-shadow: var(--shadow-xl), 0 0 0 4px rgba(5, 150, 105, 0.1); }
+        .topic-card[data-theme="excel"]:hover { border-color: #ea580c; box-shadow: var(--shadow-xl), 0 0 0 4px rgba(234, 88, 12, 0.1); }
+        .topic-card[data-theme="python"]:hover { border-color: #db2777; box-shadow: var(--shadow-xl), 0 0 0 4px rgba(219, 39, 119, 0.1); }
+
+        .topic-tag {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .topic-card[data-theme="ai"] .topic-tag { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
+        .topic-card[data-theme="automation"] .topic-tag { background: rgba(37, 99, 235, 0.1); color: #2563eb; }
+        .topic-card[data-theme="data"] .topic-tag { background: rgba(8, 145, 178, 0.1); color: #0891b2; }
+        .topic-card[data-theme="某自动化工具"] .topic-tag { background: rgba(5, 150, 105, 0.1); color: #059669; }
+        .topic-card[data-theme="excel"] .topic-tag { background: rgba(234, 88, 12, 0.1); color: #ea580c; }
+        .topic-card[data-theme="python"] .topic-tag { background: rgba(219, 39, 119, 0.1); color: #db2777; }
+
+        .topic-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.3;
+            margin-bottom: 20px;
+        }
+
+        /* 分享人区域 - 单人 */
+        .topic-speaker-single {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .topic-speaker-single .speaker-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 16px;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: var(--accent-blue-dim);
+            border: 2px solid var(--border-color);
+        }
+
+        .topic-speaker-single .speaker-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .topic-speaker-single .speaker-info {
+            flex: 1;
+        }
+
+        .topic-speaker-single .speaker-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .topic-speaker-single .speaker-dept {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* 分享人区域 - 双人 */
+        .topic-speakers-dual {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .speaker-item {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: 12px;
+        }
+
+        .speaker-item .speaker-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 16px;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: var(--accent-blue-dim);
+            border: 2px solid var(--border-color);
+        }
+
+        .speaker-item .speaker-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .speaker-item .speaker-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .speaker-item .speaker-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .speaker-item .speaker-dept {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .topic-desc {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .topic-placeholder {
+            color: rgba(100, 116, 139, 0.6);
+            font-style: italic;
+        }
+
+        .topic-highlight {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(245, 158, 11, 0.1);
+            border-radius: 6px;
+            font-size: 12px;
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        /* ========== PATENTS SECTION ========== */
+        .patents-section {
+            background: linear-gradient(180deg, var(--bg-primary) 0%, #eff6ff 50%, var(--bg-primary) 100%);
+            padding: 100px 0;
+        }
+
+        .patents-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .patent-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .patent-card:hover {
+            border-color: var(--accent-blue-light);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .patent-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .patent-index {
+            font-size: 48px;
+            font-weight: 900;
+            color: rgba(37, 99, 235, 0.15);
+            font-family: 'Roboto', sans-serif;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .patent-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+
+        .patent-highlight-text {
+            font-size: 14px;
+            color: var(--accent-blue);
+            line-height: 1.5;
+        }
+
+        .patent-desc-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .patent-photo {
+            width: 100%;
+            height: 140px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--accent-blue-dim) 0%, rgba(59, 130, 246, 0.05) 100%);
+            border: 2px dashed rgba(37, 99, 235, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-blue);
+            font-size: 14px;
+            margin-top: auto;
+            overflow: hidden;
+        }
+
+        .patent-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ========== REWARDS SECTION ========== */
+        .rewards-section {
+            padding: 100px 0;
+        }
+
+        .rewards-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .reward-card {
+            flex: 1;
+            max-width: 380px;
+            background: var(--bg-card);
+            border: 1px solid var(--accent-blue);
+            border-radius: 24px;
+            padding: 50px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+        .reward-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--accent-blue-gradient);
+        }
+
+        .reward-icon {
+            font-size: 56px;
+            margin-bottom: 25px;
+            display: block;
+        }
+
+        .reward-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+        }
+
+        .reward-desc {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* ========== CTA SECTION ========== */
+        .cta-section {
+            padding: 80px 0 120px;
+            text-align: center;
+        }
+
+        .cta-title {
+            font-size: clamp(36px, 5vw, 56px);
+            font-weight: 900;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+        }
+
+        .cta-desc {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 50px;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            padding: 22px 50px;
+            background: var(--accent-blue-gradient);
+            border: none;
+            border-radius: 60px;
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffffff;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(37, 99, 235, 0.4);
+        }
+
+        .cta-btn i {
+            font-size: 18px;
+        }
+
+        .cta-note {
+            margin-top: 25px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* ========== FOOTER ========== */
+        .footer {
+            padding: 40px 0;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .footer-slogan {
+            font-size: 18px;
+            color: var(--text-secondary);
+            letter-spacing: 4px;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1200px) {
+            .topics-grid {
+                grid-template-columns: 1fr;
+            }
+            .patents-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 20px;
+            }
+            .hero-info-grid {
+                flex-direction: column;
+                align-items: center;
+            }
+            .patents-grid {
+                grid-template-columns: 1fr;
+            }
+            .rewards-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .reward-card {
+                max-width: 100%;
+            }
+            .section-number {
+                font-size: 80px;
+            }
+            .speaker-avatar {
+                width: 100px;
+                height: 100px;
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景装饰 -->
+    <div class="bg-decoration">
+        <div class="bg-blob bg-blob-1"></div>
+        <div class="bg-blob bg-blob-2"></div>
+        <div class="bg-blob bg-blob-3"></div>
+        <div class="bg-blob bg-blob-4"></div>
+    </div>
+
+    <!-- ========== HERO ========== -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-badge">
+                <i class="fas fa-bolt"></i>
+                Technology Innovation Festival
+            </div>
+            
+            <h1 class="hero-title-main">
+                <span>技术分享沙龙</span>
+            </h1>
+            
+            <p class="hero-subtitle">一场技术人的思想集市</p>
+            
+            <div class="hero-info-grid">
+                <div class="info-block">
+                    <i class="far fa-calendar-alt"></i>
+                    <div class="info-content">
+                        <div class="info-label">活动时间</div>
+                        <div class="info-value">4月23日 周三 14:00-16:00</div>
+                    </div>
+                </div>
+                <div class="info-block">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div class="info-content">
+                        <div class="info-label">活动地点</div>
+                        <div class="info-value">某培训场地</div>
+                    </div>
+                </div>
+                <div class="info-block">
+                    <i class="fas fa-edit"></i>
+                    <div class="info-content">
+                        <div class="info-label">参与方式</div>
+                        <div class="info-value">扫码或点击下方报名</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-cta-wrapper">
+                <a href="#" class="hero-register-btn" id="heroRegisterBtn">
+                    <i class="fas fa-rocket"></i>
+                    立即报名
+                </a>
+                <div class="hero-gift-badge">
+                    <i class="fas fa-gift"></i>
+                    参与即有礼 · 集章打卡赢大奖
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <!-- ========== TOPICS SECTION ========== -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-number">01</div>
+                <h2 class="section-title">技术分享</h2>
+                <p class="section-desc">6位实践者分享真实故事，不讲空洞理论，只讲踩过的坑和意外发现</p>
+            </div>
+
+            <div class="topics-grid">
+                <!-- ==================== 课题1：AI - 某工程师（单人） ==================== -->
+                <div class="topic-card" data-theme="ai">
+                    <div class="topic-tag">AI · AUTOMATION</div>
+                    <h3 class="topic-title">零代码编程 & AI知识库搭建</h3>
+                    <div class="topic-speaker-single">
+                        <!-- ★★★ 分享人照片位置 - 某工程师 ★★★ -->
+                        <div class="speaker-avatar">
+                            <img src="https://knowledge.example.com" alt="某工程师">
+                        </div>
+                        <!-- ★★★ 照片链接结束 ★★★ -->
+                        <div class="speaker-info">
+                            <div class="speaker-name">某工程师</div>
+                            <div class="speaker-dept">某技术部门 · Agent技术同好会会长</div>
+                        </div>
+                    </div>
+                    <p class="topic-desc">
+                        利用RAG技术重构本地知识库，通过Vibe Coding让每个人都能制作自己的AI小工具。不写代码，也能让AI为你工作。
+                    </p>
+                </div>
+
+                <!-- ==================== 课题2：某自动化工具 - 某工程师·某工程师（双人） ==================== -->
+                <div class="topic-card" data-theme="automation">
+                    <div class="topic-tag">AUTOMATION · LOW-CODE</div>
+                    <h3 class="topic-title">【课题名称待定】</h3>
+                    <div class="topic-speakers-dual">
+                        <div class="speaker-item">
+                            <!-- ★★★ 分享人照片位置 - 某工程师 ★★★ -->
+                            <div class="speaker-avatar">
+                                <img src="https://knowledge.example.com" alt="某工程师">
+                            </div>
+                            <!-- ★★★ 照片链接结束 ★★★ -->
+                            <div class="speaker-info">
+                                <div class="speaker-name">某工程师</div>
+                                <div class="speaker-dept">某技术部门</div>
+                            </div>
+                        </div>
+                        <div class="speaker-item">
+                            <!-- ★★★ 分享人照片位置 - 某工程师 ★★★ -->
+                            <div class="speaker-avatar">
+                                <img src="https://knowledge.example.com" alt="某工程师">
+                            </div>
+                            <!-- ★★★ 照片链接结束 ★★★ -->
+                            <div class="speaker-info">
+                                <div class="speaker-name">某工程师</div>
+                                <div class="speaker-dept">某技术部门</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="topic-desc">
+                        使用某自动化工具软件可视化编写自动化脚本，告别重复工作。无代码/低代码实现效率飞跃。
+                        <span class="topic-placeholder">【详细内容待补充】</span>
+                    </p>
+                </div>
+
+                <!-- ==================== 课题3：某自动化工具 - 某工程师（单人） ==================== -->
+                <div class="topic-card" data-theme="data">
+                    <div class="topic-tag">DATA ANALYTICS</div>
+                    <h3 class="topic-title">法人自动化生产日报制作</h3>
+                    <div class="topic-speaker-single">
+                        <!-- ★★★ 分享人照片位置 - 某工程师 ★★★ -->
+                        <div class="speaker-avatar">
+                            <img src="https://knowledge.example.com" alt="某工程师">
+                        </div>
+                        <!-- ★★★ 照片链接结束 ★★★ -->
+                        <div class="speaker-info">
+                            <div class="speaker-name">某工程师</div>
+                            <div class="speaker-dept">某技术部门</div>
+                        </div>
+                    </div>
+                    <p class="topic-desc">
+                        用某自动化工具数据可视化工具，将复杂生产数据转化为直观图表和报告，让数据说话，助力决策。
+                    </p>
+                </div>
+
+                <!-- ==================== 课题4：某自动化工具 - 某工程师·某工程师（双人） ==================== -->
+                <div class="topic-card" data-theme="某自动化工具">
+                    <div class="topic-tag">某自动化工具 · PROCESS AUTOMATION</div>
+                    <h3 class="topic-title">【课题名称待定】</h3>
+                    <div class="topic-speakers-dual">
+                        <div class="speaker-item">
+                            <!-- ★★★ 分享人照片位置 - 某工程师 ★★★ -->
+                            <div class="speaker-avatar">
+                                <img src="https://knowledge.example.com" alt="某工程师">
+                            </div>
+                            <!-- ★★★ 照片链接结束 ★★★ -->
+                            <div class="speaker-info">
+                                <div class="speaker-name">某工程师</div>
+                                <div class="speaker-dept">某技术部门</div>
+                            </div>
+                        </div>
+                        <div class="speaker-item">
+                            <!-- ★★★ 分享人照片位置 - 某工程师 ★★★ -->
+                            <div class="speaker-avatar">
+                                <img src="https://knowledge.example.com" alt="某工程师">
+                            </div>
+                            <!-- ★★★ 照片链接结束 ★★★ -->
+                            <div class="speaker-info">
+                                <div class="speaker-name">某工程师</div>
+                                <div class="speaker-dept">某技术部门</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="topic-desc">
+                        利用软件机器人自动化重复性业务流程，数据录入、自动检测、报告生成一键搞定。
+                        <span class="topic-placeholder">【详细内容待补充】</span>
+                    </p>
+                </div>
+
+                <!-- ==================== 课题5：Excel - 某工程师·某工程师（双人） ==================== -->
+                <div class="topic-card" data-theme="excel">
+                    <div class="topic-tag">EXCEL · VBA</div>
+                    <h3 class="topic-title">【课题名称待定】</h3>
+                    <div class="topic-speakers-dual">
+                        <div class="speaker-item">
+                            <!-- ★★★ 分享人照片位置 - 某工程师 ★★★ -->
+                            <div class="speaker-avatar">
+                                <img src="https://knowledge.example.com" alt="某工程师">
+                            </div>
+                            <!-- ★★★ 照片链接结束 ★★★ -->
+                            <div class="speaker-info">
+                                <div class="speaker-name">某工程师</div>
+                                <div class="speaker-dept">某技术部门</div>
+                            </div>
+                        </div>
+                        <div class="speaker-item">
+                            <!-- ★★★ 分享人照片位置 - 某工程师 ★★★ -->
+                            <div class="speaker-avatar">
+                                <img src="https://knowledge.example.com" alt="某工程师">
+                            </div>
+                            <!-- ★★★ 照片链接结束 ★★★ -->
+                            <div class="speaker-info">
+                                <div class="speaker-name">某工程师</div>
+                                <div class="speaker-dept">某技术部门</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="topic-desc">
+                        公式+VBA双剑合璧，自动化处理数据，让Excel成为你的效率利器。
+                        <span class="topic-placeholder">【详细内容待补充】</span>
+                    </p>
+                </div>
+
+                <!-- ==================== 课题6：Python - 某工程师（单人） ==================== -->
+                <div class="topic-card" data-theme="python">
+                    <div class="topic-tag">PYTHON · SYSTEM</div>
+                    <h3 class="topic-title">良率分析 & 故障定位系统</h3>
+                    <div class="topic-speaker-single">
+                        <!-- ★★★ 分享人照片位置 - 某工程师 ★★★ -->
+                        <div class="speaker-avatar">
+                            <img src="https://knowledge.example.com" alt="某工程师">
+                        </div>
+                        <!-- ★★★ 照片链接结束 ★★★ -->
+                        <div class="speaker-info">
+                            <div class="speaker-name">某工程师</div>
+                            <div class="speaker-dept">某技术部门</div>
+                        </div>
+                    </div>
+                    <p class="topic-desc">
+                        <span class="topic-highlight">★ 2026年优秀内部专利奖 · 推广至本社</span><br>
+                        Python开发结合社内系统，智能分析良率数据，精准定位故障根源。
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ========== PATENTS SECTION ========== -->
+    <section class="patents-section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-number">02</div>
+                <h2 class="section-title">专利展示</h2>
+                <p class="section-desc">6位内部专利发明人现场展示创新成果，实物+海报+视频</p>
+            </div>
+
+            <div class="patents-grid">
+                <!-- ==================== 专利01：内窥镜 ==================== -->
+                <div class="patent-card">
+                    <div class="patent-header">
+                        <div class="patent-index">01</div>
+                        <h4 class="patent-title">基于内窥镜视觉辅助的狭小空间零件更换</h4>
+                    </div>
+                    <p class="patent-highlight-text">【一句话亮点待填写】</p>
+                    <p class="patent-desc-text">【技术简介待填写】</p>
+                    <!-- ★★★ 专利实物照片位置 - 内窥镜 ★★★ -->
+                    <div class="patent-photo">
+                        <img src="https://knowledge.example.com" alt="内窥镜">
+                    </div>
+                    <!-- ★★★ 照片链接结束 ★★★ -->
+                </div>
+
+                <!-- ==================== 专利02：高度量测Jig ==================== -->
+                <div class="patent-card">
+                    <div class="patent-header">
+                        <div class="patent-index">02</div>
+                        <h4 class="patent-title">设备Parts高度量测Jig</h4>
+                    </div>
+                    <p class="patent-highlight-text">【一句话亮点待填写】</p>
+                    <p class="patent-desc-text">【技术简介待填写】</p>
+                    <!-- ★★★ 专利实物照片位置 - 高度量测Jig ★★★ -->
+                    <div class="patent-photo">
+                        <img src="https://knowledge.example.com" alt="高度量测Jig">
+                    </div>
+                    <!-- ★★★ 照片链接结束 ★★★ -->
+                </div>
+
+                <!-- ==================== 专利03：更换支持Jig ==================== -->
+                <div class="patent-card">
+                    <div class="patent-header">
+                        <div class="patent-index">03</div>
+                        <h4 class="patent-title">设备Parts更换支持Jig</h4>
+                    </div>
+                    <p class="patent-highlight-text">【一句话亮点待填写】</p>
+                    <p class="patent-desc-text">【技术简介待填写】</p>
+                    <!-- ★★★ 专利实物照片位置 - 更换支持Jig ★★★ -->
+                    <div class="patent-photo">
+                        <img src="https://knowledge.example.com" alt="更换支持Jig">
+                    </div>
+                    <!-- ★★★ 照片链接结束 ★★★ -->
+                </div>
+
+                <!-- ==================== 专利04：隔绝阀Close Jig ==================== -->
+                <div class="patent-card">
+                    <div class="patent-header">
+                        <div class="patent-index">04</div>
+                        <h4 class="patent-title">隔绝阀Close Jig</h4>
+                    </div>
+                    <p class="patent-highlight-text">【一句话亮点待填写】</p>
+                    <p class="patent-desc-text">【技术简介待填写】</p>
+                    <!-- ★★★ 专利实物照片位置 - 隔绝阀Close Jig ★★★ -->
+                    <div class="patent-photo">
+                        <img src="https://knowledge.example.com" alt="隔绝阀Close Jig">
+                    </div>
+                    <!-- ★★★ 照片链接结束 ★★★ -->
+                </div>
+
+                <!-- ==================== 专利05：Pump Clean工具 ==================== -->
+                <div class="patent-card">
+                    <div class="patent-header">
+                        <div class="patent-index">05</div>
+                        <h4 class="patent-title">Pump Outline Clean工具</h4>
+                    </div>
+                    <p class="patent-highlight-text">【一句话亮点待填写】</p>
+                    <p class="patent-desc-text">【技术简介待填写】</p>
+                    <!-- ★★★ 专利实物照片位置 - Pump Clean工具 ★★★ -->
+                    <div class="patent-photo">
+                        <img src="https://knowledge.example.com" alt="Pump Clean工具">
+                    </div>
+                    <!-- ★★★ 照片链接结束 ★★★ -->
+                </div>
+
+                <!-- ==================== 专利06：Fluke检测仪器 ==================== -->
+                <div class="patent-card">
+                    <div class="patent-header">
+                        <div class="patent-index">06</div>
+                        <h4 class="patent-title">Fluke流量与Leak检测仪器</h4>
+                    </div>
+                    <p class="patent-highlight-text">【一句话亮点待填写】</p>
+                    <p class="patent-desc-text">【技术简介待填写】</p>
+                    <!-- ★★★ 专利实物照片位置 - Fluke检测仪器 ★★★ -->
+                    <div class="patent-photo">
+                        <img src="https://knowledge.example.com" alt="Fluke检测仪器">
+                    </div>
+                    <!-- ★★★ 照片链接结束 ★★★ -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <!-- ========== REWARDS SECTION ========== -->
+        <section class="rewards-section">
+            <div class="section-header">
+                <div class="section-number">03</div>
+                <h2 class="section-title">参与福利</h2>
+                <p class="section-desc">到场即有礼，集章更精彩</p>
+            </div>
+
+            <div class="rewards-container">
+                <div class="reward-card">
+                    <span class="reward-icon">🎁</span>
+                    <h3 class="reward-title">签到即送礼</h3>
+                    <p class="reward-desc">到场签到即领取精美礼品<br>数量有限，先到先得</p>
+                </div>
+                <div class="reward-card">
+                    <span class="reward-icon">⭐</span>
+                    <h3 class="reward-title">集章兑好礼</h3>
+                    <p class="reward-desc">听分享、看展览、参与互动<br>集满3章即可兑换礼品</p>
+                </div>
+                <div class="reward-card">
+                    <span class="reward-icon">🎉</span>
+                    <h3 class="reward-title">终场大抽奖</h3>
+                    <p class="reward-desc">集满5章参与终极抽奖<br>惊喜大奖等你来拿</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== CTA SECTION ========== -->
+        <section class="cta-section">
+            <h2 class="cta-title">名额有限，立即报名</h2>
+            <p class="cta-desc">点击按钮填写报名问卷，锁定你的席位</p>
+            
+            <a href="#" class="cta-btn" id="registerBtn">
+                <i class="fas fa-rocket"></i>
+                立即报名
+            </a>
+            
+            <p class="cta-note">报名截止：4月22日 18:00</p>
+        </section>
+
+        <!-- ========== FOOTER ========== -->
+        <footer class="footer">
+            <p class="footer-slogan">洞察技术 · 启发创新 · 连接同行</p>
+        </footer>
+    </div>
+
+    <script>
+        // ========================================
+        // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+        // ★★★ 请在这里填写你的报名问卷链接 ★★★
+        // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+        const surveyUrl = 'YOUR_SURVEY_URL_HERE'; // ← 把这里替换成你的问卷链接
+        // ========================================
+        
+        function handleRegister(e) {
+            if (surveyUrl === 'YOUR_SURVEY_URL_HERE') {
+                e.preventDefault();
+                alert('请先设置问卷链接！在HTML代码中找到 YOUR_SURVEY_URL_HERE 并替换为实际链接。');
+            } else {
+                window.open(surveyUrl, '_blank');
+            }
+        }
+        
+        document.getElementById('heroRegisterBtn').addEventListener('click', handleRegister);
+        document.getElementById('registerBtn').addEventListener('click', handleRegister);
+    </script>
+</body>
+</html>

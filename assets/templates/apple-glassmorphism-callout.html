@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>效率工具征集活动开发征集令 | 某科技集团</title>
+    <style>
+        /* ========== CSS 变量 ========== */
+        :root {
+            --bg-start: #f5f7ff;
+            --bg-end: #eef1fa;
+            --glass-bg: rgba(255, 255, 255, 0.72);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --glass-shadow: rgba(31, 38, 135, 0.08);
+            --text-primary: #1d1d1f;
+            --text-secondary: #515154;
+            --text-muted: #86868b;
+            --apple-blue: #0071e3;
+            --apple-blue-hover: #0077ED;
+            --apple-gray: #f5f5f7;
+            --radius-sm: 10px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-xl: 32px;
+        }
+
+        /* ========== 基础重置 ========== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ========== 页面基础 ========== */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
+            color: var(--text-primary);
+            line-height: 1.65;
+            font-size: 17px;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ========== 背景层 ========== */
+        .bg-layer {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse 80% 60% at 50% -10%, rgba(120, 140, 255, 0.35) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 80% 20%, rgba(180, 100, 255, 0.2) 0%, transparent 55%),
+                radial-gradient(ellipse 50% 40% at 10% 80%, rgba(80, 200, 255, 0.2) 0%, transparent 50%),
+                linear-gradient(180deg, #f5f7ff 0%, #eef1fa 40%, #f0f2ff 100%);
+        }
+
+        /* ========== 毛玻璃卡片 ========== */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            box-shadow: 
+                0 8px 32px var(--glass-shadow),
+                0 1px 0px rgba(255, 255, 255, 0.6) inset;
+        }
+
+        .glass-card-inner {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 20px;
+            box-shadow: 0 2px 12px rgba(31, 38, 135, 0.06);
+        }
+
+        /* ========== 容器 ========== */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* ========== 导航 ========== */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 0 1.5rem;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.68);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .nav-brand {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--apple-blue);
+        }
+
+        .nav-mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        /* ========== Hero 首屏 ========== */
+        .hero {
+            padding: 7rem 1.5rem 6rem;
+            text-align: center;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .hero-title {
+            font-size: clamp(2.2rem, 6vw, 3.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+            margin-bottom: 1.25rem;
+        }
+
+        .hero-title .highlight {
+            background: linear-gradient(135deg, #0071e3, #bf5af2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 520px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.6;
+        }
+
+        .hero-badges {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 2.5rem;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid var(--glass-border);
+            border-radius: 980px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .badge .emoji {
+            font-size: 16px;
+        }
+
+        /* ========== 按钮 ========== */
+        .btn-apple {
+            display: inline-block;
+            background: var(--apple-blue);
+            color: white;
+            font-weight: 500;
+            font-size: 1.0625rem;
+            padding: 0.875rem 2.25rem;
+            border-radius: 980px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 14px rgba(0, 113, 227, 0.25);
+        }
+
+        .btn-apple:hover {
+            background: var(--apple-blue-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 113, 227, 0.35);
+        }
+
+        .btn-secondary {
+            display: inline-block;
+            background: transparent;
+            color: var(--apple-blue);
+            font-weight: 500;
+            font-size: 1rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 980px;
+            border: 1px solid var(--apple-blue);
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 113, 227, 0.08);
+            transform: translateY(-1px);
+        }
+
+        /* ========== 章节通用 ========== */
+        .section {
+            padding: 4rem 0;
+            animation: fadeInUp 0.6s ease-out backwards;
+        }
+
+        .section:nth-child(2) { animation-delay: 0.1s; }
+        .section:nth-child(3) { animation-delay: 0.2s; }
+        .section:nth-child(4) { animation-delay: 0.3s; }
+        .section:nth-child(5) { animation-delay: 0.4s; }
+        .section:nth-child(6) { animation-delay: 0.5s; }
+        .section:nth-child(7) { animation-delay: 0.6s; }
+        .section:nth-child(8) { animation-delay: 0.7s; }
+        .section:nth-child(9) { animation-delay: 0.8s; }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .section-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .section-content {
+            padding: 2rem;
+        }
+
+        .subsection-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .subsection-title:first-child {
+            margin-top: 0;
+        }
+
+        p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+
+        .accent {
+            color: var(--apple-blue);
+            font-weight: 600;
+        }
+
+        .note {
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-top: 1rem;
+        }
+
+        /* ========== 奖项模块 ========== */
+        .awards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .award-card {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.5rem 1.25rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .award-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(31, 38, 135, 0.12);
+        }
+
+        .award-card.gold {
+            border-top: 4px solid;
+            border-image: linear-gradient(135deg, #0071e3, #bf5af2) 1;
+        }
+
+        .award-card.silver {
+            border-top: 4px solid #a1a1a6;
+        }
+
+        .award-card.bronze {
+            border-top: 4px solid #cd7f32;
+        }
+
+        .award-rank {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .award-amount {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .award-count {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .award-honor {
+            font-size: 13px;
+            color: var(--apple-blue);
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(0, 0, 0, 0.06);
+            margin: 1.5rem 0;
+        }
+
+        /* ========== 工具类型列表 ========== */
+        .tool-list {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+
+        .tool-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            color: var(--text-secondary);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .tool-list li:last-child {
+            border-bottom: none;
+        }
+
+        .tool-list .icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .tool-list strong {
+            color: var(--text-primary);
+        }
+
+        .excluded {
+            padding: 1rem;
+            background: rgba(245, 90, 11, 0.08);
+            border-radius: 12px;
+            color: #b45309;
+            font-size: 15px;
+        }
+
+        /* ========== 流程模块 ========== */
+        .flow-container {
+            padding: 2rem;
+        }
+
+        .flow-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            position: relative;
+        }
+
+        .flow-step {
+            text-align: center;
+            position: relative;
+        }
+
+        .flow-step::after {
+            content: '';
+            position: absolute;
+            top: 24px;
+            right: -0.75rem;
+            width: 16px;
+            height: 1px;
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        .flow-step:last-child::after {
+            display: none;
+        }
+
+        .flow-number {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--apple-blue);
+        }
+
+        .flow-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .flow-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .flow-note {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        /* ========== 审核标准 ========== */
+        .check-list {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+
+        .check-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            color: var(--text-secondary);
+        }
+
+        .check-list .check {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(34, 197, 94, 0.12);
+            color: #16a34a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .check-list .cross {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(245, 158, 11, 0.12);
+            color: #d97706;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        /* ========== 附件卡片 ========== */
+        .attachment-card {
+            background: rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            margin: 1rem 0;
+        }
+
+        .attachment-card p {
+            font-size: 15px;
+            margin-bottom: 0.5rem;
+        }
+
+        .attachment-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--apple-blue);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .attachment-link:hover {
+            color: var(--apple-blue-hover);
+            text-decoration: underline;
+        }
+
+        /* ========== 表格 ========== */
+        .table-container {
+            overflow: hidden;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+
+        th, td {
+            padding: 0.875rem 1.25rem;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(0, 0, 0, 0.03);
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        td {
+            background: rgba(255, 255, 255, 0.5);
+            color: var(--text-secondary);
+            border-top: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        tr:nth-child(even) td {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        /* ========== FAQ ========== */
+        .faq-container {
+            padding: 0.5rem;
+        }
+
+        details {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            overflow: hidden;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        details:hover {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        details[open] {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(0, 113, 227, 0.2);
+        }
+
+        summary {
+            padding: 1rem 1.25rem;
+            cursor: pointer;
+            color: var(--text-primary);
+            font-weight: 500;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background 0.2s;
+        }
+
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
+        summary::after {
+            content: '+';
+            color: var(--apple-blue);
+            font-size: 20px;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+        }
+
+        details[open] summary::after {
+            transform: rotate(45deg);
+        }
+
+        summary:hover {
+            background: rgba(0, 113, 227, 0.04);
+        }
+
+        .faq-answer {
+            padding: 0.75rem 1.25rem 1.25rem;
+            border-left: 2px solid var(--apple-blue);
+            margin-left: 1rem;
+            padding-left: 1.25rem;
+            color: var(--text-secondary);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        /* ========== CTA 底部 ========== */
+        .cta-final {
+            text-align: center;
+            padding: 3.5rem 2rem;
+            margin: 2rem 0 4rem;
+        }
+
+        .cta-final-title {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .cta-final-subtitle {
+            font-size: 1.0625rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .cta-final-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .cta-steps {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+            font-size: 15px;
+            color: var(--text-secondary);
+        }
+
+        .cta-steps span {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .cta-arrow {
+            margin: 0 0.5rem;
+            color: var(--text-muted);
+        }
+
+        /* ========== 底部 ========== */
+        .footer {
+            text-align: center;
+            padding: 2rem 1.5rem 3rem;
+            color: var(--text-muted);
+            font-size: 14px;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .footer-brand {
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-note {
+            margin-top: 1rem;
+            font-size: 13px;
+        }
+
+        /* ========== 动画 ========== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ========== 步骤编号列表 ========== */
+        .step-list {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+
+        .step-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            color: var(--text-secondary);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .step-list li:last-child {
+            border-bottom: none;
+        }
+
+        .step-list .step-num {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(0, 113, 227, 0.12);
+            color: var(--apple-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        /* ========== 响应式 ========== */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .nav-mobile-toggle {
+                display: block;
+            }
+
+            .hero {
+                padding: 5rem 1rem 4rem;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-badges {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .awards-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .flow-steps {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+
+            .flow-step:nth-child(2)::after {
+                display: none;
+            }
+
+            .flow-step::after {
+                top: 24px;
+                right: -0.5rem;
+                width: 10px;
+            }
+
+            .section-content {
+                padding: 1.5rem;
+            }
+
+            .flow-container {
+                padding: 1.5rem;
+            }
+
+            .cta-final {
+                padding: 2.5rem 1.5rem;
+            }
+
+            .cta-final-title {
+                font-size: 1.5rem;
+            }
+
+            .cta-steps {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .cta-arrow {
+                margin: 0.25rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-layer"></div>
+
+    <!-- 导航 -->
+    <nav class="nav">
+        <div class="nav-brand">效率工具征集活动开发征集令</div>
+        <div class="nav-links">
+            <a href="#awards">奖项</a>
+            <a href="#participate">参与方式</a>
+            <a href="#submit">提交方式</a>
+            <a href="#faq">FAQ</a>
+        </div>
+        <button class="nav-mobile-toggle" aria-label="菜单">☰</button>
+    </nav>
+
+    <div class="container">
+        <!-- Hero 首屏 -->
+        <header class="hero">
+            <h1 class="hero-title">
+                <span class="highlight">AI 时代</span>，你的"小工具"也能成为全公司的效率神器！
+            </h1>
+            <p class="hero-subtitle">
+                把你的提效利器分享出来，你拿奖金、赢荣誉，其他部门省时间、提效率——双赢！
+            </p>
+            <div class="hero-badges">
+                <span class="badge"><span class="emoji">🎯</span> 零门槛参与</span>
+                <span class="badge"><span class="emoji">💰</span> 最高 1,000 元奖金</span>
+                <span class="badge"><span class="emoji">🏆</span> 效率工具征集活动</span>
+            </div>
+            <a href="#participate" class="btn-apple">立即提交工具</a>
+        </header>
+
+        <!-- 奖励速览 -->
+        <section class="section" id="awards">
+            <div class="glass-card">
+                <div class="section-content">
+                    <h2 class="section-title">奖励速览</h2>
+                    
+                    <h3 class="subsection-title">个人奖（开发者）</h3>
+                    <div class="awards-grid">
+                        <div class="award-card gold">
+                            <div class="award-rank">🥇 一等奖</div>
+                            <div class="award-amount">1,000 元</div>
+                            <div class="award-count">× 2 名</div>
+                            <div class="award-honor">奖杯 + 技术节演讲展示 + 内部门户"效率工具征集活动"</div>
+                        </div>
+                        <div class="award-card silver">
+                            <div class="award-rank">🥈 二等奖</div>
+                            <div class="award-amount">500 元</div>
+                            <div class="award-count">× 2 名</div>
+                            <div class="award-honor">证书 + 内部门户"效率工具征集活动"</div>
+                        </div>
+                        <div class="award-card bronze">
+                            <div class="award-rank">🥉 三等奖</div>
+                            <div class="award-amount">300 元</div>
+                            <div class="award-count">× 4 名</div>
+                            <div class="award-honor">证书 + 内部门户"效率工具征集活动"</div>
+                        </div>
+                    </div>
+
+                    <h3 class="subsection-title">部门奖（效率先锋）</h3>
+                    <div class="awards-grid">
+                        <div class="award-card gold">
+                            <div class="award-rank">🏅 金牌效率先锋部门</div>
+                            <div class="award-amount">1,000 元</div>
+                            <div class="award-count">提效奖金 × 1 个</div>
+                        </div>
+                        <div class="award-card silver">
+                            <div class="award-rank">🥈 银牌效率先锋部门</div>
+                            <div class="award-amount">500 元</div>
+                            <div class="award-count">提效奖金 × 1 个</div>
+                        </div>
+                        <div class="award-card bronze">
+                            <div class="award-rank">🥉 铜牌效率先锋部门</div>
+                            <div class="award-amount">300 元</div>
+                            <div class="award-count">提效奖金 × 1 个</div>
+                        </div>
+                    </div>
+
+                    <p class="note">📌 注：个人奖与团队奖可同时获得，互不冲突。奖金总额约6,000元，覆盖8位开发者及3个部门。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 一、为什么做这件事 -->
+        <section class="section" id="why">
+            <div class="glass-card">
+                <div class="section-content">
+                    <h2 class="section-title">一、为什么做这件事？</h2>
+                    <p>
+                        过去，开发工具是程序员的专利。但今天，AI编程助手、低代码平台、某自动化工具工具让"人人皆可开发"成为现实。你可能花半小时写了一个Excel宏，或让AI生成了一段数据处理脚本——这个小工具每月能帮你省下10个小时。
+                    </p>
+                    <p>
+                        然而，这样的好工具大多藏在个人电脑里，其他同事还在重复造轮子。
+                    </p>
+                    <div class="divider"></div>
+                    <p>
+                        <strong>某科技集团</strong>正式启动「效率工具征集活动与推广活动」：把你的提效利器分享出来，让全公司一起受益。你拿奖金、赢荣誉，其他部门省时间、提效率，双赢！
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 二、谁能参与 -->
+        <section class="section" id="who">
+            <div class="glass-card">
+                <div class="section-content">
+                    <h2 class="section-title">二、谁能参与？工具类型有哪些？</h2>
+                    <p>
+                        <strong>任何人</strong>：只要你自主开发过能提升工作效率的工具（非商业采购），无论岗位、专业背景，均可提交。
+                    </p>
+
+                    <h3 class="subsection-title">工具类型示例（包括但不限于）</h3>
+                    <ul class="tool-list">
+                        <li><span class="icon">📊</span><div><strong>Excel/WPS高级模板</strong>：自动化报表、数据清洗模板、一键生成图表</div></li>
+                        <li><span class="icon">💻</span><div><strong>脚本/小程序</strong>：Python自动抓取数据、批处理文件重命名、VBA宏</div></li>
+                        <li><span class="icon">🤖</span><div><strong>某自动化工具流程</strong>：某自动化工具、某自动化工具等自动化操作（如自动发送邮件、录入数据）</div></li>
+                        <li><span class="icon">✨</span><div><strong>AI辅助工具</strong>：提示词模板、AI自动生成文案/代码的工作流</div></li>
+                        <li><span class="icon">🛠️</span><div><strong>办公提效小软件</strong>：文件批量重命名、PDF合并拆分、定时提醒工具</div></li>
+                        <li><span class="icon">🔧</span><div><strong>低代码应用</strong>：某低代码平台、某低代码平台等搭建的业务小应用</div></li>
+                    </ul>
+
+                    <div class="divider"></div>
+                    
+                    <div class="excluded">
+                        <span>⛔</span> 不包含：公司统一采购的商业软件、仅个人使用的简单技巧（如复制粘贴快捷键）。
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 三、如何提交 -->
+        <section class="section" id="submit">
+            <div class="glass-card">
+                <div class="section-content">
+                    <h2 class="section-title">三、如何提交？（关键说明）</h2>
+                    <p>
+                        为简化流程，高效工具统一通过内部专利提交通道提交。请务必遵守以下格式要求：
+                    </p>
+
+                    <h3 class="subsection-title">3.1 标题格式（与普通专利区分）</h3>
+                    <p>
+                        必须在标题开头加上前缀【高效工具】，例如：【高效工具】自动周报生成器
+                    </p>
+                    <p class="note">⚠️ 不加此前缀的提交将被视为普通内部专利，不参与高效工具评奖。</p>
+
+                    <div class="divider"></div>
+
+                    <h3 class="subsection-title">3.2 需提交的材料（比普通专利多三项）</h3>
+                    <p>在提交内部专利所需的说明书、申请表之外，必须额外提供：</p>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>补充材料</th>
+                                    <th>格式要求</th>
+                                    <th>用途</th>
+                                    <th>是否必须</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>工具提报表</td>
+                                    <td>使用附件Excel模板（见文末）</td>
+                                    <td>统一汇总统计，包含工具名称、功能、提效数据等</td>
+                                    <td><strong>✅ 必须</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>使用SOP（标准作业程序）</td>
+                                    <td>PDF或Word，一页以内</td>
+                                    <td>让他人能够独立安装、使用</td>
+                                    <td><strong>✅ 必须</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>演示视频/录屏</td>
+                                    <td>可选项，不强求。若有，请将视频文件作为附件上传（内部系统或邮件附件均可）</td>
+                                    <td>直观展示操作过程，降低理解成本</td>
+                                    <td>⭕ 可选</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <h3 class="subsection-title">3.3 文件提交方式（无云盘，使用内部系统）</h3>
+                    <ul class="check-list">
+                        <li><span class="check">✓</span>所有文件（工具提报表、使用SOP、演示视频等）请直接作为附件上传至内部系统。</li>
+                        <li><span class="check">✓</span>由于我们没有公共云盘，请勿使用外部链接或云存储链接。请直接添加文件原件或通过内部系统（内部系统）关联文件。</li>
+                        <li><span class="check">✓</span>若文件较多，可压缩为一个ZIP包上传。</li>
+                    </ul>
+
+                    <div class="divider"></div>
+
+                    <h3 class="subsection-title">3.4 提交步骤</h3>
+                    <ol class="step-list">
+                        <li><span class="step-num">①</span>下载《工具提报表》模板（见附件）</li>
+                        <li><span class="step-num">②</span>准备使用SOP（可参考模板），如有演示视频也一并准备</li>
+                        <li><span class="step-num">③</span>登录内部系统，创建新申请</li>
+                        <li><span class="step-num">④</span>标题以【高效工具】开头</li>
+                        <li><span class="step-num">⑤</span>在附件中上传：工具提报表、使用SOP、演示视频（可选）</li>
+                        <li><span class="step-num">⑥</span>同时上传普通专利所需的说明书、申请表（如系统要求）</li>
+                        <li><span class="step-num">⑦</span>提交完成</li>
+                    </ol>
+                    <p class="note">
+                        某科技集团将在 <strong>5个工作日内</strong> 完成审核。通过后，您的工具将上架内部门户"高效工具"专区，并列入"效率工具征集活动"。
+                    </p>
+
+                    <div class="divider"></div>
+
+                    <h3 class="subsection-title">📎 附件下载</h3>
+                    <div class="attachment-card">
+                        <p>请替换为实际下载链接：</p>
+                        <a href="#" class="attachment-link">📥《工具提报表.xlsx》下载</a><br><br>
+                        <a href="#" class="attachment-link">📥《效率反馈表.xlsx》下载</a><br><br>
+                        <a href="#" class="attachment-link">📥《使用SOP参考模板.docx》下载</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 四、部门如何申请 -->
+        <section class="section" id="participate">
+            <div class="glass-card">
+                <div class="section-content">
+                    <h2 class="section-title">四、部门：如何申请使用工具并赢得团建经费？</h2>
+
+                    <h3 class="subsection-title">4.1 申请使用</h3>
+                    <p>
+                        任何部门员工均可代表部门联系某科技集团（邮箱：<span class="accent">contact@example.com</span>，标题格式：【工具使用申请】部门 – 工具名称），说明：
+                    </p>
+                    <ul class="tool-list">
+                        <li><span class="icon">•</span><div>希望使用的工具名称</div></li>
+                        <li><span class="icon">•</span><div>预计使用人数、主要用途</div></li>
+                    </ul>
+                    <p class="note">
+                        某科技集团将在 <strong>3个工作日内</strong> 协调开发者交付工具及使用SOP。
+                    </p>
+
+                    <div class="divider"></div>
+
+                    <h3 class="subsection-title">4.2 反馈效率提升（必须填写才能参与部门奖评选）</h3>
+                    <p>
+                        部门在连续使用满1个月后，填写《效率反馈表》（见附件），发送至某科技集团邮箱，标题格式：【效率反馈】部门 – 工具名称。
+                    </p>
+                    <p>
+                        <strong>反馈表关键字段：</strong>实际使用人数、每月累计节省工时（估算公式）、使用效果简述。
+                    </p>
+
+                    <div class="attachment-card">
+                        <p>📎 详细字段说明见附件</p>
+                        <a href="#" class="attachment-link">📥《效率反馈表.xlsx》下载</a>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <h3 class="subsection-title">4.3 部门排名规则</h3>
+                    <p>
+                        按部门年度累计节省工时从高到低排序，前3名获得相应团建经费（金牌1个、银牌1个、铜牌1个）。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 五、年度评奖标准 -->
+        <section class="section" id="awards-detail">
+            <div class="glass-card">
+                <div class="section-content">
+                    <h2 class="section-title">五、年度评奖标准</h2>
+
+                    <h3 class="subsection-title">5.1 个人工具奖</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>奖项</th>
+                                    <th>评选维度</th>
+                                    <th>门槛/说明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>🥇 一等奖</td>
+                                    <td>① 被申请使用次数最高 ② 用户满意度≥4.5分 ③ 提效数据突出</td>
+                                    <td>共2名</td>
+                                </tr>
+                                <tr>
+                                    <td>🥈 二等奖</td>
+                                    <td>① 被申请次数第2-3名 ② 用户满意度≥4.0分</td>
+                                    <td>共2名</td>
+                                </tr>
+                                <tr>
+                                    <td>🥉 三等奖</td>
+                                    <td>① 被申请次数第4-7名，或创新潜力突出 ② 评审小组综合评定</td>
+                                    <td>共4名</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="note">
+                        <strong>被申请次数统计：</strong>不同部门首次申请即计1次，同一部门多次申请同一工具只计1次。
+                    </p>
+
+                    <div class="divider"></div>
+
+                    <h3 class="subsection-title">5.2 部门效率先锋奖</h3>
+                    <p>
+                        直接按年度累计节省工时排名，前三名分别授予金牌（1个）、银牌（1个）、铜牌（1个）。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 六、知识产权与法律声明 -->
+        <section class="section" id="ip">
+            <div class="glass-card">
+                <div class="section-content">
+                    <h2 class="section-title">六、知识产权与法律声明</h2>
+                    <ul class="check-list">
+                        <li><span class="check">✓</span>开发者提交工具即视为同意公司内部免费使用该工具</li>
+                        <li><span class="check">✓</span>工具的知识产权归属按公司相关规定执行；开发者保留署名权</li>
+                        <li><span class="check">✓</span>若工具涉及第三方代码或素材，须注明来源并保证已获得合法授权</li>
+                        <li><span class="cross">✕</span>工具不得包含恶意代码、后门、侵犯公司商业秘密的内容；一经发现，取消参评资格并通报批评</li>
+                        <li><span class="check">✓</span>联合开发：若多人联合开发，请在工具提报表中备注所有开发者姓名、工号，奖金由第一开发者领取后自行分配</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 七、FAQ -->
+        <section class="section" id="faq">
+            <div class="glass-card">
+                <div class="faq-container">
+                    <h2 class="section-title">七、FAQ（常见问题）</h2>
+
+                    <details>
+                        <summary>Q1：我不会编程，只有Excel高级模板，可以参加吗？</summary>
+                        <div class="faq-answer">
+                            ✅ 可以！只要是你自己设计的、能提升效率，哪怕是一个模板、一个智能表单，都欢迎提交。
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary>Q2：提交高效工具和提交普通内部专利有什么区别？</summary>
+                        <div class="faq-answer">
+                            📌 相同点：都使用同一套系统。不同点：高效工具必须在标题加【高效工具】，且需额外提供工具提报表、使用SOP。演示视频为可选项。普通专利不需要这些。
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary>Q3：我提交的工具被认定为高效工具还是普通专利？</summary>
+                        <div class="faq-answer">
+                            🔍 某科技集团会根据标题和内容判断。如果您想参加高效工具评奖，请一定在标题加前缀并附上补充材料。若不加前缀，系统将按普通专利流程处理。
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary>Q4：使用SOP必须一页纸吗？</summary>
+                        <div class="faq-answer">
+                            📄 不强求一页，但建议简明扼要，包含：安装步骤、操作指南、常见问题。提供模板供参考。
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary>Q5：我没有录制演示视频，会影响评审吗？</summary>
+                        <div class="faq-answer">
+                            🎥 不会。演示视频是可选项，不提交不影响评奖。但我们建议您录制1-3分钟简单操作演示，能帮助其他部门更快理解和使用您的工具，从而增加被申请次数。
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary>Q6：文件怎么提交？没有云盘。</summary>
+                        <div class="faq-answer">
+                            📎 所有文件直接作为附件上传到内部系统即可。如果文件较多，可以打包成ZIP上传。不要提供外部链接。
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary>Q7：工具没人申请怎么办？还能获奖吗？</summary>
+                        <div class="faq-answer">
+                            📢 我们会持续推广优质工具。若确实无人申请，可参评三等奖（侧重创新潜力，不要求使用量）。
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary>Q8：如何估算"每月累计节省工时"？</summary>
+                        <div class="faq-answer">
+                            📐 提供简易公式：(原单次耗时 − 新单次耗时) × 每月使用次数 × 使用人数。不需要精确到分钟，合理估算即可。
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary>Q9：部门申请工具后，需要多久反馈？</summary>
+                        <div class="faq-answer">
+                            ⏰ 需连续使用满1个月后方可提交反馈。不足1个月可暂缓，待满1个月后补交。反馈截止日期为某月某日。
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <!-- 底部 CTA -->
+        <section class="section">
+            <div class="glass-card cta-final">
+                <h2 class="cta-final-title">立即行动！</h2>
+                <p class="cta-final-subtitle">让一个人的效率，成为一群人的效率</p>
+
+                <div class="cta-steps">
+                    <span>登录内部专利系统</span>
+                    <span class="cta-arrow">→</span>
+                    <span>标题加【高效工具】</span>
+                    <span class="cta-arrow">→</span>
+                    <span>上传工具提报表、使用SOP</span>
+                    <span class="cta-arrow">→</span>
+                    <span>提交</span>
+                </div>
+
+                <p class="note" style="margin-bottom: 2rem;">
+                    ⚠️ 截止说明：工具提交和效率反馈均需在 <strong>某月某日前</strong>完成，方可参与当年评选。
+                </p>
+
+                <div class="cta-final-buttons">
+                    <a href="#submit" class="btn-apple">立即提交你的工具</a>
+                    <a href="#awards" class="btn-secondary">查看奖项详情</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 底部信息 -->
+        <footer class="footer">
+            <div class="footer-brand">主办：某科技集团</div>
+            <div>咨询电话：0000-0000</div>
+            <div>活动最终解释权归某科技集团所有</div>
+            <div class="footer-note">
+                📎 附件：《工具提报表.xlsx》《效率反馈表.xlsx》《使用SOP参考模板.docx》
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

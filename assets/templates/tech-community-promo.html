@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>技术专家社区 · 你最权威的技术后援</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Display', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 50%, #f0f4f8 100%);
+            min-height: 100vh;
+            color: #1d1d1f;
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Gradient bubbles background */
+        .bubble-1 {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.15) 0%, transparent 70%);
+            top: -100px;
+            right: -100px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bubble-2 {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(118, 75, 162, 0.12) 0%, transparent 70%);
+            bottom: 10%;
+            left: -50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bubble-3 {
+            position: fixed;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(79, 172, 254, 0.1) 0%, transparent 70%);
+            top: 50%;
+            right: 10%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Section Title Style */
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1d1d1f;
+            margin-bottom: 32px;
+            padding-left: 16px;
+            border-left: 4px solid;
+            border-image: linear-gradient(180deg, #667eea, #764ba2) 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 80px 20px 60px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+
+        .hero .subtitle {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: #86868b;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 32px;
+        }
+
+        .hero .intro {
+            font-size: clamp(1rem, 2vw, 1.125rem);
+            color: #424245;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* Value Cards */
+        .value-section {
+            padding: 60px 0;
+        }
+
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .value-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            padding: 40px 32px;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+        }
+
+        .value-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.15);
+        }
+
+        .value-card .icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .value-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 12px;
+        }
+
+        .value-card p {
+            color: #86868b;
+            font-size: 0.9375rem;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 60px 0;
+        }
+
+        .stats-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 24px;
+            padding: 48px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 32px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 20px;
+        }
+
+        .stat-item .number {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .stat-item .label {
+            color: #86868b;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+
+        /* ===== NEW MODULE 1: How to Join ===== */
+        .join-section {
+            padding: 60px 0;
+        }
+
+        .steps-container {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 24px;
+            padding: 48px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        }
+
+        .steps-grid {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 24px;
+        }
+
+        .step-item {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .step-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 36px;
+            right: -30px;
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            opacity: 0.3;
+        }
+
+        .step-number {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 28px;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+        }
+
+        .step-item h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 8px;
+        }
+
+        .step-item p {
+            font-size: 0.875rem;
+            color: #86868b;
+            line-height: 1.6;
+        }
+
+        /* ===== NEW MODULE 2: Activity Types ===== */
+        .activity-section {
+            padding: 60px 0;
+        }
+
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+        }
+
+        .activity-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            padding: 32px 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+        }
+
+        .activity-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 32px rgba(102, 126, 234, 0.12);
+        }
+
+        .activity-card .icon {
+            font-size: 40px;
+            margin-bottom: 16px;
+        }
+
+        .activity-card h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 12px;
+        }
+
+        .activity-card p {
+            font-size: 0.875rem;
+            color: #86868b;
+            line-height: 1.6;
+        }
+
+        /* ===== NEW MODULE 3: FAQ ===== */
+        .faq-section {
+            padding: 60px 0;
+        }
+
+        .faq-container {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 24px;
+            padding: 48px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        }
+
+        .faq-item {
+            padding: 24px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-item .question {
+            font-size: 1.0625rem;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .faq-item .question::before {
+            content: 'Q';
+            font-size: 0.875rem;
+            font-weight: 700;
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .faq-item .answer {
+            font-size: 0.9375rem;
+            color: #6e6e73;
+            line-height: 1.7;
+            padding-left: 36px;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            padding: 16px 48px;
+            border-radius: 12px;
+            font-size: 1.0625rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        .cta-button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.5);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #86868b;
+            font-size: 0.875rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            margin-top: 40px;
+        }
+
+        /* Grid background pattern */
+        .pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(102, 126, 234, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(102, 126, 234, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .steps-grid {
+                flex-direction: column;
+                gap: 32px;
+            }
+
+            .step-item:not(:last-child)::after {
+                display: none;
+            }
+
+            .step-item {
+                display: flex;
+                align-items: center;
+                gap: 20px;
+                text-align: left;
+            }
+
+            .step-number {
+                margin: 0;
+                width: 56px;
+                height: 56px;
+                font-size: 22px;
+                flex-shrink: 0;
+            }
+
+            .steps-container,
+            .faq-container,
+            .stats-card {
+                padding: 32px 24px;
+            }
+
+            .hero {
+                padding: 60px 20px 40px;
+            }
+
+            .bubble-1,
+            .bubble-2,
+            .bubble-3 {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="pattern"></div>
+    <div class="bubble-1"></div>
+    <div class="bubble-2"></div>
+    <div class="bubble-3"></div>
+    
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>技术专家社区 · 你最权威的技术后援</h1>
+            <p class="subtitle">分享 · 连接 · 成长</p>
+            <p class="intro">
+                技术专家社区是公司内部技术达人交流平台，为挖掘各部门隐藏的好技术，
+                促进组织间协作，通过分享实战经验，解决业务难题，推动技术落地。
+            </p>
+        </section>
+
+        <!-- Value Cards -->
+        <section class="value-section">
+            <h2 class="section-title">核心价值</h2>
+            <div class="value-grid">
+                <div class="value-card">
+                    <div class="icon">💡</div>
+                    <h3>实战分享</h3>
+                    <p>一线技术难题当场解决</p>
+                </div>
+                <div class="value-card">
+                    <div class="icon">🏆</div>
+                    <h3>成长认证</h3>
+                    <p>获得技术专家社区认证，提升个人影响力</p>
+                </div>
+                <div class="value-card">
+                    <div class="icon">👥</div>
+                    <h3>跨组织连接</h3>
+                    <p>与各领域专家深度交流</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats-section">
+            <h2 class="section-title">数据说话</h2>
+            <div class="stats-card">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="number">10+</div>
+                        <div class="label">每月举办场次</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="number">50+</div>
+                        <div class="label">月参与人次</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="number">50+</div>
+                        <div class="label">月解决问题数</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== NEW MODULE 1: How to Join ===== -->
+        <section class="join-section">
+            <h2 class="section-title">📋 如何成为技术专家社区</h2>
+            <div class="steps-container">
+                <div class="steps-grid">
+                    <div class="step-item">
+                        <div class="step-number">📝</div>
+                        <div>
+                            <h4>推荐/自荐</h4>
+                            <p>由CA或技术同好会推荐，或主动自荐报名</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">✅</div>
+                        <div>
+                            <h4>资格审核</h4>
+                            <p>专家组审核技术实力与分享意愿</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">🎤</div>
+                        <div>
+                            <h4>活动举办</h4>
+                            <p>需求部门资助邀请技术专家社区进行协作交流</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">🏅</div>
+                        <div>
+                            <h4>获得认证</h4>
+                            <p>完成分享后获得技术专家社区认证与荣誉</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== NEW MODULE 2: Activity Types ===== -->
+        <section class="activity-section">
+            <h2 class="section-title">🎯 我们如何活动</h2>
+            <div class="activity-grid">
+                <div class="activity-card">
+                    <div class="icon">📢</div>
+                    <h4>技术分享会</h4>
+                    <p>30-60分钟主题分享 + 互动答疑，深度交流技术见解与实战经验</p>
+                </div>
+                <div class="activity-card">
+                    <div class="icon">🔍</div>
+                    <h4>圆桌诊断</h4>
+                    <p>针对实际技术难题，技术专家社区现场会诊，群策群力找到解决方案</p>
+                </div>
+                <div class="activity-card">
+                    <div class="icon">🛠️</div>
+                    <h4>工作坊</h4>
+                    <p>小范围实操培训，技术专家社区带大家一起动手，边学边练快速掌握</p>
+                </div>
+                <div class="activity-card">
+                    <div class="icon">💬</div>
+                    <h4>线上问答</h4>
+                    <p>在线上问答平台随时响应，技术难题快速解答，知识高效流转</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== NEW MODULE 3: FAQ ===== -->
+        <section class="faq-section">
+            <h2 class="section-title">❓ 常见问题</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="question">技术专家社区与普通员工有什么区别？</div>
+                    <div class="answer">技术专家社区是经认证的技术专家，享有优先参与高端技术交流、年度评优加分、专属荣誉激励等特权，是公司技术骨干的荣誉称号。</div>
+                </div>
+                <div class="faq-item">
+                    <div class="question">谁都可以成为技术专家社区吗？</div>
+                    <div class="answer">只要你在某一技术领域（如数据分析、设备维护、软件开发、工艺优化等）有扎实的实战经验和独到见解，均可申请成为技术专家社区。</div>
+                </div>
+                <div class="faq-item">
+                    <div class="question">加入后必须每月分享吗？</div>
+                    <div class="answer">不强制每月分享，我们鼓励每季度至少参与一次分享或线上答疑，保持活跃度即可。技术专家社区是荣誉更是责任，但我们充分尊重你的时间安排。</div>
+                </div>
+                <div class="faq-item">
+                    <div class="question">分享有什么奖励机制吗？</div>
+                    <div class="answer">每次分享可获得积分奖励，积分可兑换技术书籍、培训课程、技术会议门票等。年度优秀技术专家社区还将获得公司级表彰和额外奖励。</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <!-- 🔗 预留链接位置：将下方 href="#" 替换为实际荣誉榜链接 -->
+            <a href="#" class="cta-button">技术专家社区 荣誉榜</a>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>某科技集团</p>
+        </footer>
+    </div>
+</body>
+</html>
